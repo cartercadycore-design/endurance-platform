@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coreformance — v5</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f7f6f3; --bg-w: #f2f0eb; --sur: #ffffff; --sur2: #faf9f7; --sur3: #f4f2ee;
+  --bd: #e8e4dd; --bd2: #d8d3c9;
+  --t1: #1a1814; --t2: #6b6557; --t3: #a39d93; --t4: #c8c2b8;
+  --g: #1a9e6e; --g1: #edf7f3; --g2: rgba(26,158,110,0.12); --g3: rgba(26,158,110,0.22);
+  --a: #d97706; --a1: #fef8ee; --a2: rgba(217,119,6,0.12);
+  --r: #dc3545; --r1: #fff0f1; --r2: rgba(220,53,69,0.10);
+  --b: #2563eb; --b1: #eff4ff; --b2: rgba(37,99,235,0.10);
+  --gold: #b8860b; --gold1: #fdf8ec; --gold2: rgba(184,134,11,0.15);
+  --topbar: 52px; --rad: 14px; --rad-s: 8px;
+  --sh: 0 1px 3px rgba(26,24,20,0.06),0 4px 16px rgba(26,24,20,0.04);
+  --sh-md: 0 2px 8px rgba(26,24,20,0.08),0 8px 32px rgba(26,24,20,0.06);
+}
+body.coach-mode { --bg:#f4f6fb; --bg-w:#eef1f8; --sur2:#f8f9fd; --sur3:#eef1f8; --bd:#e0e5f0; --bd2:#cdd4e8; }
+html { scroll-behavior: smooth; }
+body { background:var(--bg); color:var(--t1); font-family:'Plus Jakarta Sans',sans-serif; font-size:14px; line-height:1.55; -webkit-font-smoothing:antialiased; transition:background 0.3s; }
+
+/* ── TOPBAR ── */
+.topbar { position:fixed; top:0; left:0; right:0; z-index:500; height:var(--topbar); background:rgba(247,246,243,0.93); backdrop-filter:blur(20px); border-bottom:1px solid var(--bd); display:flex; align-items:center; padding:0 24px; gap:16px; transition:background 0.3s; }
+body.coach-mode .topbar { background:rgba(244,246,251,0.93); }
+.logo { font-weight:800; font-size:16px; color:var(--t1); letter-spacing:-.03em; flex-shrink:0; }
+.logo-dot { color:var(--g); }
+body.coach-mode .logo-dot { color:var(--b); }
+
+/* Mode pill */
+.mode-pill { display:flex; align-items:center; background:var(--sur); border:1px solid var(--bd); border-radius:32px; padding:4px; gap:2px; box-shadow:var(--sh); flex-shrink:0; }
+.mpb { display:flex; align-items:center; gap:5px; padding:5px 14px; border-radius:28px; border:none; background:transparent; font-family:'Plus Jakarta Sans',sans-serif; font-size:12px; font-weight:500; color:var(--t3); cursor:pointer; transition:all 0.22s cubic-bezier(.4,0,.2,1); white-space:nowrap; }
+.mpb.active { background:var(--t1); color:#fff; box-shadow:0 1px 4px rgba(26,24,20,.2); }
+body.coach-mode .mpb.active.coach { background:var(--b); }
+
+/* Nav tabs */
+.nav { display:flex; align-items:center; gap:2px; flex:1; }
+.ntab { padding:5px 13px; border-radius:var(--rad-s); font-size:13px; font-weight:500; cursor:pointer; border:none; background:none; color:var(--t3); transition:all .12s; font-family:'Plus Jakarta Sans',sans-serif; white-space:nowrap; }
+.ntab:hover { color:var(--t1); background:var(--sur3); }
+.ntab.active { color:var(--t1); background:var(--sur3); font-weight:600; }
+.ntab.active.hi { color:var(--g); background:var(--g1); }
+.ntab.active.hic { color:var(--b); background:var(--b1); }
+.ntab .badge-dot { background:var(--r); color:#fff; font-size:9px; padding:1px 5px; border-radius:8px; margin-left:3px; font-family:'DM Mono',monospace; }
+
+.tbar-right { display:flex; align-items:center; gap:10px; margin-left:auto; flex-shrink:0; }
+.race-tag { display:flex; align-items:center; gap:5px; background:var(--a1); border:1px solid var(--a2); border-radius:20px; padding:4px 12px; font-size:11px; font-family:'DM Mono',monospace; color:var(--a); }
+.rdot { width:5px; height:5px; border-radius:50%; background:var(--a); animation:blink 2s infinite; }
+@keyframes blink { 0%,100%{opacity:1}50%{opacity:.4} }
+.mbadge { font-size:10px; font-family:'DM Mono',monospace; font-weight:500; padding:4px 10px; border-radius:6px; }
+.mbadge.athlete { background:var(--g1); color:var(--g); border:1px solid var(--g2); }
+.mbadge.coach { background:var(--b1); color:var(--b); border:1px solid var(--b2); }
+.uavi { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; cursor:pointer; border:2px solid transparent; }
+.uavi.a { background:var(--g1); color:var(--g); border-color:var(--g2); }
+.uavi.c { background:var(--b1); color:var(--b); border-color:var(--b2); }
+
+/* ── LAYOUT ── */
+.app { margin-top:var(--topbar); min-height:calc(100vh - var(--topbar)); }
+.screen { display:none; padding:40px 44px; max-width:1120px; }
+.screen.active { display:block; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)} }
+.screen.active>*{animation:fadeUp .26s cubic-bezier(.4,0,.2,1) both}
+.screen.active>*:nth-child(2){animation-delay:.05s}
+.screen.active>*:nth-child(3){animation-delay:.1s}
+.screen.active>*:nth-child(4){animation-delay:.15s}
+.screen.active>*:nth-child(5){animation-delay:.2s}
+
+/* ── SHARED ── */
+.ph { margin-bottom:28px; }
+.ph-row { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; }
+.ph-t { font-size:24px; font-weight:800; letter-spacing:-.03em; }
+.ph-s { font-size:14px; color:var(--t2); margin-top:4px; }
+.card { background:var(--sur); border:1px solid var(--bd); border-radius:var(--rad); box-shadow:var(--sh); }
+.card-p { padding:22px 24px; }
+.chip { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:20px; font-size:11px; font-family:'DM Mono',monospace; font-weight:500; }
+.cg { background:var(--g1); color:var(--g); border:1px solid var(--g2); }
+.ca { background:var(--a1); color:var(--a); border:1px solid var(--a2); }
+.cr { background:var(--r1); color:var(--r); border:1px solid var(--r2); }
+.cb { background:var(--b1); color:var(--b); border:1px solid var(--b2); }
+.cn { background:var(--sur3); color:var(--t2); border:1px solid var(--bd); }
+.gold-chip { background:var(--gold1); color:var(--gold); border:1px solid var(--gold2); }
+.btn { border:none; border-radius:var(--rad-s); padding:10px 20px; font-family:'Plus Jakarta Sans',sans-serif; font-size:13px; font-weight:600; cursor:pointer; transition:all .15s; display:inline-flex; align-items:center; gap:6px; }
+.btn:hover { transform:translateY(-1px); }
+.btn-p { background:var(--t1); color:#fff; }
+.btn-p:hover { box-shadow:0 4px 12px rgba(26,24,20,.2); }
+.btn-g { background:var(--g); color:#fff; }
+.btn-g:hover { background:#158a5f; }
+.btn-b { background:var(--b); color:#fff; }
+.btn-b:hover { background:#1d4ed8; }
+.btn-gold { background:var(--gold); color:#fff; }
+.btn-ghost { background:var(--sur); color:var(--t2); border:1px solid var(--bd); }
+.btn-ghost:hover { background:var(--sur3); color:var(--t1); }
+.up{color:var(--g)} .warn{color:var(--a)} .risk{color:var(--r)} .info{color:var(--b)} .muted{color:var(--t3)} .mono{font-family:'DM Mono',monospace}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.sdiv { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:var(--t4); display:flex; align-items:center; gap:10px; margin:24px 0 12px; }
+.sdiv::after { content:''; flex:1; height:1px; background:var(--bd); }
+.irow { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--bd); font-size:13px; }
+.irow:last-child { border-bottom:none; }
+.ilbl { color:var(--t2); }
+.ival { font-family:'DM Mono',monospace; font-weight:500; }
+::-webkit-scrollbar{width:4px} ::-webkit-scrollbar-track{background:transparent} ::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:4px}
+
+/* ══ ONBOARDING ══ */
+.onboard-overlay { position:fixed; inset:0; background:var(--bg); z-index:1000; display:flex; align-items:center; justify-content:center; }
+.onboard-box { background:var(--sur); border:1px solid var(--bd); border-radius:20px; padding:48px 52px; max-width:520px; width:100%; box-shadow:var(--sh-md); animation:fadeUp .3s ease both; }
+.ob-logo { font-weight:800; font-size:18px; letter-spacing:-.03em; color:var(--t1); margin-bottom:6px; }
+.ob-logo span { color:var(--g); }
+.ob-step { font-size:11px; font-family:'DM Mono',monospace; color:var(--t4); margin-bottom:32px; }
+.ob-q { font-size:22px; font-weight:800; letter-spacing:-.02em; color:var(--t1); margin-bottom:8px; }
+.ob-sub { font-size:14px; color:var(--t2); margin-bottom:28px; line-height:1.6; }
+.ob-options { display:flex; flex-direction:column; gap:10px; margin-bottom:28px; }
+.ob-opt { display:flex; align-items:center; gap:14px; padding:16px 18px; background:var(--sur3); border:1px solid var(--bd); border-radius:12px; cursor:pointer; transition:all .15s; }
+.ob-opt:hover { border-color:var(--bd2); background:var(--sur); box-shadow:var(--sh); }
+.ob-opt.selected { border-color:var(--g); background:var(--g1); }
+.ob-opt-icon { width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; background:var(--sur); border:1px solid var(--bd); }
+.ob-opt.selected .ob-opt-icon { background:var(--g2); border-color:var(--g2); }
+.ob-opt-text {}
+.ob-opt-title { font-size:14px; font-weight:700; }
+.ob-opt-desc { font-size:12px; color:var(--t3); margin-top:2px; }
+.ob-footer { display:flex; justify-content:flex-end; }
+.ob-progress { display:flex; gap:5px; margin-bottom:24px; }
+.ob-prog-dot { height:3px; border-radius:2px; background:var(--bd); flex:1; transition:background .2s; }
+.ob-prog-dot.done { background:var(--g); }
+.ob-prog-dot.active { background:var(--t3); }
+
+/* ══ ATHLETE: HOME / TODAY ══ */
+.readiness-hero { background:var(--sur); border:1px solid var(--bd); border-radius:20px; box-shadow:var(--sh-md); padding:38px 42px; margin-bottom:14px; display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:center; position:relative; overflow:hidden; }
+.readiness-hero::before { content:''; position:absolute; top:-80px; right:-80px; width:300px; height:300px; border-radius:50%; background:radial-gradient(circle,rgba(26,158,110,.06) 0%,transparent 65%); pointer-events:none; }
+.rh-greet { font-size:13px; font-weight:500; color:var(--t3); margin-bottom:6px; }
+.rh-score { font-size:96px; font-weight:800; line-height:1; color:var(--t1); letter-spacing:-.04em; }
+.rh-status { font-size:22px; font-weight:700; color:var(--g); letter-spacing:-.02em; margin-bottom:4px; }
+.rh-desc { font-size:13px; color:var(--t2); line-height:1.6; }
+.rh-bullets { display:flex; flex-direction:column; gap:6px; margin-top:14px; }
+.rh-b { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--t2); }
+.rh-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+.spark { margin-top:18px; }
+.spark-lbl { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--t4); margin-bottom:7px; }
+.spark-bars { display:flex; align-items:flex-end; gap:4px; height:30px; }
+.sbar { flex:1; border-radius:3px 3px 0 0; background:var(--g1); border-top:1px solid var(--g2); }
+.sbar.now { background:var(--g2); border-top:2px solid var(--g); }
+.rh-right { background:var(--bg); border:1px solid var(--bd); border-radius:16px; padding:22px 24px; }
+.rec-eye { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:var(--g); display:flex; align-items:center; gap:6px; margin-bottom:12px; }
+.ldot { width:7px; height:7px; border-radius:50%; background:var(--g); animation:lp 2s infinite; }
+@keyframes lp { 0%,100%{box-shadow:0 0 0 0 rgba(26,158,110,.4)}50%{box-shadow:0 0 0 5px rgba(26,158,110,0)} }
+.rec-title { font-size:22px; font-weight:800; letter-spacing:-.02em; margin-bottom:4px; }
+.rec-sub { font-family:'DM Mono',monospace; font-size:11px; color:var(--t3); margin-bottom:12px; }
+.rec-why { font-size:13px; color:var(--t2); line-height:1.65; background:var(--sur); border:1px solid var(--bd); border-radius:var(--rad-s); padding:12px 14px; margin-bottom:14px; }
+.imp-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:14px; }
+.imp-t { background:var(--sur); border:1px solid var(--bd); border-radius:var(--rad-s); padding:9px 12px; }
+.imp-l { font-size:9px; text-transform:uppercase; letter-spacing:.1em; color:var(--t4); margin-bottom:3px; }
+.imp-v { font-family:'DM Mono',monospace; font-size:13px; font-weight:500; }
+.kpi-strip { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin-bottom:14px; }
+.kpi { background:var(--sur); border:1px solid var(--bd); border-radius:var(--rad); padding:16px 18px; box-shadow:var(--sh); transition:transform .15s,box-shadow .15s; }
+.kpi:hover { transform:translateY(-1px); box-shadow:var(--sh-md); }
+.kpi-l { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:.1em; color:var(--t4); margin-bottom:8px; }
+.kpi-v { font-size:24px; font-weight:800; line-height:1; letter-spacing:-.02em; margin-bottom:4px; }
+.kpi-d { font-family:'DM Mono',monospace; font-size:11px; }
+.ts-card { background:var(--sur); border:1px solid var(--bd); border-radius:var(--rad); padding:22px 24px; box-shadow:var(--sh); }
+.ts-hd { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:var(--t4); margin-bottom:14px; }
+.ts-row { display:flex; align-items:center; padding:9px 0; border-bottom:1px solid var(--bd); }
+.ts-row:last-child { border-bottom:none; }
+.ts-l { flex:1; }
+.ts-name { font-size:14px; font-weight:600; }
+.ts-m { font-size:11px; color:var(--t3); font-family:'DM Mono',monospace; margin-top:1px; }
+.ts-r { text-align:right; }
+.ts-verdict { font-size:13px; font-weight:700; margin-bottom:3px; }
+.ts-bar { width:56px; height:3px; background:var(--bd); border-radius:2px; overflow:hidden; display:inline-block; }
+.ts-bf { height:100%; border-radius:2px; }
+
+/* Output mini */
+.out-mini { background:linear-gradient(135deg,var(--sur) 0%,var(--g1) 100%); border:1px solid var(--g2); border-radius:var(--rad); padding:16px 20px; box-shadow:var(--sh); display:flex; align-items:center; justify-content:space-between; gap:20px; }
+.om-icon { width:38px; height:38px; border-radius:10px; background:var(--g2); border:1px solid var(--g3); display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
+.om-lbl { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--g); margin-bottom:2px; }
+.om-val { font-size:17px; font-weight:800; letter-spacing:-.02em; }
+.om-bt { flex:1; max-width:180px; }
+.om-track { height:5px; background:var(--g1); border-radius:3px; overflow:hidden; border:1px solid var(--g2); }
+.om-fill { height:100%; border-radius:3px; background:var(--g); }
+
+/* ══ TRAINING ══ */
+.filter-bar { display:flex; gap:6px; margin-bottom:16px; flex-wrap:wrap; }
+.fbtn { padding:5px 14px; border-radius:20px; font-size:12px; font-weight:500; border:1px solid var(--bd); background:var(--sur); color:var(--t2); cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif; transition:all .1s; }
+.fbtn:hover { background:var(--sur3); color:var(--t1); }
+.fbtn.active { background:var(--t1); color:#fff; border-color:var(--t1); }
+.hist-grp { margin-bottom:20px; }
+.hg-lbl { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:var(--t4); margin-bottom:8px; }
+.hrow { display:flex; align-items:center; gap:13px; background:var(--sur); border:1px solid var(--bd); border-radius:var(--rad); padding:13px 16px; margin-bottom:6px; cursor:pointer; box-shadow:var(--sh); transition:all .12s; }
+.hrow:hover { transform:translateY(-1px); box-shadow:var(--sh-md); border-color:var(--bd2); }
+.htype { width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0; }
+.htype.run{background:var(--g1)} .htype.bike{background:var(--b1)} .htype.swim{background:#f3f0ff}
+.hmain { flex:1; }
+.hname { font-size:14px; font-weight:600; margin-bottom:2px; }
+.hmeta { font-size:11px; color:var(--t3); font-family:'DM Mono',monospace; }
+.hright { text-align:right; }
+.hload { font-size:19px; font-weight:800; letter-spacing:-.02em; margin-bottom:3px; }
+/* Plan builder (self-coached) */
+.plan-builder { background:var(--sur); border:1px solid var(--bd); border-radius:var(--rad); padding:22px 24px; box-shadow:var(--sh); margin-bottom:14px; }
+.pb-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+.pb-title { font-size:16px; font-weight:700; }
+.week-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; }
+.wday { background:var(--sur3); border:1px solid var(--bd); border-radius:8px; padding:10px 8px; text-align:center; cursor:pointer; transition:all .12s; }
+.wday:hover { background:var(--b1); border-color:var(--b2); }
+.wday.has-workout { background:var(--g1); border-color:var(--g2); }
+.wday.rest { background:var(--sur3); opacity:.6; }
+.wd-day { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--t4); margin-bottom:5px; }
+.wd-icon { font-size:18px; margin-bottom:3px; }
+.wd-type { font-size:10px; color:var(--t2); font-weight:500; }
+
+/* ══ PERFORMANCE ══ */
+.perf-hero { background:var(--sur); border:1px solid var(--bd); border-radius:20px; box-shadow:var(--sh-md); padding:32px 36px; margin-bottom:14px; display:grid; grid-template-columns:1fr 1fr 1fr; gap:1px; background-color:var(--bd); overflow:hidden; }
+.perf-cell { background:var(--sur); padding:26px 28px; position:relative; overflow:hidden; }
+.perf-cell::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; }
+.pc-fit::before{background:var(--g)} .pc-fat::before{background:var(--a)} .pc-read::before{background:var(--b)}
+.pc-bg { position:absolute; top:-60px; right:-60px; width:160px; height:160px; border-radius:50%; pointer-events:none; }
+.pc-fit .pc-bg{background:radial-gradient(circle,rgba(26,158,110,.05) 0%,transparent 70%)}
+.pc-fat .pc-bg{background:radial-gradient(circle,rgba(217,119,6,.05) 0%,transparent 70%)}
+.pc-read .pc-bg{background:radial-gradient(circle,rgba(37,99,235,.05) 0%,transparent 70%)}
+.pc-type { font-size:9px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:var(--t3); margin-bottom:4px; }
+.pc-name { font-size:13px; font-weight:600; color:var(--t2); margin-bottom:10px; }
+.pc-val { font-size:52px; font-weight:800; line-height:1; letter-spacing:-.03em; margin-bottom:6px; }
+.pc-fit .pc-val{color:var(--g)} .pc-fat .pc-val{color:var(--a)} .pc-read .pc-val{color:var(--b)}
+.pc-verdict { font-size:12px; color:var(--t2); line-height:1.5; margin-bottom:10px; }
+.pc-stats { display:flex; flex-direction:column; gap:3px; }
+.pc-stat { display:flex; justify-content:space-between; font-size:11px; color:var(--t3); font-family:'DM Mono',monospace; }
+.pc-stat span:last-child { color:var(--t2); }
+.analytics-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.a-card { background:var(--sur); border:1px solid var(--bd); border-radius:var(--rad); padding:20px 22px; box-shadow:var(--sh); }
+.a-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--t3); margin-bottom:14px; }
+.zrow { display:flex; align-items:center; gap:8px; padding:6px 0; border-bottom:1px solid var(--bd); }
+.zrow:last-child { border-bottom:none; }
+.zlbl { font-size:12px; color:var(--t2); width:52px; }
+.ztrack { flex:1; height:6px; background:var(--bd); border-radius:3px; overflow:hidden; }
+.zfill { height:100%; border-radius:3px; }
+.zpct { font-family:'DM Mono',monospace; font-size:11px; color:var(--t3); width:28px; text-align:right; }
+
+/* ══ INTELLIGENCE ══ */
+.intel-hero { background:linear-gradient(135deg,#f0fdf7 0%,#e8f8f0 100%); border:1px solid var(--g2); border-radius:20px; padding:32px 36px; margin-bottom:14px; box-shadow:var(--sh-md); }
+.ih-eyebrow { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:var(--g); margin-bottom:10px; display:flex; align-items:center; gap:7px; }
+.ih-title { font-size:26px; font-weight:800; letter-spacing:-.03em; margin-bottom:6px; }
+.ih-sub { font-size:14px; color:var(--t2); line-height:1.6; max-width:600px; }
+.intel-cards { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px; }
+.intel-card { background:var(--sur); border:1px solid var(--bd); border-radius:var(--rad); padding:20px 22px; box-shadow:var(--sh); }
+.ic-eye { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; margin-bottom:8px; }
+.ic-title { font-size:17px; font-weight:800; letter-spacing:-.02em; margin-bottom:6px; }
+.ic-body { font-size:13px; color:var(--t2); line-height:1.65; }
+.ic-meta { font-family:'DM Mono',monospace; font-size:11px; color:var(--t3); margin-top:10px; }
+
+/* ══ DISCOVER / CADY CORE ══ */
+.cady-hero { background:linear-gradient(135deg,var(--gold1) 0%,#fef9f0 100%); border:1px solid var(--gold2); border-radius:20px; padding:36px 40px; margin-bottom:18px; box-shadow:var(--sh-md); display:grid; grid-template-columns:1fr auto; gap:32px; align-items:center; }
+.ch-badge { display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+.cady-badge { display:inline-flex; align-items:center; gap:7px; background:var(--gold); color:#fff; padding:6px 14px; border-radius:20px; font-size:12px; font-weight:700; letter-spacing:.02em; }
+.cady-badge-icon { font-size:14px; }
+.ch-title { font-size:28px; font-weight:800; letter-spacing:-.03em; margin-bottom:6px; }
+.ch-sub { font-size:14px; color:var(--t2); line-height:1.6; max-width:500px; }
+.ch-stats { display:flex; gap:24px; }
+.ch-stat { text-align:center; }
+.ch-stat-val { font-size:22px; font-weight:800; color:var(--gold); }
+.ch-stat-lbl { font-size:11px; color:var(--t3); }
+.discover-filters { display:flex; gap:8px; margin-bottom:18px; flex-wrap:wrap; align-items:center; }
+.df-lbl { font-size:12px; color:var(--t3); font-weight:500; margin-right:4px; }
+.coach-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+.coach-card { background:var(--sur); border:1px solid var(--bd); border-radius:var(--rad); padding:22px 24px; box-shadow:var(--sh); cursor:pointer; transition:all .15s; }
+.coach-card:hover { transform:translateY(-2px); box-shadow:var(--sh-md); border-color:var(--bd2); }
+.coach-card-top { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:14px; }
+.coach-avi-lg { width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:700; border:3px solid transparent; }
+.cady-verified { display:inline-flex; align-items:center; gap:5px; background:var(--gold1); color:var(--gold); border:1px solid var(--gold2); padding:3px 10px; border-radius:12px; font-size:10px; font-weight:700; }
+.coach-name { font-size:16px; font-weight:800; margin-bottom:2px; }
+.coach-spec { font-size:12px; color:var(--t3); margin-bottom:10px; }
+.coach-bio { font-size:13px; color:var(--t2); line-height:1.6; margin-bottom:14px; }
+.coach-stats { display:flex; gap:14px; margin-bottom:14px; }
+.cst { }
+.cst-val { font-size:16px; font-weight:800; letter-spacing:-.02em; }
+.cst-lbl { font-size:10px; color:var(--t3); font-family:'DM Mono',monospace; }
+.prog-pill { display:inline-flex; align-items:center; gap:5px; background:var(--sur3); border:1px solid var(--bd); border-radius:8px; padding:4px 10px; font-size:11px; color:var(--t2); margin:2px; }
+
+/* Verified profile page */
+.verified-profile { background:var(--sur); border:1px solid var(--bd); border-radius:20px; overflow:hidden; box-shadow:var(--sh-md); margin-bottom:14px; }
+.vp-banner { height:100px; background:linear-gradient(135deg,#1a1814 0%,#2a2620 100%); position:relative; display:flex; align-items:flex-end; padding:16px 28px; }
+.vp-avi { width:72px; height:72px; border-radius:50%; border:3px solid #fff; background:var(--g1); color:var(--g); display:flex; align-items:center; justify-content:center; font-size:24px; font-weight:700; position:absolute; bottom:-36px; left:28px; }
+.vp-body { padding:52px 28px 28px; }
+.vp-name { font-size:24px; font-weight:800; letter-spacing:-.02em; margin-bottom:4px; }
+.vp-creds { display:flex; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
+.vp-bio { font-size:14px; color:var(--t2); line-height:1.7; margin-bottom:16px; max-width:600px; }
+
+/* ══ COACH: ROSTER LEDGER ══ */
+.coach-strip { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin-bottom:18px; }
+.cs-c { background:var(--sur); border:1px solid var(--bd); border-radius:var(--rad); padding:14px 16px; box-shadow:var(--sh); }
+.cs-l { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:.1em; color:var(--t4); margin-bottom:8px; }
+.cs-v { font-size:26px; font-weight:800; letter-spacing:-.02em; margin-bottom:3px; }
+.cs-s { font-family:'DM Mono',monospace; font-size:11px; }
+.ledger { background:var(--sur); border:1px solid var(--bd); border-radius:var(--rad); box-shadow:var(--sh-md); overflow:hidden; }
+.ledger-tb { display:flex; align-items:center; gap:8px; padding:12px 16px; border-bottom:1px solid var(--bd); background:var(--sur2); }
+.ldg-search { flex:1; max-width:200px; background:var(--sur); border:1px solid var(--bd); border-radius:20px; padding:6px 14px; color:var(--t1); font-family:'Plus Jakarta Sans',sans-serif; font-size:13px; outline:none; }
+.ldg-search::placeholder{color:var(--t4)}
+.spill { padding:5px 13px; border-radius:20px; font-size:12px; font-weight:500; background:var(--sur); border:1px solid var(--bd); color:var(--t2); cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif; transition:all .1s; }
+.spill:hover { background:var(--sur3); color:var(--t1); }
+.spill.active { background:var(--t1); color:#fff; border-color:var(--t1); }
+.ldg-ct { margin-left:auto; font-family:'DM Mono',monospace; font-size:11px; color:var(--t4); }
+.ldg-head { display:grid; grid-template-columns:190px 78px 68px 68px 68px 86px 105px 100px; padding:9px 16px; border-bottom:1px solid var(--bd); background:var(--sur2); }
+.lhc { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--t4); cursor:pointer; user-select:none; }
+.lhc:hover{color:var(--t2)} .lhc.sorted{color:var(--b)}
+.arow-w {}
+.arow { display:grid; grid-template-columns:190px 78px 68px 68px 68px 86px 105px 100px; border-bottom:1px solid var(--bd); cursor:pointer; transition:background .1s; }
+.arow:hover{background:var(--sur2)} .arow.at-risk{border-left:3px solid var(--r)} .arow.flagged{border-left:3px solid var(--a)} .arow.selected{background:var(--b1)}
+.arc { padding:12px 0 12px 16px; display:flex; align-items:center; font-size:13px; }
+.ath-id { display:flex; align-items:center; gap:9px; }
+.avi-s { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0; border:2px solid transparent; }
+.an { font-size:13px; font-weight:700; }
+.ae { font-size:10px; color:var(--t4); font-family:'DM Mono',monospace; margin-top:1px; }
+.sc-cell { display:flex; flex-direction:column; }
+.sc-num { font-size:16px; font-weight:800; letter-spacing:-.02em; }
+.sc-bar { width:34px; height:3px; background:var(--bd); border-radius:2px; overflow:hidden; margin-top:3px; }
+.sc-fill { height:100%; border-radius:2px; }
+/* Drill */
+.drill-panel { display:none; padding:24px 26px; background:var(--sur2); border-top:1px solid var(--bd); }
+.drill-panel.open{display:block;animation:fadeUp .2s ease both}
+.drill-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; padding-bottom:16px; border-bottom:1px solid var(--bd); }
+.dident { display:flex; align-items:center; gap:11px; }
+.dname { font-size:19px; font-weight:800; letter-spacing:-.02em; }
+.dmeta { font-size:11px; color:var(--t3); font-family:'DM Mono',monospace; margin-top:2px; }
+.drill-bs { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:16px; }
+.dbs { background:var(--sur); border:1px solid var(--bd); border-radius:var(--rad-s); padding:14px 16px; border-top:2px solid transparent; }
+.dbs.g{border-top-color:var(--g)} .dbs.a{border-top-color:var(--a)} .dbs.r{border-top-color:var(--r)} .dbs.b{border-top-color:var(--b)}
+.dbs-type { font-size:9px; text-transform:uppercase; letter-spacing:.12em; color:var(--t4); margin-bottom:3px; }
+.dbs-val { font-size:32px; font-weight:800; letter-spacing:-.03em; margin-bottom:3px; }
+.dbs-desc { font-size:12px; color:var(--t2); line-height:1.5; }
+.dtabs { display:flex; gap:4px; margin-bottom:14px; }
+.dtab { padding:5px 14px; border-radius:20px; font-size:12px; font-weight:500; border:1px solid var(--bd); background:var(--sur); color:var(--t2); cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif; transition:all .1s; }
+.dtab:hover{background:var(--sur3);color:var(--t1)} .dtab.active{background:var(--t1);color:#fff;border-color:var(--t1)}
+.dsec{display:none} .dsec.active{display:block}
+.dwo { display:flex; align-items:center; gap:11px; padding:9px 12px; background:var(--sur); border:1px solid var(--bd); border-radius:var(--rad-s); margin-bottom:5px; box-shadow:var(--sh); }
+.dwo-t { width:30px; height:30px; border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0; }
+.dwo-t.run{background:var(--g1)} .dwo-t.bike{background:var(--b1)} .dwo-t.swim{background:#f3f0ff}
+.dwo-m { flex:1; }
+.dwo-n { font-size:13px; font-weight:600; }
+.dwo-mt { font-size:10px; color:var(--t3); font-family:'DM Mono',monospace; }
+.note-box { background:var(--sur); border:1px solid var(--bd); border-radius:var(--rad-s); padding:13px 15px; box-shadow:var(--sh); }
+.note-l { font-size:10px; text-transform:uppercase; letter-spacing:.1em; color:var(--t4); font-weight:600; margin-bottom:6px; }
+.note-ta { width:100%; background:none; border:none; color:var(--t2); font-family:'Plus Jakarta Sans',sans-serif; font-size:13px; resize:none; outline:none; line-height:1.7; }
+.note-f { display:flex; justify-content:flex-end; margin-top:8px; }
+
+/* ══ PROGRAMS ══ */
+.prog-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+.prog-card { background:var(--sur); border:1px solid var(--bd); border-radius:var(--rad); padding:20px 22px; box-shadow:var(--sh); cursor:pointer; transition:all .15s; }
+.prog-card:hover { transform:translateY(-1px); box-shadow:var(--sh-md); }
+.prog-card-top { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:12px; }
+.prog-icon { width:44px; height:44px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; }
+.prog-name { font-size:16px; font-weight:700; margin-bottom:3px; }
+.prog-meta { font-size:11px; color:var(--t3); font-family:'DM Mono',monospace; margin-bottom:8px; }
+.prog-desc { font-size:13px; color:var(--t2); line-height:1.6; margin-bottom:12px; }
+.prog-stats { display:flex; gap:14px; }
+.pst-val { font-size:16px; font-weight:800; }
+.pst-lbl { font-size:10px; color:var(--t4); }
+
+/* ══ SCHEDULE ══ */
+.cal-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+.cal-nav { display:flex; align-items:center; gap:12px; }
+.cal-month { font-size:18px; font-weight:700; }
+.cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:1px; background:var(--bd); border:1px solid var(--bd); border-radius:var(--rad); overflow:hidden; margin-bottom:14px; }
+.cal-day-head { background:var(--sur2); padding:8px; text-align:center; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--t4); }
+.cal-day { background:var(--sur); padding:8px; min-height:72px; cursor:pointer; transition:background .1s; }
+.cal-day:hover{background:var(--sur3)} .cal-day.today{background:var(--g1)}
+.cal-day.other-month{background:var(--sur2)} .cal-day.other-month .cdn{color:var(--t4)}
+.cdn { font-size:12px; font-weight:600; color:var(--t1); margin-bottom:4px; }
+.cal-wo { font-size:10px; padding:2px 6px; border-radius:4px; margin-bottom:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.cal-wo.run{background:var(--g1);color:var(--g)} .cal-wo.bike{background:var(--b1);color:var(--b)} .cal-wo.swim{background:#f3f0ff;color:#7c3aed} .cal-wo.rest{background:var(--sur3);color:var(--t3)}
+
+/* ══ INSIGHTS ══ */
+.insight-strip { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin-bottom:18px; }
+.bar-chart-card { background:var(--sur); border:1px solid var(--bd); border-radius:var(--rad); padding:20px 22px; box-shadow:var(--sh); margin-bottom:14px; }
+.bcc-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--t3); margin-bottom:14px; }
+.bar-viz { display:flex; align-items:flex-end; gap:5px; height:80px; margin-bottom:8px; }
+.bv { flex:1; border-radius:4px 4px 0 0; transition:background .2s; cursor:pointer; }
+.bv.fit{background:var(--g1);border-top:1px solid var(--g2)} .bv.fit.now{background:var(--g2);border-top:2px solid var(--g)}
+.bv.fat{background:var(--a1);border-top:1px solid var(--a2)} .bv.fat.now{background:var(--a2);border-top:2px solid var(--a)}
+.chart-ft { display:flex; justify-content:space-between; font-family:'DM Mono',monospace; font-size:9px; color:var(--t4); }
+.roster-perf { background:var(--sur); border:1px solid var(--bd); border-radius:var(--rad); padding:20px 22px; box-shadow:var(--sh); }
+.rp-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--t3); margin-bottom:14px; }
+.rp-row { display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid var(--bd); }
+.rp-row:last-child{border-bottom:none}
+.rp-avi { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; flex-shrink:0; }
+.rp-name { font-size:13px; font-weight:600; flex:1; }
+.rp-bars { display:flex; gap:6px; align-items:center; }
+.rp-bar-item { display:flex; align-items:center; gap:4px; }
+.rp-bar-lbl { font-size:9px; color:var(--t4); width:12px; }
+.rp-bw { width:50px; height:4px; background:var(--bd); border-radius:2px; overflow:hidden; }
+.rp-bf { height:100%; border-radius:2px; }
+.rp-val { font-family:'DM Mono',monospace; font-size:11px; color:var(--t2); width:22px; text-align:right; }
+
+/* ══ ALERTS (coach intelligence) ══ */
+.alert-list { display:flex; flex-direction:column; gap:6px; margin-bottom:18px; }
+.alrt { display:flex; align-items:flex-start; gap:11px; padding:14px 16px; border-radius:var(--rad); background:var(--sur); border:1px solid var(--bd); border-left:3px solid transparent; cursor:pointer; transition:all .1s; box-shadow:var(--sh); }
+.alrt:hover{transform:translateY(-1px);box-shadow:var(--sh-md)}
+.alrt.danger{border-left-color:var(--r)} .alrt.warn{border-left-color:var(--a)} .alrt.info{border-left-color:var(--b)}
+.alrt-ic{font-size:16px;margin-top:1px;flex-shrink:0}
+.alrt-b{flex:1}
+.alrt-who{font-size:14px;font-weight:700;margin-bottom:2px}
+.alrt-txt{font-size:13px;color:var(--t2);line-height:1.5}
+.alrt-time{font-family:'DM Mono',monospace;font-size:10px;color:var(--t4);margin-top:4px}
+.alrt-cta{flex-shrink:0;font-size:12px;font-weight:500;background:var(--sur3);border:1px solid var(--bd);border-radius:var(--rad-s);padding:5px 12px;cursor:pointer;color:var(--t2);transition:all .1s;font-family:'Plus Jakarta Sans',sans-serif;white-space:nowrap;align-self:center}
+.alrt-cta:hover{background:var(--t1);color:#fff;border-color:var(--t1)}
+.intel-coach-card{background:var(--sur);border:1px solid var(--bd);border-radius:var(--rad);padding:18px 20px;box-shadow:var(--sh)}
+.icc-eye{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px}
+.icc-title{font-size:15px;font-weight:700;margin-bottom:5px}
+.icc-body{font-size:13px;color:var(--t2);line-height:1.6}
+.icc-action{margin-top:10px}
+
+/* ══ BUSINESS ══ */
+.biz-hero { background:var(--sur); border:1px solid var(--bd); border-radius:20px; padding:32px 36px; margin-bottom:14px; box-shadow:var(--sh-md); display:grid; grid-template-columns:1fr auto; gap:32px; align-items:center; }
+.biz-plan-badge { display:inline-flex; align-items:center; gap:7px; background:var(--g1); color:var(--g); border:1px solid var(--g2); border-radius:20px; padding:5px 14px; font-size:12px; font-weight:700; margin-bottom:10px; }
+.biz-plan-name { font-size:26px; font-weight:800; letter-spacing:-.03em; margin-bottom:4px; }
+.biz-plan-sub { font-size:14px; color:var(--t2); }
+.biz-plan-price { text-align:right; }
+.biz-price-amt { font-size:40px; font-weight:800; letter-spacing:-.03em; color:var(--t1); }
+.biz-price-per { font-size:14px; color:var(--t3); }
+.biz-metrics { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:14px; }
+.biz-m { background:var(--sur); border:1px solid var(--bd); border-radius:var(--rad); padding:16px 18px; box-shadow:var(--sh); }
+.biz-m-l { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:.1em; color:var(--t4); margin-bottom:7px; }
+.biz-m-v { font-size:24px; font-weight:800; letter-spacing:-.02em; margin-bottom:3px; }
+.biz-m-s { font-size:11px; font-family:'DM Mono',monospace; }
+.billing-table { background:var(--sur); border:1px solid var(--bd); border-radius:var(--rad); overflow:hidden; box-shadow:var(--sh); }
+.bt-head { display:grid; grid-template-columns:1fr 100px 100px 100px 80px; padding:10px 18px; background:var(--sur2); border-bottom:1px solid var(--bd); }
+.bth { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--t4); }
+.bt-row { display:grid; grid-template-columns:1fr 100px 100px 100px 80px; padding:13px 18px; border-bottom:1px solid var(--bd); font-size:13px; align-items:center; }
+.bt-row:last-child{border-bottom:none} .bt-row:hover{background:var(--sur2)}
+.cady-profile-section { background:linear-gradient(135deg,var(--gold1) 0%,#fff 100%); border:1px solid var(--gold2); border-radius:var(--rad); padding:22px 24px; margin-top:14px; }
+.cps-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+.cps-title { font-size:16px; font-weight:700; display:flex; align-items:center; gap:8px; }
+.profile-form { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.pf-field { display:flex; flex-direction:column; gap:5px; }
+.pf-field.full { grid-column:span 2; }
+.pf-label { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.1em; color:var(--t4); }
+.pf-input,.pf-ta { background:var(--sur); border:1px solid var(--bd); border-radius:var(--rad-s); padding:9px 13px; font-family:'Plus Jakarta Sans',sans-serif; font-size:13px; color:var(--t1); outline:none; transition:border-color .15s; }
+.pf-input:focus,.pf-ta:focus { border-color:var(--bd2); }
+.pf-ta { resize:none; line-height:1.6; }
+
+/* ══ LOAD / COMPARE / PLANS ══ */
+.load-shell{background:var(--sur);border:1px solid var(--bd);border-radius:var(--rad);padding:22px 24px;box-shadow:var(--sh)}
+.la-row{display:flex;align-items:center;gap:13px;padding:10px 0;border-bottom:1px solid var(--bd)}
+.la-row:last-child{border-bottom:none}
+.la-name{font-size:13px;font-weight:600;width:130px;flex-shrink:0}
+.la-track{flex:1;height:8px;background:var(--bd);border-radius:4px;overflow:hidden}
+.la-fill{height:100%;border-radius:4px;transition:width .8s cubic-bezier(.4,0,.2,1)}
+.la-val{font-family:'DM Mono',monospace;font-size:12px;color:var(--t2);width:40px;text-align:right}
+.la-st{width:70px;text-align:right}
+.cmp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+.cmp-card{background:var(--sur);border:1px solid var(--bd);border-radius:var(--rad);padding:20px 22px;box-shadow:var(--sh)}
+.cmp-hd{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:13px;border-bottom:1px solid var(--bd)}
+.cmp-n{font-size:14px;font-weight:700} .cmp-e{font-size:10px;color:var(--t4);font-family:'DM Mono',monospace}
+.cmp-m-l{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--t4);margin-bottom:3px}
+.cmp-m-v{font-size:24px;font-weight:800;letter-spacing:-.02em;margin-bottom:2px}
+.cmp-m-s{font-family:'DM Mono',monospace;font-size:10px;color:var(--t3)}
+.cmp-bars{margin-top:12px;display:flex;flex-direction:column;gap:5px}
+.cmp-br{display:flex;align-items:center;gap:5px}
+.cmp-bl{font-size:10px;color:var(--t3);width:46px}
+.cmp-bw{flex:1;height:5px;background:var(--bd);border-radius:3px;overflow:hidden}
+.cmp-bf{height:100%;border-radius:3px}
+.cmp-bv{font-family:'DM Mono',monospace;font-size:10px;color:var(--t3);margin-left:3px;width:22px}
+.plan-shell{background:var(--sur);border:1px solid var(--bd);border-radius:var(--rad);overflow:hidden;box-shadow:var(--sh-md)}
+.plan-head{display:grid;grid-template-columns:170px repeat(7,1fr);padding:9px 16px;background:var(--sur2);border-bottom:1px solid var(--bd)}
+.phc{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t4)}
+.plan-row{display:grid;grid-template-columns:170px repeat(7,1fr);padding:11px 16px;border-bottom:1px solid var(--bd);align-items:center}
+.plan-row:last-child{border-bottom:none} .plan-row:hover{background:var(--sur2)}
+.plan-ath{font-size:13px;font-weight:600}
+.day-c{display:flex;justify-content:center}
+.dd{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:10px;font-family:'DM Mono',monospace;font-weight:500;cursor:pointer;transition:all .1s}
+.dd:hover{transform:scale(1.1)}
+.dd.done{background:var(--g1);color:var(--g);border:1px solid var(--g2)}
+.dd.sched{background:var(--b1);color:var(--b);border:1px solid var(--b2)}
+.dd.missed{background:var(--r1);color:var(--r);border:1px solid var(--r2)}
+.dd.rest{background:var(--sur3);color:var(--t4);border:1px solid var(--bd)}
+.dd.race{background:var(--a1);color:var(--a);border:1px solid var(--a2)}
+/* Period summary */
+.period-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.period-card{background:var(--sur);border:1px solid var(--bd);border-radius:var(--rad);padding:20px 22px;box-shadow:var(--sh)}
+.period-t{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin-bottom:14px}
+.par{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid var(--bd)}
+.par:last-child{border-bottom:none}
+.pa-avi{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+.pa-name{font-size:13px;font-weight:600;flex:1}
+.pa-d{font-family:'DM Mono',monospace;font-size:12px;font-weight:500}
+
+/* ── RELATIONSHIP STATE ── */
+.state-banner{display:flex;align-items:center;gap:13px;padding:12px 17px;border-radius:14px;border:1px solid var(--bd);margin-bottom:16px;font-size:13px}
+.sb-self{background:var(--sur3);border-color:var(--bd)}
+.sb-activated{background:var(--g1);border-color:var(--g2)}
+.sb-assigned{background:var(--b1);border-color:var(--b2)}
+.sb-icon{font-size:16px;flex-shrink:0}
+.sb-main{flex:1}
+.sb-title{font-weight:700;margin-bottom:1px}
+.sb-sub{font-size:12px;color:var(--t2)}
+/* KEY MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(26,24,20,.45);backdrop-filter:blur(8px);z-index:800;display:none;align-items:center;justify-content:center;padding:24px}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--sur);border:1px solid var(--bd);border-radius:20px;padding:34px 38px;max-width:460px;width:100%;box-shadow:var(--sh-lg);animation:fadeUp .2s ease both;position:relative}
+.modal-title{font-size:18px;font-weight:800;letter-spacing:-.02em;margin-bottom:5px}
+.modal-sub{font-size:13px;color:var(--t2);line-height:1.6;margin-bottom:18px}
+.key-input-wrap{background:var(--sur3);border:1px solid var(--bd);border-radius:8px;padding:14px;margin-bottom:12px;text-align:center}
+.key-input{background:none;border:none;font-family:'DM Mono',monospace;font-size:20px;font-weight:500;color:var(--t1);outline:none;text-align:center;letter-spacing:.2em;width:100%}
+.key-input::placeholder{color:var(--t4);font-size:15px}
+.key-disclosure{background:var(--b1);border:1px solid var(--b2);border-radius:8px;padding:11px 13px;font-size:12px;color:var(--b);line-height:1.65;margin-bottom:16px}
+.modal-footer{display:flex;gap:8px;justify-content:flex-end}
+.modal-close{position:absolute;top:14px;right:16px;background:none;border:none;color:var(--t3);font-size:18px;cursor:pointer;padding:4px;line-height:1}
+/* REL BADGE */
+.rel-badge{font-size:10px;font-family:'DM Mono',monospace;font-weight:500;padding:4px 10px;border-radius:6px}
+.rel-self{background:var(--sur3);color:var(--t2);border:1px solid var(--bd)}
+.rel-activated{background:var(--g1);color:var(--g);border:1px solid var(--g2)}
+.rel-assigned{background:var(--b1);color:var(--b);border:1px solid var(--b2)}
+/* AUTONOMY TOGGLE */
+.auto-toggle{display:flex;gap:2px;background:var(--sur3);border:1px solid var(--bd);border-radius:20px;padding:3px}
+.at-btn{padding:3px 7px;border-radius:14px;font-size:10px;font-weight:600;border:none;background:none;color:var(--t3);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .1s;white-space:nowrap}
+.at-btn:hover{color:var(--t1)}
+.at-btn.act-f{background:var(--r);color:#fff}
+.at-btn.act-p{background:var(--a);color:#fff}
+.at-btn.act-o{background:var(--g);color:#fff}
+/* EXPIRY BAR */
+.expiry-bar{background:var(--sur3);border:1px solid var(--bd);border-radius:8px;padding:9px 13px;display:flex;align-items:center;gap:11px;margin-top:7px}
+.exp-track{flex:1;height:4px;background:var(--bd);border-radius:2px;overflow:hidden}
+.exp-fill{height:100%;border-radius:2px;background:var(--g)}
+.exp-label{font-family:'DM Mono',monospace;font-size:10px;color:var(--t3);white-space:nowrap}
+/* STATE TAG in roster */
+.a-state-tag{font-size:9px;font-family:'DM Mono',monospace;font-weight:500;padding:2px 6px;border-radius:4px;margin-top:2px;display:inline-block}
+
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     ONBOARDING OVERLAY
+══════════════════════════════════════ -->
+<div class="onboard-overlay" id="onboard">
+  <div class="onboard-box">
+    <div class="ob-logo">Coreformance<span>.</span></div>
+    <div class="ob-step" id="ob-step-label">Step 1 of 2</div>
+    <div class="ob-progress" id="ob-progress">
+      <div class="ob-prog-dot active"></div>
+      <div class="ob-prog-dot"></div>
+    </div>
+
+    <!-- Step 1: Role -->
+    <div id="ob-s1">
+      <div class="ob-q">How will you use Coreformance?</div>
+      <div class="ob-sub">This determines your experience. You can always switch roles later.</div>
+      <div class="ob-options">
+        <div class="ob-opt" onclick="selectRole('coach',this)">
+          <div class="ob-opt-icon">📋</div>
+          <div class="ob-opt-text">
+            <div class="ob-opt-title">I'm a Coach</div>
+            <div class="ob-opt-desc">Manage athletes, assign programs, monitor performance at scale</div>
+          </div>
+        </div>
+        <div class="ob-opt" onclick="selectRole('open',this)">
+          <div class="ob-opt-icon">🏃</div>
+          <div class="ob-opt-text">
+            <div class="ob-opt-title">I'm an Athlete — I choose my own coach</div>
+            <div class="ob-opt-desc">Discover Cady Core coaches, follow a program, track your performance</div>
+          </div>
+        </div>
+        <div class="ob-opt" onclick="selectRole('self',this)">
+          <div class="ob-opt-icon">⚙️</div>
+          <div class="ob-opt-text">
+            <div class="ob-opt-title">I'm Self-Coached</div>
+            <div class="ob-opt-desc">Build your own programs, full planning tools, no roster needed</div>
+          </div>
+        </div>
+        <div class="ob-opt" onclick="selectRole('closed',this)">
+          <div class="ob-opt-icon">🏫</div>
+          <div class="ob-opt-text">
+            <div class="ob-opt-title">I'm on a Team / School Program</div>
+            <div class="ob-opt-desc">Your coach assigns everything — you follow the plan and track progress</div>
+          </div>
+        </div>
+      </div>
+      <div class="ob-footer">
+        <button class="btn btn-p" id="ob-next1" onclick="obNext()" disabled style="opacity:.4;cursor:not-allowed">Continue →</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Sport -->
+    <div id="ob-s2" style="display:none">
+      <div class="ob-q">What's your primary sport?</div>
+      <div class="ob-sub">We'll calibrate your metrics and recommendations around this.</div>
+      <div class="ob-options">
+        <div class="ob-opt" onclick="selectSport('triathlon',this)">
+          <div class="ob-opt-icon">🏊</div>
+          <div class="ob-opt-text"><div class="ob-opt-title">Triathlon</div><div class="ob-opt-desc">Swim, bike, run — multi-sport tracking</div></div>
+        </div>
+        <div class="ob-opt" onclick="selectSport('running',this)">
+          <div class="ob-opt-icon">🏃</div>
+          <div class="ob-opt-text"><div class="ob-opt-title">Running</div><div class="ob-opt-desc">Road, trail, track</div></div>
+        </div>
+        <div class="ob-opt" onclick="selectSport('cycling',this)">
+          <div class="ob-opt-icon">🚴</div>
+          <div class="ob-opt-text"><div class="ob-opt-title">Cycling</div><div class="ob-opt-desc">Road, gravel, criterium</div></div>
+        </div>
+        <div class="ob-opt" onclick="selectSport('other',this)">
+          <div class="ob-opt-icon">🏊</div>
+          <div class="ob-opt-text"><div class="ob-opt-title">Swimming / Other</div><div class="ob-opt-desc">Open water, pool, cross-training</div></div>
+        </div>
+      </div>
+      <div class="ob-footer" style="gap:10px;justify-content:space-between">
+        <button class="btn btn-ghost" onclick="obBack()">← Back</button>
+        <button class="btn btn-p" id="ob-next2" onclick="obFinish()" disabled style="opacity:.4;cursor:not-allowed">Enter Coreformance →</button>
+      </div>
+    </div>
+      <!-- Step 2b: Athlete type -->
+    <div id="ob-s2-athlete" style="display:none">
+      <div class="ob-q">Are you on a team or school program?</div>
+      <div class="ob-sub">Everyone starts self-coached by default — your coach relationship layers in naturally whenever you're ready.</div>
+      <div class="ob-opts">
+        <div class="ob-opt" onclick="obSelAthType('team',this)">
+          <div class="ob-opt-ic">&#x1F3EB;</div>
+          <div><div class="ob-opt-title">Yes — I'm on a team or school</div><div class="ob-opt-desc">Enter your team invite code to connect to your assigned coach</div></div>
+        </div>
+        <div class="ob-opt" onclick="obSelAthType('independent',this)">
+          <div class="ob-opt-ic">&#x26A1;</div>
+          <div><div class="ob-opt-title">No — I train independently</div><div class="ob-opt-desc">Start self-coached. Add a coach anytime via activation key or Discover</div></div>
+        </div>
+      </div>
+      <div id="ob-team-code" style="display:none;margin-top:12px">
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--t4);margin-bottom:7px">Team Invite Code</div>
+        <input style="width:100%;background:var(--sur3);border:1px solid var(--bd);border-radius:8px;padding:13px 16px;font-family:'DM Mono',monospace;font-size:16px;color:var(--t1);outline:none;text-align:center;letter-spacing:.12em" id="ob-team-input" placeholder="Paste your code here" oninput="obCheckTeamCode()">
+        <div style="text-align:center;font-size:13px;color:var(--t3);cursor:pointer;text-decoration:underline;text-underline-offset:3px;margin-top:11px" onclick="obSelAthType('independent',document.querySelector('#ob-s2-athlete .ob-opt:last-child'))">Continue without a code →</div>
+      </div>
+      <div class="ob-footer" style="margin-top:18px">
+        <button class="ob-back" onclick="obBack()">← Back</button>
+        <button class="btn btn-p" id="ob-btn-ath" onclick="obFinishAthlete()" disabled style="opacity:.4;cursor:not-allowed">Enter Coreformance →</button>
+      </div>
+    </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TOPBAR
+══════════════════════════════════════ -->
+
+<!-- ACTIVATION KEY MODAL -->
+<div class="modal-overlay" id="key-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">&#x2715;</button>
+    <div class="modal-title">Enter Activation Key</div>
+    <div class="modal-sub">Your coach shared this key — enter it to link their program, activate your training plan, and open a direct channel with your coach.</div>
+    <div class="key-input-wrap">
+      <input class="key-input" id="key-input" placeholder="XXXX — XXXX — XXXX" maxlength="18" oninput="formatKey(this)">
+    </div>
+    <div class="key-disclosure"><strong>What this does:</strong> Entering this key links you to your coach's program, activates the structured plan, and opens a direct communication channel. Your coach receives access to your performance data for the program term. The relationship auto-expires at term end — you revert to self-coached unless renewed.</div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" style="font-size:12px;padding:6px 13px" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-g" style="font-size:12px;padding:6px 13px" onclick="activateKey()">Activate Key →</button>
+    </div>
+  </div>
+</div>
+
+<div class="topbar" id="topbar" style="display:none">
+  <div class="logo">Coreformance<span class="logo-dot">.</span></div>
+  <div class="mode-pill" id="mode-pill" style="display:none">
+    <button class="mpb active athlete" id="btn-a" onclick="setMode('athlete')">🏃 Athlete</button>
+    <button class="mpb coach" id="btn-c" onclick="setMode('coach')">📋 Coach</button>
+  </div>
+  <div class="nav" id="athlete-nav"></div>
+  <div class="nav" id="coach-nav" style="display:none"></div>
+  <div class="tbar-right">
+    <div class="race-tag" id="race-tag"><div class="rdot"></div>70.3 Ironman · 47d</div>
+    <div class="rel-badge rel-self" id="rel-badge">SELF-COACHED</div>
+    <div class="uavi a" id="uavi">MR</div>
+  </div>
+</div>
+
+<div class="app" id="main-app" style="display:none">
+
+<!-- ══════════════════════════════════════════
+     ATHLETE: TODAY
+══════════════════════════════════════════ -->
+<div class="screen active" id="screen-today">
+  <!-- Relationship State Banner -->
+  <div class="state-banner sb-self" id="state-banner">
+    <div class="sb-icon">&#x2699;&#xFE0F;</div>
+    <div class="sb-main">
+      <div class="sb-title">Self-Coached</div>
+      <div class="sb-sub">You're running your own program. Add a coach anytime — enter an activation key or browse Discover.</div>
+    </div>
+    <button class="btn btn-ghost" style="font-size:12px;padding:6px 13px;flex-shrink:0" onclick="openModal()">Enter Key</button>
+    <button class="btn btn-ghost" style="font-size:12px;padding:6px 13px;flex-shrink:0" onclick="go('discover')">Discover</button>
+  </div>
+
+  <div class="ph"><div class="ph-t">Good morning, Marcus.</div><div class="ph-s">Saturday, February 21 · Here's everything you need.</div></div>
+  <div class="readiness-hero">
+    <div>
+      <div class="rh-greet">Your readiness today</div>
+      <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:8px">
+        <div class="rh-score">82</div>
+        <div><div class="rh-status">Productive</div><div class="rh-desc">Ready for quality training.</div></div>
+      </div>
+      <div class="rh-bullets">
+        <div class="rh-b"><div class="rh-dot" style="background:var(--g)"></div>Fitness rising at a safe rate</div>
+        <div class="rh-b"><div class="rh-dot" style="background:var(--a)"></div>Fatigue manageable — ratio healthy</div>
+        <div class="rh-b"><div class="rh-dot" style="background:var(--g)"></div>Safe to train hard today</div>
+      </div>
+      <div class="spark"><div class="spark-lbl">7-day readiness</div><div class="spark-bars"><div class="sbar" style="height:55%"></div><div class="sbar" style="height:48%"></div><div class="sbar" style="height:70%"></div><div class="sbar" style="height:62%"></div><div class="sbar" style="height:54%"></div><div class="sbar" style="height:76%"></div><div class="sbar now" style="height:82%"></div></div></div>
+    </div>
+    <div class="rh-right">
+      <div class="rec-eye"><div class="ldot"></div>Today's Session</div>
+      <div class="rec-title">Zone 2 Aerobic Run</div>
+      <div class="rec-sub">55 MIN · HR &lt;145 BPM · EASY EFFORT</div>
+      <div class="rec-why">Fitness rising faster than fatigue. Extending that gap with low-stress volume is the highest-value thing you can do today.</div>
+      <div class="imp-grid">
+        <div class="imp-t"><div class="imp-l">Fitness gain</div><div class="imp-v up">+0.4 pts</div></div>
+        <div class="imp-t"><div class="imp-l">Fatigue cost</div><div class="imp-v warn">+1.1 pts</div></div>
+        <div class="imp-t"><div class="imp-l">Risk level</div><div class="imp-v up">Low</div></div>
+        <div class="imp-t"><div class="imp-l">Coach assigned</div><div class="imp-v info">Yes</div></div>
+      </div>
+      <button class="btn btn-g" style="width:100%;justify-content:center">▶ Start Session</button>
+    </div>
+  </div>
+  <div class="kpi-strip">
+    <div class="kpi"><div class="kpi-l">Fitness Score</div><div class="kpi-v up">72</div><div class="kpi-d up">↑ +3.2 this week</div></div>
+    <div class="kpi"><div class="kpi-l">Fatigue Score</div><div class="kpi-v warn">61</div><div class="kpi-d muted">→ stable</div></div>
+    <div class="kpi"><div class="kpi-l">Training Load</div><div class="kpi-v">482</div><div class="kpi-d muted">TSS this week</div></div>
+    <div class="kpi"><div class="kpi-l">Consistency</div><div class="kpi-v">87<span style="font-size:13px;color:var(--t4)">%</span></div><div class="kpi-d up">↑ last 30 days</div></div>
+    <div class="kpi"><div class="kpi-l">Recovery</div><div class="kpi-v up" style="font-size:17px;padding-top:4px">Good</div><div class="kpi-d muted">18h to next hard</div></div>
+  </div>
+  <div class="g2">
+    <div class="ts-card"><div class="ts-hd">Trend Summary — 30 Days</div>
+      <div class="ts-row"><div class="ts-l"><div class="ts-name">Fitness</div><div class="ts-m">Score 61 → 72</div></div><div class="ts-r"><div class="ts-verdict up">↑ Improving</div><div class="ts-bar" style="width:56px"><div class="ts-bf" style="width:72%;background:var(--g)"></div></div></div></div>
+      <div class="ts-row"><div class="ts-l"><div class="ts-name">Fatigue</div><div class="ts-m">Score 58 → 61</div></div><div class="ts-r"><div class="ts-verdict muted">→ Stable</div><div class="ts-bar"><div class="ts-bf" style="width:61%;background:var(--a)"></div></div></div></div>
+      <div class="ts-row"><div class="ts-l"><div class="ts-name">Form</div><div class="ts-m">Fitness minus fatigue</div></div><div class="ts-r"><div class="ts-verdict info">+11 Fresh</div><div class="ts-bar"><div class="ts-bf" style="width:60%;background:var(--b)"></div></div></div></div>
+      <div class="ts-row"><div class="ts-l"><div class="ts-name">Injury Risk</div><div class="ts-m">Load ramp rate</div></div><div class="ts-r"><div class="ts-verdict up">Low</div><div class="ts-bar"><div class="ts-bf" style="width:18%;background:var(--g)"></div></div></div></div>
+      <div class="ts-row"><div class="ts-l"><div class="ts-name">Race Readiness</div><div class="ts-m">47 days out</div></div><div class="ts-r"><div class="ts-verdict info">On Track</div><div class="ts-bar"><div class="ts-bf" style="width:80%;background:var(--b)"></div></div></div></div>
+    </div>
+    <div class="ts-card"><div class="ts-hd">This Week vs Last Week</div>
+      <div class="ts-row"><div class="ts-l"><div class="ts-name">Fitness</div><div class="ts-m">Week over week</div></div><div class="ts-r"><div class="ts-verdict up">↑ +3.2 pts</div></div></div>
+      <div class="ts-row"><div class="ts-l"><div class="ts-name">Fatigue</div><div class="ts-m">Week over week</div></div><div class="ts-r"><div class="ts-verdict muted">+1.4 pts</div></div></div>
+      <div class="ts-row"><div class="ts-l"><div class="ts-name">Sessions</div><div class="ts-m">Completed</div></div><div class="ts-r"><div class="ts-verdict">6 of 7</div></div></div>
+      <div class="ts-row"><div class="ts-l"><div class="ts-name">Total Load</div><div class="ts-m">TSS</div></div><div class="ts-r"><div class="ts-verdict up">482</div></div></div>
+      <div class="ts-row"><div class="ts-l"><div class="ts-name">Proj. Race Fitness</div><div class="ts-m">At current trajectory</div></div><div class="ts-r"><div class="ts-verdict info">84 pts</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ATHLETE: TRAINING ══ -->
+<div class="screen" id="screen-training">
+  <div class="ph"><div class="ph-row"><div><div class="ph-t">Training</div><div class="ph-s">Your assigned plan and session history.</div></div><div style="display:flex;gap:8px"><button class="btn btn-ghost" style="font-size:12px">Week View</button><button class="btn btn-ghost" style="font-size:12px">Month View</button></div></div></div>
+  <!-- Self-coached plan builder (shown conditionally) -->
+  <div class="plan-builder" id="self-plan-builder" style="display:none">
+    <div class="pb-header"><div class="pb-title">Week Builder — Feb 17–23</div><button class="btn btn-b" style="font-size:12px">+ Add Workout</button></div>
+    <div class="week-grid">
+      <div class="wday has-workout"><div class="wd-day">Mon</div><div class="wd-icon">🚴</div><div class="wd-type">Tempo Bike</div></div>
+      <div class="wday has-workout"><div class="wd-day">Tue</div><div class="wd-icon">🏃</div><div class="wd-type">Z2 Run</div></div>
+      <div class="wday rest"><div class="wd-day">Wed</div><div class="wd-icon">—</div><div class="wd-type">Rest</div></div>
+      <div class="wday has-workout"><div class="wd-day">Thu</div><div class="wd-icon">🏊</div><div class="wd-type">Swim</div></div>
+      <div class="wday has-workout"><div class="wd-day">Fri</div><div class="wd-icon">🚴</div><div class="wd-type">Intervals</div></div>
+      <div class="wday has-workout"><div class="wd-day">Sat</div><div class="wd-icon">🏃</div><div class="wd-type">Long Run</div></div>
+      <div class="wday rest"><div class="wd-day">Sun</div><div class="wd-icon">—</div><div class="wd-type">Rest</div></div>
+    </div>
+  </div>
+  <div class="filter-bar">
+    <button class="fbtn active">All</button><button class="fbtn">🏃 Run</button><button class="fbtn">🚴 Bike</button><button class="fbtn">🏊 Swim</button><button class="fbtn">Last 7 days</button><button class="fbtn">Last 30 days</button>
+  </div>
+  <div class="hist-grp"><div class="hg-lbl">This Week</div>
+    <div class="hrow"><div class="htype run">🏃</div><div class="hmain"><div class="hname">Zone 2 Run</div><div class="hmeta">SAT FEB 21 · 45 MIN · 6.2 MI · HR AVG 138</div></div><div class="hright"><div class="hload up">62</div><div class="chip cg">Positive</div></div></div>
+    <div class="hrow"><div class="htype bike">🚴</div><div class="hmain"><div class="hname">Tempo Intervals</div><div class="hmeta">FRI FEB 20 · 60 MIN · 3×12MIN · 245W AVG</div></div><div class="hright"><div class="hload warn">88</div><div class="chip ca">High Load</div></div></div>
+    <div class="hrow"><div class="htype swim">🏊</div><div class="hmain"><div class="hname">Easy Aerobic Swim</div><div class="hmeta">THU FEB 19 · 35 MIN · 2,400M</div></div><div class="hright"><div class="hload up">41</div><div class="chip cg">Positive</div></div></div>
+    <div class="hrow"><div class="htype run">🏃</div><div class="hmain"><div class="hname">Recovery Run</div><div class="hmeta">WED FEB 18 · 30 MIN · HR AVG 122</div></div><div class="hright"><div class="hload muted">28</div><div class="chip cn">Recovery</div></div></div>
+  </div>
+  <div class="hist-grp"><div class="hg-lbl">Last Week</div>
+    <div class="hrow"><div class="htype bike">🚴</div><div class="hmain"><div class="hname">Long Ride</div><div class="hmeta">SAT FEB 14 · 3H 20MIN · 240W NP</div></div><div class="hright"><div class="hload warn">112</div><div class="chip ca">High Load</div></div></div>
+    <div class="hrow"><div class="htype run">🏃</div><div class="hmain"><div class="hname">Brick Run</div><div class="hmeta">SAT FEB 14 · 20 MIN · Post-bike</div></div><div class="hright"><div class="hload up">31</div><div class="chip cg">Productive</div></div></div>
+  </div>
+</div>
+
+<!-- ══ ATHLETE: PERFORMANCE ══ -->
+<div class="screen" id="screen-performance">
+  <div class="ph"><div class="ph-t">Performance</div><div class="ph-s">Your physiological balance sheet and trends.</div></div>
+  <div class="perf-hero" style="border-radius:20px;margin-bottom:14px;box-shadow:var(--sh-md)">
+    <div class="perf-cell pc-fit"><div class="pc-bg"></div><div class="pc-type">Asset</div><div class="pc-name">Fitness Score</div><div class="pc-val">72</div><div class="pc-verdict">Building at safe rate. Season high.</div><div class="pc-stats"><div class="pc-stat"><span>7d change</span><span class="up">+3.2</span></div><div class="pc-stat"><span>30d change</span><span class="up">+11.4</span></div><div class="pc-stat"><span>Season peak</span><span>78</span></div></div></div>
+    <div class="perf-cell pc-fat"><div class="pc-bg"></div><div class="pc-type">Liability</div><div class="pc-name">Fatigue Score</div><div class="pc-val">61</div><div class="pc-verdict">Manageable. Not accumulating faster than fitness.</div><div class="pc-stats"><div class="pc-stat"><span>7d change</span><span class="warn">+2.1</span></div><div class="pc-stat"><span>Ratio F:F</span><span class="up">0.85 ✓</span></div><div class="pc-stat"><span>Risk level</span><span class="up">Low</span></div></div></div>
+    <div class="perf-cell pc-read"><div class="pc-bg"></div><div class="pc-type">Equity</div><div class="pc-name">Readiness</div><div class="pc-val">82</div><div class="pc-verdict">Ready for productive training today.</div><div class="pc-stats"><div class="pc-stat"><span>Status</span><span class="info">Productive</span></div><div class="pc-stat"><span>HRV trend</span><span class="info">↑ Stable</span></div><div class="pc-stat"><span>Confidence</span><span class="info">High</span></div></div></div>
+  </div>
+  <div class="analytics-grid">
+    <div class="a-card"><div class="a-title">Efficiency Trends</div>
+      <div class="irow"><div class="ilbl">Cardiac drift</div><div class="ival up">↓ improving</div></div>
+      <div class="irow"><div class="ilbl">Run economy</div><div class="ival up">↑ +4% vs Jan</div></div>
+      <div class="irow"><div class="ilbl">Threshold pace</div><div class="ival">6:42/mi</div></div>
+      <div class="irow"><div class="ilbl">FTP (bike)</div><div class="ival">272W · 3.6 W/kg</div></div>
+      <div class="irow"><div class="ilbl">Swim CSS</div><div class="ival">1:38/100m</div></div>
+    </div>
+    <div class="a-card"><div class="a-title">HR Zone Distribution — 30d</div>
+      <div class="zrow"><div class="zlbl">Zone 1</div><div class="ztrack"><div class="zfill" style="width:12%;background:var(--g)"></div></div><div class="zpct">12%</div></div>
+      <div class="zrow"><div class="zlbl">Zone 2</div><div class="ztrack"><div class="zfill" style="width:52%;background:var(--g)"></div></div><div class="zpct">52%</div></div>
+      <div class="zrow"><div class="zlbl">Zone 3</div><div class="ztrack"><div class="zfill" style="width:18%;background:var(--a)"></div></div><div class="zpct">18%</div></div>
+      <div class="zrow"><div class="zlbl">Zone 4</div><div class="ztrack"><div class="zfill" style="width:13%;background:var(--a)"></div></div><div class="zpct">13%</div></div>
+      <div class="zrow"><div class="zlbl">Zone 5</div><div class="ztrack"><div class="zfill" style="width:5%;background:var(--r)"></div></div><div class="zpct">5%</div></div>
+    </div>
+    <div class="a-card"><div class="a-title">Performance Output</div>
+      <div class="irow"><div class="ilbl">This week</div><div class="ival up">3.8 kWh</div></div>
+      <div class="irow"><div class="ilbl">This month</div><div class="ival up">14.2 kWh</div></div>
+      <div class="irow"><div class="ilbl">This season</div><div class="ival">187 kWh</div></div>
+      <div class="irow"><div class="ilbl">Credits earned</div><div class="ival up">247</div></div>
+      <div class="irow"><div class="ilbl">Tier</div><div class="ival">Silver → Gold</div></div>
+    </div>
+    <div class="a-card"><div class="a-title">Season Goal</div>
+      <div class="irow"><div class="ilbl">Race</div><div class="ival">Ironman 70.3</div></div>
+      <div class="irow"><div class="ilbl">Date</div><div class="ival">Apr 9, 2026</div></div>
+      <div class="irow"><div class="ilbl">Target finish</div><div class="ival">4:45:00</div></div>
+      <div class="irow"><div class="ilbl">Required fitness</div><div class="ival">80–85 pts</div></div>
+      <div class="irow"><div class="ilbl">Trajectory</div><div class="ival up">On target ✓</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ATHLETE: INTELLIGENCE ══ -->
+<div class="screen" id="screen-intelligence">
+  <div class="ph"><div class="ph-t">Intelligence</div><div class="ph-s">AI-powered recommendations built around your physiology.</div></div>
+  <div class="intel-hero">
+    <div class="ih-eyebrow"><div class="ldot"></div>AI Analysis — Updated 6:45 AM</div>
+    <div class="ih-title">You're in your best training window of the season.</div>
+    <div class="ih-sub">Fitness is rising faster than fatigue for the third consecutive week. The next 10 days are your highest-leverage training window before your taper begins. Push the aerobic volume now.</div>
+  </div>
+  <div class="intel-cards">
+    <div class="intel-card"><div class="ic-eye up">↑ Fitness Insight</div><div class="ic-title">Extend your long run by 8 minutes</div><div class="ic-body">Your aerobic efficiency has improved 4% since January. Your body is ready for more volume at low intensity. Adding 8 minutes to Saturday's long run will accelerate your CTL without meaningfully increasing injury risk.</div><div class="ic-meta">Confidence: High · Based on 42 days of data</div></div>
+    <div class="intel-card"><div class="ic-eye warn">⚡ Load Warning</div><div class="ic-title">Don't add a 7th workout this week</div><div class="ic-body">Your current 6-session week is producing excellent adaptation. Adding a 7th session at this point in your build phase would push your fatigue-to-fitness ratio above optimal. Rest day is doing real work.</div><div class="ic-meta">Confidence: High · Load modeling</div></div>
+    <div class="intel-card"><div class="ic-eye info">◈ Race Readiness</div><div class="ic-title">You're 6 fitness points from your race target</div><div class="ic-body">Target fitness for your Ironman 70.3 is 80–85 points. You're at 72 with 47 days remaining. At your current build rate of +3.2/week, you'll peak at approximately 84 — right in the target window.</div><div class="ic-meta">Projection: 84 pts at race day</div></div>
+    <div class="intel-card"><div class="ic-eye up">💤 Recovery Signal</div><div class="ic-title">Your recovery pattern is optimal</div><div class="ic-body">HRV has been stable or rising for 9 consecutive mornings. This is your body signaling that the current training-recovery balance is working. Maintain the pattern through the end of this build block.</div><div class="ic-meta">HRV trend: ↑ +8% vs last week</div></div>
+  </div>
+</div>
+
+<!-- ══ ATHLETE: DISCOVER (Open only) ══ -->
+<div class="screen" id="screen-discover">
+  <div class="ph"><div class="ph-t">Discover</div><div class="ph-s">Find your coach. Browse Cady Core verified programs.</div></div>
+  <div class="cady-hero">
+    <div>
+      <div class="ch-badge"><div class="cady-badge"><span class="cady-badge-icon">✦</span> Cady Core</div></div>
+      <div class="ch-title">Coaches you can trust.</div>
+      <div class="ch-sub">Cady Core is Coreformance's verification program. Every coach here has been vetted, credentialed, and approved. Not a marketplace — a curated directory of the best endurance coaches on the platform.</div>
+    </div>
+    <div class="ch-stats">
+      <div class="ch-stat"><div class="ch-stat-val">47</div><div class="ch-stat-lbl">Verified coaches</div></div>
+      <div class="ch-stat"><div class="ch-stat-val">12</div><div class="ch-stat-lbl">Sports covered</div></div>
+      <div class="ch-stat"><div class="ch-stat-val">2,400+</div><div class="ch-stat-lbl">Active athletes</div></div>
+    </div>
+  </div>
+  <div class="discover-filters">
+    <span class="df-lbl">Filter by:</span>
+    <button class="fbtn active">All Sports</button>
+    <button class="fbtn">🏊 Triathlon</button>
+    <button class="fbtn">🏃 Running</button>
+    <button class="fbtn">🚴 Cycling</button>
+    <button class="fbtn active" style="margin-left:8px">Cady Core Only</button>
+  </div>
+  <div class="coach-grid">
+    <div class="coach-card" onclick="go('coach-profile')">
+      <div class="coach-card-top">
+        <div class="coach-avi-lg" style="background:var(--g1);color:var(--g);border-color:var(--g2)">JT</div>
+        <div class="cady-verified"><span>✦</span> Cady Core</div>
+      </div>
+      <div class="coach-name">Jordan Taylor</div>
+      <div class="coach-spec">Triathlon · Ironman Specialist · 12 years</div>
+      <div class="coach-bio">"I coach working professionals who want to finish strong — not just finish. My athletes average 23% performance improvement in their first season."</div>
+      <div class="coach-stats"><div class="cst"><div class="cst-val up">34</div><div class="cst-lbl">Athletes</div></div><div class="cst"><div class="cst-val">94%</div><div class="cst-lbl">Completion rate</div></div><div class="cst"><div class="cst-val up">4.9★</div><div class="cst-lbl">Rating</div></div></div>
+      <div><span class="prog-pill">20-wk IM 70.3</span><span class="prog-pill">16-wk Olympic</span><span class="prog-pill">Base Building</span></div>
+    </div>
+    <div class="coach-card">
+      <div class="coach-card-top">
+        <div class="coach-avi-lg" style="background:var(--b1);color:var(--b);border-color:var(--b2)">SR</div>
+        <div class="cady-verified"><span>✦</span> Cady Core</div>
+      </div>
+      <div class="coach-name">Sam Rivera</div>
+      <div class="coach-spec">Marathon · Boston Qualifier · 8 years</div>
+      <div class="coach-bio">"Former D1 coach now working with age-groupers. I specialize in athletes who've plateaued and need to break through to the next level."</div>
+      <div class="coach-stats"><div class="cst"><div class="cst-val up">28</div><div class="cst-lbl">Athletes</div></div><div class="cst"><div class="cst-val">91%</div><div class="cst-lbl">Completion rate</div></div><div class="cst"><div class="cst-val up">4.8★</div><div class="cst-lbl">Rating</div></div></div>
+      <div><span class="prog-pill">18-wk Marathon</span><span class="prog-pill">BQ Training</span><span class="prog-pill">Speed Block</span></div>
+    </div>
+    <div class="coach-card">
+      <div class="coach-card-top">
+        <div class="coach-avi-lg" style="background:var(--a1);color:var(--a);border-color:var(--a2)">DK</div>
+        <div class="cady-verified"><span>✦</span> Cady Core</div>
+      </div>
+      <div class="coach-name">Dana Kim</div>
+      <div class="coach-spec">Cycling · Gravel · FTP Development</div>
+      <div class="coach-bio">"Power-based coaching for cyclists who want real numbers to train against. I turn data into decisions so you don't have to."</div>
+      <div class="coach-stats"><div class="cst"><div class="cst-val up">19</div><div class="cst-lbl">Athletes</div></div><div class="cst"><div class="cst-val">96%</div><div class="cst-lbl">Completion rate</div></div><div class="cst"><div class="cst-val up">5.0★</div><div class="cst-lbl">Rating</div></div></div>
+      <div><span class="prog-pill">12-wk FTP Build</span><span class="prog-pill">Gravel Prep</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ COACH PROFILE (Cady Core) ══ -->
+<div class="screen" id="screen-coach-profile">
+  <div class="ph"><div class="ph-row"><div><button class="btn btn-ghost" style="font-size:12px;margin-bottom:12px" onclick="go('discover')">← Back to Discover</button><div class="ph-t">Jordan Taylor</div><div class="ph-s">Cady Core Verified Coach</div></div><button class="btn btn-g" style="font-size:13px;align-self:flex-start;margin-top:40px">Enroll with Jordan</button></div></div>
+  <div class="verified-profile">
+    <div class="vp-banner"><div style="position:absolute;top:14px;right:24px"><div class="cady-badge"><span class="cady-badge-icon">✦</span> Cady Core Verified</div></div></div>
+    <div class="vp-avi">JT</div>
+    <div class="vp-body">
+      <div class="vp-name">Jordan Taylor</div>
+      <div class="vp-creds"><div class="cady-verified"><span>✦</span> Cady Core</div><span class="chip cn">Triathlon</span><span class="chip cn">Ironman</span><span class="chip cn">12 years coaching</span></div>
+      <div class="vp-bio">I coach working professionals who want to compete seriously without burning out. My methodology is rooted in aerobic base development, progressive overload, and intelligent recovery. My athletes finish races — and come back next year stronger.</div>
+      <div class="g3" style="margin-bottom:18px">
+        <div class="kpi"><div class="kpi-l">Athletes Coached</div><div class="kpi-v">34</div><div class="kpi-d muted">active this season</div></div>
+        <div class="kpi"><div class="kpi-l">Avg Improvement</div><div class="kpi-v up">+23%</div><div class="kpi-d up">first season</div></div>
+        <div class="kpi"><div class="kpi-l">Completion Rate</div><div class="kpi-v up">94%</div><div class="kpi-d muted">of prescribed sessions</div></div>
+      </div>
+      <div class="sdiv">Programs</div>
+      <div class="prog-grid">
+        <div class="prog-card"><div class="prog-card-top"><div class="prog-icon" style="background:var(--b1)">🏊</div><div class="chip cg" style="font-size:10px">Open Enrollment</div></div><div class="prog-name">20-Week Ironman 70.3</div><div class="prog-meta">20 WEEKS · 6 SESSIONS/WK · INTERMEDIATE</div><div class="prog-desc">Full periodized build from base to peak. Designed for athletes targeting 4:30–5:30 finish times with 8–12 hrs/week available.</div><div class="prog-stats"><div><div class="pst-val">47</div><div class="pst-lbl">Enrolled</div></div><div><div class="pst-val up">4.9★</div><div class="pst-lbl">Rating</div></div></div></div>
+        <div class="prog-card"><div class="prog-card-top"><div class="prog-icon" style="background:var(--g1)">🏃</div><div class="chip cg" style="font-size:10px">Open Enrollment</div></div><div class="prog-name">16-Week Olympic Tri</div><div class="prog-meta">16 WEEKS · 5 SESSIONS/WK · ALL LEVELS</div><div class="prog-desc">Sprint to Olympic distance. Emphasis on pacing strategy and race-day execution. Good for first-timers and improvement-seekers.</div><div class="prog-stats"><div><div class="pst-val">31</div><div class="pst-lbl">Enrolled</div></div><div><div class="pst-val up">4.8★</div><div class="pst-lbl">Rating</div></div></div></div>
+        <div class="prog-card"><div class="prog-card-top"><div class="prog-icon" style="background:var(--a1)">⚡</div><div class="chip cn" style="font-size:10px">Waitlist</div></div><div class="prog-name">Aerobic Base Build</div><div class="prog-meta">12 WEEKS · 4 SESSIONS/WK · BEGINNER</div><div class="prog-desc">For athletes returning from injury or building from scratch. Low intensity, high consistency. The foundation everything else is built on.</div><div class="prog-stats"><div><div class="pst-val">22</div><div class="pst-lbl">Enrolled</div></div><div><div class="pst-val up">5.0★</div><div class="pst-lbl">Rating</div></div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- INVITE ATHLETE SCREEN -->
+<div class="screen" id="screen-invite">
+  <div class="ph"><div class="ph-row"><div><button class="btn btn-ghost" style="font-size:12px;padding:6px 13px;margin-bottom:12px" onclick="go('roster')">← Back to Roster</button><div class="ph-t">Add Athlete</div><div class="ph-s">Invite to your roster or generate an activation key for external distribution.</div></div></div></div>
+  <div class="g2">
+    <div class="card card-p">
+      <div style="font-size:15px;font-weight:700;margin-bottom:4px">Invite to Roster</div>
+      <div style="font-size:13px;color:var(--t2);line-height:1.6;margin-bottom:16px">Generate a team invite link or code. When the athlete joins, they're automatically rostered to you. You set their autonomy level from the start.</div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
+        <div><div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--t4);margin-bottom:5px">Athlete Email</div><input style="width:100%;background:var(--sur3);border:1px solid var(--bd);border-radius:8px;padding:9px 12px;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;color:var(--t1);outline:none" placeholder="athlete@email.com"></div>
+        <div><div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--t4);margin-bottom:5px">Default Autonomy</div><select style="width:100%;background:var(--sur3);border:1px solid var(--bd);border-radius:8px;padding:9px 12px;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;color:var(--t1);outline:none;cursor:pointer"><option>Full Control — Today and Performance only, no Discover</option><option selected>Partial Autonomy — assigned program + can self-log, coach sees all</option><option>Open — rostered but self-coached, coach has visibility only</option></select></div>
+      </div>
+      <button class="btn btn-b" style="width:100%;justify-content:center">Send Invite Link</button>
+    </div>
+    <div class="card card-p">
+      <div style="font-size:15px;font-weight:700;margin-bottom:4px">Generate Activation Key</div>
+      <div style="font-size:13px;color:var(--t2);line-height:1.6;margin-bottom:16px">Create a key for a specific program. Share externally — your website, social, wherever. When the athlete enters it in Coreformance, they link to you automatically.</div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
+        <div><div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--t4);margin-bottom:5px">Program</div><select style="width:100%;background:var(--sur3);border:1px solid var(--bd);border-radius:8px;padding:9px 12px;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;color:var(--t1);outline:none;cursor:pointer"><option>20-Week Ironman 70.3 (20-week term)</option><option>16-Week Olympic Tri (16-week term)</option><option>12-Week Base Build (12-week term)</option></select></div>
+        <div><div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--t4);margin-bottom:5px">Term Length</div><select style="width:100%;background:var(--sur3);border:1px solid var(--bd);border-radius:8px;padding:9px 12px;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;color:var(--t1);outline:none;cursor:pointer"><option>Matches program length (recommended)</option><option>Custom term</option></select></div>
+        <div style="background:var(--sur3);border:1px solid var(--bd);border-radius:8px;padding:10px 13px;font-size:12px;color:var(--t2);line-height:1.65">When the term ends, the athlete automatically reverts to self-coached unless you issue a renewal key. This prevents orphaned relationships.</div>
+      </div>
+      <button class="btn btn-g" style="width:100%;justify-content:center">Generate Activation Key →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     COACH: ROSTER
+══════════════════════════════════════════ -->
+<div class="screen" id="screen-roster">
+  <div class="ph"><div class="ph-row"><div><div class="ph-t">Athlete Roster</div><div class="ph-s">12 athletes · Physiological ledger. Click any row to drill in.</div></div><div style="display:flex;gap:8px"><button class="btn btn-ghost" style="font-size:12px">Export</button><button class="btn btn-b" style="font-size:12px" onclick="go('invite')">+ Invite Athlete</button></div></div></div>
+  <div class="coach-strip">
+    <div class="cs-c"><div class="cs-l">Athletes</div><div class="cs-v">12</div><div class="cs-s muted">active this week</div></div>
+    <div class="cs-c"><div class="cs-l">Avg Readiness</div><div class="cs-v up">74</div><div class="cs-s up">↑ +4 vs last week</div></div>
+    <div class="cs-c" style="border-top:2px solid var(--r)"><div class="cs-l">At Risk</div><div class="cs-v risk">1</div><div class="cs-s risk">HRV alarm active</div></div>
+    <div class="cs-c" style="border-top:2px solid var(--a)"><div class="cs-l">Flagged</div><div class="cs-v warn">2</div><div class="cs-s warn">Need check-in</div></div>
+    <div class="cs-c"><div class="cs-l">Completion</div><div class="cs-v">91%</div><div class="cs-s muted">sessions this week</div></div>
+  </div>
+  <div class="ledger">
+    <div class="ledger-tb">
+      <input class="ldg-search" type="text" placeholder="🔍  Search athletes…">
+      <button class="spill active">All</button>
+      <button class="spill" onclick="spill(this)">At Risk</button>
+      <button class="spill" onclick="spill(this)">Flagged</button>
+      <button class="spill" onclick="spill(this)">By Readiness</button>
+      <button class="spill" onclick="spill(this)">By Fitness</button>
+      <div class="ldg-ct">12 athletes</div>
+    </div>
+    <div class="ldg-head">
+      <div class="lhc">Athlete</div><div class="lhc sorted">Readiness ↕</div><div class="lhc">Fitness</div><div class="lhc">Fatigue</div><div class="lhc">Form</div><div class="lhc">Consist.</div><div class="lhc">Autonomy</div><div class="lhc">Status</div>
+    </div>
+    <!-- Sarah Chen — AT RISK -->
+    <div class="arow-w">
+      <div class="arow at-risk" onclick="drill('sc')">
+        <div class="arc"><div class="ath-id"><div class="avi-s" style="background:var(--r1);color:var(--r);border-color:var(--r2)">SC</div><div><div class="an">Sarah Chen</div><div class="ae">Boston · 61d</div><div><span class="a-state-tag" style="background:var(--b1);color:var(--b)">INVITED</span></div></div></div></div>
+        <div class="arc"><div class="sc-cell"><div class="sc-num risk">38</div><div class="sc-bar"><div class="sc-fill" style="width:38%;background:var(--r)"></div></div></div></div>
+        <div class="arc"><div class="sc-num">65</div></div><div class="arc"><div class="sc-num risk">87</div></div><div class="arc"><div class="sc-num risk">−22</div></div>
+        <div class="arc"><div class="sc-num">79%</div></div>
+        <div class="arc" onclick="event.stopPropagation()"><div class="auto-toggle"><button class="at-btn act-f" onclick="setAuto(this,'f')">Full</button><button class="at-btn" onclick="setAuto(this,'p')">Part</button><button class="at-btn" onclick="setAuto(this,'o')">Open</button></div></div>
+        <div class="arc"><span class="chip cr">AT RISK</span></div>
+      </div>
+      <div class="drill-panel" id="drill-sc">
+        <div class="drill-top"><div class="dident"><div class="avi-s" style="width:40px;height:40px;background:var(--r1);color:var(--r);border:2px solid var(--r2);font-size:13px">SC</div><div><div class="dname">Sarah Chen</div><div class="dmeta">INVITED · FULL CONTROL · BOSTON 61 DAYS · ⚠ OVERREACH</div></div></div><div style="display:flex;gap:8px"><button class="btn btn-ghost" style="font-size:11px" onclick="closeDrill('sc')">✕</button><button class="btn btn-b" style="font-size:11px">✉ Message</button></div></div>
+        <div class="drill-bs"><div class="dbs r"><div class="dbs-type">Readiness (Equity)</div><div class="dbs-val risk">38</div><div class="dbs-desc">Critical. Rest only. HRV dropped 22% overnight.</div></div><div class="dbs a"><div class="dbs-type">Fitness (Asset)</div><div class="dbs-val">65</div><div class="dbs-desc">Good baseline. Masked by current fatigue.</div></div><div class="dbs r"><div class="dbs-type">Fatigue (Liability)</div><div class="dbs-val risk">87</div><div class="dbs-desc">Dangerously high. Exceeds fitness by 22 pts.</div></div></div>
+        <div class="dtabs"><button class="dtab active" onclick="drillTab(this,'wk-sc')">Workouts</button><button class="dtab" onclick="drillTab(this,'note-sc')">Notes</button></div>
+        <div class="dsec active" id="wk-sc"><div class="dwo"><div class="dwo-t run">🏃</div><div class="dwo-m"><div class="dwo-n">Tempo Run</div><div class="dwo-mt">WED FEB 19 · 50 MIN</div></div><div style="font-family:'DM Mono',monospace;font-size:14px;font-weight:800" class="warn">91</div></div><div class="dwo"><div class="dwo-t bike">🚴</div><div class="dwo-m"><div class="dwo-n">Hard Intervals</div><div class="dwo-mt">TUE FEB 18 · 75 MIN</div></div><div style="font-family:'DM Mono',monospace;font-size:14px;font-weight:800" class="risk">118</div></div><div class="dwo"><div class="dwo-t run">🏃</div><div class="dwo-m"><div class="dwo-n">Long Run — 18mi</div><div class="dwo-mt">SUN FEB 16 · Marathon pace</div></div><div style="font-family:'DM Mono',monospace;font-size:14px;font-weight:800" class="risk">142</div></div></div>
+        <div class="dsec" id="note-sc"><div class="note-box"><div class="note-l">Coach Notes</div><textarea class="note-ta" rows="3">⚠ Rest day mandatory. Call Sarah — HRV dropped 22%. Reduce next week by 20-25%. Watch closely before resuming intensity.</textarea><div class="note-f"><button class="btn btn-g" style="font-size:11px">Save</button></div></div></div>
+      </div>
+    </div>
+    <!-- Marcus Reid -->
+    <div class="arow-w">
+      <div class="arow" onclick="drill('mr')">
+        <div class="arc"><div class="ath-id"><div class="avi-s" style="background:var(--g1);color:var(--g);border-color:var(--g2)">MR</div><div><div class="an">Marcus Reid</div><div class="ae">IM 70.3 · 47d</div><div><span class="a-state-tag" style="background:var(--g1);color:var(--g)">ACTIVATED</span></div></div></div></div>
+        <div class="arc"><div class="sc-cell"><div class="sc-num up">82</div><div class="sc-bar"><div class="sc-fill" style="width:82%;background:var(--g)"></div></div></div></div>
+        <div class="arc"><div class="sc-num up">72</div></div><div class="arc"><div class="sc-num warn">61</div></div><div class="arc"><div class="sc-num up">+11</div></div>
+        <div class="arc"><div class="sc-num">87%</div></div>
+        <div class="arc" onclick="event.stopPropagation()"><div class="auto-toggle"><button class="at-btn" onclick="setAuto(this,'f')">Full</button><button class="at-btn act-p" onclick="setAuto(this,'p')">Part</button><button class="at-btn" onclick="setAuto(this,'o')">Open</button></div></div>
+        <div class="arc"><span class="chip cg">Productive</span></div>
+      </div>
+      <div class="drill-panel" id="drill-mr">
+        <div class="drill-top"><div class="dident"><div class="avi-s" style="width:40px;height:40px;background:var(--g1);color:var(--g);border:2px solid var(--g2);font-size:13px">MR</div><div><div class="dname">Marcus Reid</div><div class="dmeta">ACTIVATED · PARTIAL AUTONOMY · IM 70.3 · 47 DAYS · WEEK 8 OF 20</div></div></div><div style="display:flex;gap:8px"><button class="btn btn-ghost" style="font-size:11px" onclick="closeDrill('mr')">✕</button><button class="btn btn-b" style="font-size:11px">✉ Message</button></div></div>
+        <div class="drill-bs"><div class="dbs g"><div class="dbs-type">Readiness (Equity)</div><div class="dbs-val up">82</div><div class="dbs-desc">Productive — ready for quality training today.</div></div><div class="dbs g"><div class="dbs-type">Fitness (Asset)</div><div class="dbs-val up">72</div><div class="dbs-desc">Season high. Building at +3.2/wk — optimal.</div></div><div class="dbs a"><div class="dbs-type">Fatigue (Liability)</div><div class="dbs-val warn">61</div><div class="dbs-desc">Manageable. Ratio 0.85 — healthy range.</div></div></div>
+        <div class="dtabs"><button class="dtab active" onclick="drillTab(this,'wk-mr')">Workouts</button><button class="dtab" onclick="drillTab(this,'note-mr')">Notes</button></div>
+        <div class="dsec active" id="wk-mr"><div class="dwo"><div class="dwo-t run">🏃</div><div class="dwo-m"><div class="dwo-n">Zone 2 Run</div><div class="dwo-mt">SAT FEB 21 · 45 MIN</div></div><div style="font-family:'DM Mono',monospace;font-size:14px;font-weight:800" class="up">62</div></div><div class="dwo"><div class="dwo-t bike">🚴</div><div class="dwo-m"><div class="dwo-n">Tempo Intervals</div><div class="dwo-mt">FRI FEB 20 · 60 MIN · 245W</div></div><div style="font-family:'DM Mono',monospace;font-size:14px;font-weight:800" class="warn">88</div></div><div class="dwo"><div class="dwo-t swim">🏊</div><div class="dwo-m"><div class="dwo-n">Easy Swim</div><div class="dwo-mt">THU FEB 19 · 35 MIN</div></div><div style="font-family:'DM Mono',monospace;font-size:14px;font-weight:800" class="up">41</div></div></div>
+        <div class="dsec" id="note-mr"><div class="note-box"><div class="note-l">Coach Notes</div><textarea class="note-ta" rows="3">Marcus tracking well. CTL crossed 70 — season milestone. Increase long run by 5 min this weekend. Watch left knee. Keep Z2 emphasis through next week.</textarea><div class="note-f"><button class="btn btn-g" style="font-size:11px">Save</button></div></div>
+          <div class="expiry-bar"><div class="exp-track"><div class="exp-fill" style="width:62%"></div></div><div class="exp-label">Week 8 of 20 &middot; Term expires Apr 9 &middot; Auto-reverts to self-coached</div></div>
+          </div>
+    </div>
+    <!-- Derek Osei — FLAGGED -->
+    <div class="arow-w">
+      <div class="arow flagged" onclick="drill('do')">
+        <div class="arc"><div class="ath-id"><div class="avi-s" style="background:var(--a1);color:var(--a);border-color:var(--a2)">DO</div><div><div class="an">Derek Osei</div><div class="ae">Chicago Tri · 89d</div><div><span class="a-state-tag" style="background:var(--g1);color:var(--g)">ACTIVATED</span></div></div></div></div>
+        <div class="arc"><div class="sc-cell"><div class="sc-num warn">54</div><div class="sc-bar"><div class="sc-fill" style="width:54%;background:var(--a)"></div></div></div></div>
+        <div class="arc"><div class="sc-num">48</div></div><div class="arc"><div class="sc-num warn">52</div></div><div class="arc"><div class="sc-num warn">−4</div></div>
+        <div class="arc"><div class="sc-num risk">41%</div></div>
+        <div class="arc" onclick="event.stopPropagation()"><div class="auto-toggle"><button class="at-btn" onclick="setAuto(this,'f')">Full</button><button class="at-btn act-p" onclick="setAuto(this,'p')">Part</button><button class="at-btn" onclick="setAuto(this,'o')">Open</button></div></div>
+        <div class="arc"><span class="chip ca">Low Consist.</span></div>
+      </div>
+      <div class="drill-panel" id="drill-do">
+        <div class="drill-top"><div class="dident"><div class="avi-s" style="width:40px;height:40px;background:var(--a1);color:var(--a);border:2px solid var(--a2);font-size:13px">DO</div><div><div class="dname">Derek Osei</div><div class="dmeta">ACTIVATED · PARTIAL AUTONOMY · CHICAGO TRI · 89 DAYS</div></div></div><div style="display:flex;gap:8px"><button class="btn btn-ghost" style="font-size:11px" onclick="closeDrill('do')">✕</button><button class="btn btn-b" style="font-size:11px">✉ Message</button></div></div>
+        <div class="drill-bs"><div class="dbs a"><div class="dbs-type">Readiness (Equity)</div><div class="dbs-val warn">54</div><div class="dbs-desc">Below target. Missed sessions may signal life stress.</div></div><div class="dbs b"><div class="dbs-type">Fitness (Asset)</div><div class="dbs-val">48</div><div class="dbs-desc">Plateaued. Needs consistent load to build.</div></div><div class="dbs b"><div class="dbs-type">Fatigue (Liability)</div><div class="dbs-val">52</div><div class="dbs-desc">Not the issue. Consistency is the problem.</div></div></div>
+        <div class="dtabs"><button class="dtab active" onclick="drillTab(this,'wk-do')">Workouts</button><button class="dtab" onclick="drillTab(this,'note-do')">Notes</button></div>
+        <div class="dsec active" id="wk-do"><div class="dwo"><div class="dwo-t run">🏃</div><div class="dwo-m"><div class="dwo-n">Easy Run</div><div class="dwo-mt">WED FEB 19 · 30 MIN</div></div><div style="font-family:'DM Mono',monospace;font-size:14px;font-weight:800" class="up">35</div></div><div class="dwo" style="opacity:.5"><div class="dwo-t run">🏃</div><div class="dwo-m"><div class="dwo-n" style="color:var(--r)">Missed — Zone 2 Run</div><div class="dwo-mt">TUE FEB 18 · Scheduled</div></div><div style="font-family:'DM Mono',monospace;font-size:14px;font-weight:800" class="risk">—</div></div><div class="dwo" style="opacity:.5"><div class="dwo-t bike">🚴</div><div class="dwo-m"><div class="dwo-n" style="color:var(--r)">Missed — Threshold Bike</div><div class="dwo-mt">MON FEB 17 · Scheduled</div></div><div style="font-family:'DM Mono',monospace;font-size:14px;font-weight:800" class="risk">—</div></div></div>
+        <div class="dsec" id="note-do"><div class="note-box"><div class="note-l">Coach Notes</div><textarea class="note-ta" rows="3">Missed 3 sessions this week. Text Derek — check on work stress. If consistency doesn't improve by Friday, revise race goal.</textarea><div class="note-f"><button class="btn btn-g" style="font-size:11px">Save</button></div></div></div>
+      </div>
+    </div>
+    <!-- Aisha Lawson -->
+    <div class="arow-w"><div class="arow"><div class="arc"><div class="ath-id"><div class="avi-s" style="background:var(--b1);color:var(--b);border-color:var(--b2)">AL</div><div><div class="an">Aisha Lawson</div><div class="ae">NYC Marathon · 104d</div></div></div></div><div class="arc"><div class="sc-cell"><div class="sc-num up">79</div><div class="sc-bar"><div class="sc-fill" style="width:79%;background:var(--g)"></div></div></div></div><div class="arc"><div class="sc-num up">68</div></div><div class="arc"><div class="sc-num">57</div></div><div class="arc"><div class="sc-num up">+11</div></div><div class="arc"><div class="sc-num up">94%</div></div><div class="arc"><span class="chip cg">On Track</span></div><div class="arc"><button class="btn btn-ghost" style="font-size:11px;padding:6px 12px">Drill in →</button></div></div></div>
+    <div style="padding:11px 16px;background:var(--sur2);border-top:1px solid var(--bd);font-family:'DM Mono',monospace;font-size:11px;color:var(--t4)">Showing 4 of 12 · <span style="color:var(--b);cursor:pointer">Load full roster →</span></div>
+  </div>
+</div>
+
+<!-- ══ COACH: PROGRAMS ══ -->
+<div class="screen" id="screen-programs">
+  <div class="ph"><div class="ph-row"><div><div class="ph-t">Programs</div><div class="ph-s">Your training plan library. Build, assign, and publish.</div></div><div style="display:flex;gap:8px"><button class="btn btn-ghost" style="font-size:12px">Import Plan</button><button class="btn btn-b" style="font-size:12px">+ New Program</button></div></div></div>
+  <div class="prog-grid">
+    <div class="prog-card"><div class="prog-card-top"><div class="prog-icon" style="background:var(--b1)">🏊</div><div class="cady-verified"><span>✦</span> Published</div></div><div class="prog-name">20-Week IM 70.3</div><div class="prog-meta">20 WEEKS · 6/WK · INTERMEDIATE · 47 ENROLLED</div><div class="prog-desc">Full periodized build. Swim, bike, run. Designed for athletes targeting 4:30–5:30 finish times.</div><div class="prog-stats"><div><div class="pst-val up">47</div><div class="pst-lbl">Enrolled</div></div><div><div class="pst-val">6</div><div class="pst-lbl">Assigned</div></div><div><div class="pst-val up">4.9★</div><div class="pst-lbl">Rating</div></div></div></div>
+    <div class="prog-card"><div class="prog-card-top"><div class="prog-icon" style="background:var(--g1)">🏃</div><div class="chip cg" style="font-size:10px">Active</div></div><div class="prog-name">16-Week Olympic Tri</div><div class="prog-meta">16 WEEKS · 5/WK · ALL LEVELS · 31 ENROLLED</div><div class="prog-desc">Sprint to Olympic distance. Pacing strategy and race-day execution emphasis.</div><div class="prog-stats"><div><div class="pst-val up">31</div><div class="pst-lbl">Enrolled</div></div><div><div class="pst-val">4</div><div class="pst-lbl">Assigned</div></div><div><div class="pst-val up">4.8★</div><div class="pst-lbl">Rating</div></div></div></div>
+    <div class="prog-card"><div class="prog-card-top"><div class="prog-icon" style="background:var(--a1)">⚡</div><div class="chip cn" style="font-size:10px">Draft</div></div><div class="prog-name">12-Week Base Build</div><div class="prog-meta">12 WEEKS · 4/WK · BEGINNER · IN PROGRESS</div><div class="prog-desc">Foundation block. Low intensity, high consistency. For returning or new athletes.</div><div class="prog-stats"><div><div class="pst-val muted">—</div><div class="pst-lbl">Enrolled</div></div><div><div class="pst-val">2</div><div class="pst-lbl">Assigned</div></div><div><div class="pst-val muted">Draft</div><div class="pst-lbl">Status</div></div></div></div>
+  </div>
+</div>
+
+<!-- ══ COACH: SCHEDULE ══ -->
+<div class="screen" id="screen-schedule">
+  <div class="ph"><div class="ph-row"><div><div class="ph-t">Schedule</div><div class="ph-s">Assign workouts across your roster. Click any day to edit.</div></div><div style="display:flex;gap:8px;align-items:center"><button class="btn btn-ghost" style="font-size:12px">← Jan</button><div style="font-size:15px;font-weight:700;padding:0 8px">February 2026</div><button class="btn btn-ghost" style="font-size:12px">Mar →</button></div></div></div>
+  <div class="cal-grid">
+    <div class="cal-day-head">Sun</div><div class="cal-day-head">Mon</div><div class="cal-day-head">Tue</div><div class="cal-day-head">Wed</div><div class="cal-day-head">Thu</div><div class="cal-day-head">Fri</div><div class="cal-day-head">Sat</div>
+    <div class="cal-day other-month"><div class="cdn">26</div></div><div class="cal-day other-month"><div class="cdn">27</div></div><div class="cal-day other-month"><div class="cdn">28</div></div><div class="cal-day other-month"><div class="cdn">29</div></div><div class="cal-day other-month"><div class="cdn">30</div></div><div class="cal-day other-month"><div class="cdn">31</div></div>
+    <div class="cal-day"><div class="cdn">1</div></div>
+    <div class="cal-day"><div class="cdn">2</div><div class="cal-wo run">MR · Z2 Run</div><div class="cal-wo bike">AL · Bike</div></div>
+    <div class="cal-day"><div class="cdn">3</div><div class="cal-wo bike">MR · Tempo</div></div>
+    <div class="cal-day"><div class="cdn">4</div><div class="cal-wo swim">SC · Swim</div></div>
+    <div class="cal-day"><div class="cdn">5</div><div class="cal-wo run">MR · Recovery</div><div class="cal-wo run">DO · Z2</div></div>
+    <div class="cal-day"><div class="cdn">6</div><div class="cal-wo bike">AL · Intervals</div></div>
+    <div class="cal-day"><div class="cdn">7</div><div class="cal-wo run">MR · Long Run</div><div class="cal-wo bike">SC · Long Ride</div></div>
+    <div class="cal-day"><div class="cdn">8</div><div class="cal-wo rest">SC · Rest</div></div>
+    <div class="cal-day"><div class="cdn">9</div></div><div class="cal-day"><div class="cdn">10</div><div class="cal-wo bike">MR · FTP</div></div>
+    <div class="cal-day"><div class="cdn">11</div><div class="cal-wo swim">SC · Swim</div></div>
+    <div class="cal-day"><div class="cdn">12</div><div class="cal-wo run">AL · Threshold</div></div>
+    <div class="cal-day"><div class="cdn">13</div><div class="cal-wo swim">MR · Open Water</div></div>
+    <div class="cal-day"><div class="cdn">14</div><div class="cal-wo bike">MR · Long Ride</div><div class="cal-wo run">SC · LR</div></div>
+    <div class="cal-day"><div class="cdn">15</div></div><div class="cal-day"><div class="cdn">16</div></div>
+    <div class="cal-day"><div class="cdn">17</div></div><div class="cal-day"><div class="cdn">18</div><div class="cal-wo bike">DO · Threshold</div></div>
+    <div class="cal-day"><div class="cdn">19</div><div class="cal-wo run">SC · Tempo</div></div>
+    <div class="cal-day today"><div class="cdn" style="color:var(--g);font-weight:800">21</div><div class="cal-wo run">MR · Z2 Run</div></div>
+    <div class="cal-day"><div class="cdn">22</div></div>
+    <div class="cal-day"><div class="cdn">23</div></div>
+  </div>
+  <div class="plan-shell">
+    <div class="plan-head"><div class="phc">Athlete</div><div class="phc">MON</div><div class="phc">TUE</div><div class="phc">WED</div><div class="phc">THU</div><div class="phc">FRI</div><div class="phc">SAT</div><div class="phc">SUN</div></div>
+    <div class="plan-row"><div class="plan-ath">Marcus Reid</div><div class="day-c"><div class="dd done">✓</div></div><div class="day-c"><div class="dd done">✓</div></div><div class="day-c"><div class="dd done">✓</div></div><div class="day-c"><div class="dd done">✓</div></div><div class="day-c"><div class="dd done">✓</div></div><div class="day-c"><div class="dd sched">Z2</div></div><div class="day-c"><div class="dd rest">—</div></div></div>
+    <div class="plan-row"><div class="plan-ath">Sarah Chen</div><div class="day-c"><div class="dd done">✓</div></div><div class="day-c"><div class="dd done">✓</div></div><div class="day-c"><div class="dd done">✓</div></div><div class="day-c"><div class="dd sched">T</div></div><div class="day-c"><div class="dd sched">LR</div></div><div class="day-c"><div class="dd rest" style="background:var(--r1);color:var(--r);border-color:var(--r2)">REST</div></div><div class="day-c"><div class="dd rest">—</div></div></div>
+    <div class="plan-row"><div class="plan-ath">Derek Osei</div><div class="day-c"><div class="dd done">✓</div></div><div class="day-c"><div class="dd missed">✗</div></div><div class="day-c"><div class="dd missed">✗</div></div><div class="day-c"><div class="dd done">✓</div></div><div class="day-c"><div class="dd missed">✗</div></div><div class="day-c"><div class="dd sched">B</div></div><div class="day-c"><div class="dd sched">R</div></div></div>
+    <div class="plan-row"><div class="plan-ath">Aisha Lawson</div><div class="day-c"><div class="dd done">✓</div></div><div class="day-c"><div class="dd done">✓</div></div><div class="day-c"><div class="dd done">✓</div></div><div class="day-c"><div class="dd done">✓</div></div><div class="day-c"><div class="dd done">✓</div></div><div class="day-c"><div class="dd done">✓</div></div><div class="day-c"><div class="dd sched">LR</div></div></div>
+  </div>
+</div>
+
+<!-- ══ COACH: INSIGHTS ══ -->
+<div class="screen" id="screen-insights">
+  <div class="ph"><div class="ph-t">Insights</div><div class="ph-s">Aggregate performance trends across your full roster.</div></div>
+  <div class="insight-strip">
+    <div class="cs-c"><div class="cs-l">Avg Fitness Δ</div><div class="cs-v up">+2.8</div><div class="cs-s up">↑ Roster improving</div></div>
+    <div class="cs-c"><div class="cs-l">Avg Fatigue Δ</div><div class="cs-v warn">+1.2</div><div class="cs-s muted">Manageable increase</div></div>
+    <div class="cs-c"><div class="cs-l">Sessions Done</div><div class="cs-v">58<span style="font-size:14px;color:var(--t4)">/64</span></div><div class="cs-s up">91% completion</div></div>
+    <div class="cs-c"><div class="cs-l">Athletes Improved</div><div class="cs-v up">9</div><div class="cs-s muted">of 12 this week</div></div>
+    <div class="cs-c"><div class="cs-l">Team Output</div><div class="cs-v up">42 kWh</div><div class="cs-s up">↑ +8% vs last week</div></div>
+  </div>
+  <div class="bar-chart-card"><div class="bcc-title">Roster Fitness Trend — 8 Weeks</div><div class="bar-viz"><div class="bv fit" style="height:58%"></div><div class="bv fit" style="height:63%"></div><div class="bv fit" style="height:67%"></div><div class="bv fit" style="height:68%"></div><div class="bv fit" style="height:71%"></div><div class="bv fit" style="height:73%"></div><div class="bv fit" style="height:75%"></div><div class="bv fit now" style="height:82%"></div></div><div class="chart-ft"><span>Jan 3</span><span>Jan 10</span><span>Jan 17</span><span>Jan 24</span><span>Feb 1</span><span>Feb 8</span><span>Feb 15</span><span>Today</span></div></div>
+  <div class="roster-perf"><div class="rp-title">Athlete Comparison — Key Metrics</div>
+    <div class="rp-row"><div class="rp-avi" style="background:var(--g1);color:var(--g)">MR</div><div class="rp-name">Marcus Reid</div><div class="rp-bars"><div class="rp-bar-item"><div class="rp-bar-lbl">Fit</div><div class="rp-bw"><div class="rp-bf" style="width:72%;background:var(--g)"></div></div><div class="rp-val">72</div></div><div class="rp-bar-item"><div class="rp-bar-lbl">Fat</div><div class="rp-bw"><div class="rp-bf" style="width:61%;background:var(--a)"></div></div><div class="rp-val">61</div></div><div class="rp-bar-item"><div class="rp-bar-lbl">Rdy</div><div class="rp-bw"><div class="rp-bf" style="width:82%;background:var(--g)"></div></div><div class="rp-val">82</div></div></div></div>
+    <div class="rp-row"><div class="rp-avi" style="background:var(--r1);color:var(--r)">SC</div><div class="rp-name">Sarah Chen</div><div class="rp-bars"><div class="rp-bar-item"><div class="rp-bar-lbl">Fit</div><div class="rp-bw"><div class="rp-bf" style="width:65%;background:var(--g)"></div></div><div class="rp-val">65</div></div><div class="rp-bar-item"><div class="rp-bar-lbl">Fat</div><div class="rp-bw"><div class="rp-bf" style="width:87%;background:var(--r)"></div></div><div class="rp-val risk">87</div></div><div class="rp-bar-item"><div class="rp-bar-lbl">Rdy</div><div class="rp-bw"><div class="rp-bf" style="width:38%;background:var(--r)"></div></div><div class="rp-val risk">38</div></div></div></div>
+    <div class="rp-row"><div class="rp-avi" style="background:var(--a1);color:var(--a)">DO</div><div class="rp-name">Derek Osei</div><div class="rp-bars"><div class="rp-bar-item"><div class="rp-bar-lbl">Fit</div><div class="rp-bw"><div class="rp-bf" style="width:48%;background:var(--g)"></div></div><div class="rp-val">48</div></div><div class="rp-bar-item"><div class="rp-bar-lbl">Fat</div><div class="rp-bw"><div class="rp-bf" style="width:52%;background:var(--a)"></div></div><div class="rp-val">52</div></div><div class="rp-bar-item"><div class="rp-bar-lbl">Rdy</div><div class="rp-bw"><div class="rp-bf" style="width:54%;background:var(--a)"></div></div><div class="rp-val warn">54</div></div></div></div>
+    <div class="rp-row"><div class="rp-avi" style="background:var(--b1);color:var(--b)">AL</div><div class="rp-name">Aisha Lawson</div><div class="rp-bars"><div class="rp-bar-item"><div class="rp-bar-lbl">Fit</div><div class="rp-bw"><div class="rp-bf" style="width:68%;background:var(--g)"></div></div><div class="rp-val">68</div></div><div class="rp-bar-item"><div class="rp-bar-lbl">Fat</div><div class="rp-bw"><div class="rp-bf" style="width:57%;background:var(--a)"></div></div><div class="rp-val">57</div></div><div class="rp-bar-item"><div class="rp-bar-lbl">Rdy</div><div class="rp-bw"><div class="rp-bf" style="width:79%;background:var(--g)"></div></div><div class="rp-val up">79</div></div></div></div>
+  </div>
+</div>
+
+<!-- ══ COACH: INTELLIGENCE ══ -->
+<div class="screen" id="screen-coach-intel">
+  <div class="ph"><div class="ph-t">Intelligence</div><div class="ph-s">AI flags, risk detection, and coaching recommendations.</div></div>
+  <div class="intel-hero" style="margin-bottom:18px">
+    <div class="ih-eyebrow"><div class="ldot"></div>3 athletes need attention · Updated 6:45 AM</div>
+    <div class="ih-title">One athlete is at overreach risk. Act today.</div>
+    <div class="ih-sub">Sarah Chen's fatigue has exceeded her fitness for the second consecutive day. The system has flagged this as a critical overreach signal. Your immediate intervention is recommended.</div>
+  </div>
+  <div class="alert-list">
+    <div class="alrt danger"><div class="alrt-ic">⚠️</div><div class="alrt-b"><div class="alrt-who">Sarah Chen &nbsp;<span style="font-size:10px;font-weight:400;color:var(--t3);font-family:'DM Mono',monospace">INVITED · FULL CONTROL</span></div><div class="alrt-txt">HRV dropped 22% overnight. Fatigue (87) exceeds fitness (65) by 22 points — overreach threshold breached. Rest day mandatory.</div><div class="alrt-time">2 hours ago · Auto-detected · HRV alarm</div></div><button class="alrt-cta" onclick="go('roster')">View →</button></div>
+    <div class="alrt warn"><div class="alrt-ic">⏰</div><div class="alrt-b"><div class="alrt-who">Derek Osei &nbsp;<span style="font-size:10px;font-weight:400;color:var(--t3);font-family:'DM Mono',monospace">ACTIVATED · PARTIAL · WEEK 2 OF 12</span></div><div class="alrt-txt">Missed 3 of 5 sessions this week. Consistency at 41% — below 70% threshold for race preparation at 89 days out.</div><div class="alrt-time">Yesterday 6:00 PM · Session missed</div></div><button class="alrt-cta" onclick="go('roster')">View →</button></div>
+    <div class="alrt info"><div class="alrt-ic">🎯</div><div class="alrt-b"><div class="alrt-who">Marcus Reid &nbsp;<span style="font-size:10px;font-weight:400;color:var(--t3);font-family:'DM Mono',monospace">ACTIVATED · PARTIAL · WEEK 8 OF 20</span></div><div class="alrt-txt">Fitness crossed 70 for first time this season. CTL building at +3.2/week — optimal rate for Ironman 70.3. On pace for race-day fitness of 84.</div><div class="alrt-time">Today 6:45 AM · Milestone</div></div><button class="alrt-cta" onclick="go('roster')">View →</button></div>
+  </div>
+  <div class="g2">
+    <div class="intel-coach-card"><div class="icc-eye up">↑ Roster Insight</div><div class="icc-title">9 of 12 athletes improved fitness this week</div><div class="icc-body">Your roster's average fitness delta of +2.8 points is above the optimal threshold of +2.0. The current training load distribution is working. Maintain the current prescription structure.</div><div class="icc-action"><button class="btn btn-ghost" style="font-size:12px">View Insights</button></div></div>
+    <div class="intel-coach-card"><div class="icc-eye info">◈ Load Optimization</div><div class="icc-title">Derek needs load intervention this week</div><div class="icc-body">At 41% session completion, Derek's fitness is plateauing. A direct conversation about training schedule barriers would be more effective than adjusting the plan. Consider restructuring his week.</div><div class="icc-action"><button class="btn btn-ghost" style="font-size:12px">Message Derek</button></div></div>
+  </div>
+</div>
+
+<!-- ══ COACH: BUSINESS ══ -->
+<div class="screen" id="screen-business">
+  <div class="ph"><div class="ph-t">Business</div><div class="ph-s">Subscriptions, billing, and your coach profile.</div></div>
+
+  <div class="biz-hero">
+    <div>
+      <div class="biz-plan-badge">✓ Active Plan</div>
+      <div class="biz-plan-name">Coreformance Pro Coach</div>
+      <div class="biz-plan-sub">Up to 25 athletes · Cady Core eligible · Full platform access</div>
+    </div>
+    <div class="biz-plan-price">
+      <div class="biz-price-amt">$129</div>
+      <div class="biz-price-per">/month · Billed annually</div>
+      <button class="btn btn-ghost" style="font-size:12px;margin-top:10px">Manage Plan</button>
+    </div>
+  </div>
+
+  <div class="biz-metrics">
+    <div class="biz-m"><div class="biz-m-l">Active Athletes</div><div class="biz-m-v up">12</div><div class="biz-m-s muted">of 25 seats used</div></div>
+    <div class="biz-m"><div class="biz-m-l">MRR</div><div class="biz-m-v up">$960</div><div class="biz-m-s up">↑ +2 athletes vs last month</div></div>
+    <div class="biz-m"><div class="biz-m-l">Avg Revenue / Athlete</div><div class="biz-m-v">$80</div><div class="biz-m-s muted">/month average</div></div>
+    <div class="biz-m"><div class="biz-m-l">Renewal Rate</div><div class="biz-m-v up">91%</div><div class="biz-m-s up">Last 12 months</div></div>
+  </div>
+
+  <div class="sdiv">Athlete Subscriptions</div>
+  <div class="billing-table">
+    <div class="bt-head" style="grid-template-columns:1fr 95px 85px 90px 75px 80px"><div class="bth">Athlete</div><div class="bth">State</div><div class="bth">Plan</div><div class="bth">Amount</div><div class="bth">Expires</div><div class="bth">Status</div></div>
+    <div class="bt-row" style="grid-template-columns:1fr 95px 85px 90px 75px 80px"><div style="font-weight:600">Marcus Reid</div><div><span class="chip cg" style="font-size:9px">ACTIVATED</span></div><div class="muted mono" style="font-size:12px">Monthly</div><div class="up mono" style="font-size:12px">$80/mo</div><div class="muted mono" style="font-size:11px">Apr 9</div><div><span class="chip cg">Active</span></div></div>
+    <div class="bt-row" style="grid-template-columns:1fr 95px 85px 90px 75px 80px"><div style="font-weight:600">Sarah Chen</div><div><span class="chip cb" style="font-size:9px">INVITED</span></div><div class="muted mono" style="font-size:12px">Monthly</div><div class="up mono" style="font-size:12px">$80/mo</div><div class="muted mono" style="font-size:11px">Apr 30</div><div><span class="chip cg">Active</span></div></div>
+    <div class="bt-row" style="grid-template-columns:1fr 95px 85px 90px 75px 80px"><div style="font-weight:600">Derek Osei</div><div><span class="chip cg" style="font-size:9px">ACTIVATED</span></div><div class="muted mono" style="font-size:12px">Monthly</div><div class="up mono" style="font-size:12px">$80/mo</div><div class="muted mono" style="font-size:11px">May 15</div><div><span class="chip ca">At Risk</span></div></div>
+    <div class="bt-row" style="grid-template-columns:1fr 95px 85px 90px 75px 80px"><div style="font-weight:600">Aisha Lawson</div><div><span class="chip cb" style="font-size:9px">INVITED</span></div><div class="muted mono" style="font-size:12px">Annual</div><div class="up mono" style="font-size:12px">$720/yr</div><div class="muted mono" style="font-size:11px">Jan 2027</div><div><span class="chip cg">Active</span></div></div>
+    <div style="padding:10px 18px;background:var(--sur2);border-top:1px solid var(--bd);font-family:'DM Mono',monospace;font-size:11px;color:var(--t4)">Showing 4 of 12 · <span style="color:var(--b);cursor:pointer">View all →</span></div>
+  </div>
+
+
+  <div class="sdiv">Key Insights</div>
+  <div class="g2" style="margin-bottom:14px">
+    <div class="card card-p"><div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--a);margin-bottom:6px">⏰ EXPIRING SOON</div><div style="font-size:15px;font-weight:700;margin-bottom:5px">2 activation terms expire this season</div><div style="font-size:13px;color:var(--t2);line-height:1.6">Marcus Reid's term expires Apr 9 (47d). Consider sending a renewal key before term ends to maintain the relationship without interruption.</div><div style="margin-top:10px"><button class="btn btn-ghost" style="font-size:12px;padding:6px 13px" onclick="go('invite')">Generate Renewal Key</button></div></div>
+    <div class="card card-p"><div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--g);margin-bottom:6px">↑ ROSTER HEALTH</div><div style="font-size:15px;font-weight:700;margin-bottom:5px">Activation model working well</div><div style="font-size:13px;color:var(--t2);line-height:1.6">7 of 12 athletes came through activation keys this season. 91% renewal rate among athletes who completed a full program term. Strong signal for the key model.</div><div style="margin-top:10px"><button class="btn btn-ghost" style="font-size:12px;padding:6px 13px" onclick="go('insights')">View Roster Insights</button></div></div>
+  </div>
+  <div class="cady-profile-section">
+    <div class="cps-head">
+      <div class="cps-title"><div class="cady-badge"><span class="cady-badge-icon">✦</span> Cady Core</div> Coach Profile</div>
+      <button class="btn btn-gold" style="font-size:12px">Save Profile</button>
+    </div>
+    <div style="background:var(--gold1);border:1px solid var(--gold2);border-radius:var(--rad-s);padding:13px 16px;margin-bottom:18px;font-size:13px;color:var(--t2);line-height:1.6">Your Cady Core profile is <strong style="color:var(--gold)">Live</strong>. Athletes can discover and enroll in your programs through the Discover tab. Maintain high completion rates and athlete outcomes to keep your verification status.</div>
+    <div class="profile-form">
+      <div class="pf-field"><div class="pf-label">Full Name</div><input class="pf-input" value="Jordan Taylor"></div>
+      <div class="pf-field"><div class="pf-label">Specialty</div><input class="pf-input" value="Triathlon · Ironman Specialist"></div>
+      <div class="pf-field full"><div class="pf-label">Bio</div><textarea class="pf-ta" rows="3">I coach working professionals who want to compete seriously without burning out. My methodology is rooted in aerobic base development, progressive overload, and intelligent recovery.</textarea></div>
+      <div class="pf-field"><div class="pf-label">Years Coaching</div><input class="pf-input" value="12"></div>
+      <div class="pf-field"><div class="pf-label">Certifications</div><input class="pf-input" value="USAT Level 2, USAC, TrainingPeaks Certified"></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /app -->
+
+<script>
+/* ════════════════════════════════════
+   STATE
+════════════════════════════════════ */
+let userRole = null; // 'coach' | 'open' | 'self' | 'closed'
+let currentMode = 'athlete';
+let obSelRoleVal = null;
+let obSelectedSport = null;
+
+/* ════════════════════════════════════
+   ONBOARDING
+════════════════════════════════════ */
+function selectRole(role, el) {
+  obSelRoleVal = role;
+  document.querySelectorAll('#ob-s1 .ob-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  const btn = document.getElementById('ob-next1');
+  btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer';
+}
+function selectSport(sport, el) {
+  obSelectedSport = sport;
+  document.querySelectorAll('#ob-s2 .ob-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  const btn = document.getElementById('ob-next2');
+  btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer';
+}
+function obNext() {
+  // Route to correct step 2 based on selected role
+  var s2 = obSelRoleVal === 'coach' ? document.getElementById('ob-s2') : document.getElementById('ob-s2-athlete');
+  if (!s2) { s2 = document.getElementById('ob-s2'); }
+  document.getElementById('ob-s1').style.display = 'none';
+  s2.style.display = 'block';
+  var lbl = document.getElementById('ob-step-lbl');
+  if (lbl) lbl.textContent = 'Step 2 of 2';
+  const dots = document.querySelectorAll('.ob-prog-dot');
+  if (dots[0]) { dots[0].classList.remove('active'); dots[0].classList.add('done'); }
+  if (dots[1]) dots[1].classList.add('active');
+}
+function obBack() {
+  ['ob-s2','ob-s2-athlete','ob-s2-coach'].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.style.display='none';
+  });
+  document.getElementById('ob-s1').style.display='block';
+  var lbl=document.getElementById('ob-step-lbl'); if(lbl) lbl.textContent='Step 1 of 2';
+  var dots=document.querySelectorAll('.ob-prog-dot');
+  if(dots[0]){dots[0].classList.remove('done');dots[0].classList.add('active');}
+  if(dots[1]) dots[1].classList.remove('active');
+}
+function obFinish() {
+  userRole = obSelRoleVal; obSelectedRole = obSelRoleVal;
+  if (userRole === 'athlete') {
+    // Show athlete type question
+    document.getElementById('ob-s1').style.display = 'none';
+    var s2ath = document.getElementById('ob-s2-athlete');
+    if (s2ath) {
+      s2ath.style.display = 'block';
+      document.getElementById('ob-step-lbl').textContent = 'Step 2 of 2';
+      var dots = document.querySelectorAll('.ob-prog-dot');
+      if (dots[0]) { dots[0].classList.remove('active'); dots[0].classList.add('done'); }
+      if (dots[1]) { dots[1].classList.add('active'); }
+      return; // Don't launch yet
+    }
+  }
+  // Coach path or fallback
+  launchFromOnboard();
+}
+function launchFromOnboard() {
+  document.getElementById('onboard').style.display = 'none';
+  document.getElementById('topbar').style.display = 'flex';
+  document.getElementById('main-app').style.display = 'block';
+  buildNav();
+  if (userRole === 'coach') {
+    setMode('coach');
+  } else {
+    setMode('athlete');
+    go('today');
+    if (userRole === 'self') {
+      var spb = document.getElementById('self-plan-builder');
+      if (spb) spb.style.display = 'block';
+    }
+    renderStateBanner();
+  }
+}
+
+/* ════════════════════════════════════
+   NAV BUILDER — renders correct tabs per role
+════════════════════════════════════ */
+const athleteNavConfig = {
+  open:   [{id:'today',label:'Today'},{id:'training',label:'Training'},{id:'performance',label:'Performance'},{id:'intelligence',label:'Intelligence'},{id:'discover',label:'Discover'}],
+  self:   [{id:'today',label:'Today'},{id:'training',label:'Training'},{id:'performance',label:'Performance'},{id:'intelligence',label:'Intelligence'}],
+  closed: [{id:'today',label:'Today'},{id:'training',label:'Training'},{id:'performance',label:'Performance'}],
+  coach:  [{id:'today',label:'Today'},{id:'training',label:'Training'},{id:'performance',label:'Performance'},{id:'intelligence',label:'Intelligence'},{id:'discover',label:'Discover'}]
+};
+const coachNavConfig = [
+  {id:'roster',label:'Roster'},
+  {id:'programs',label:'Programs'},
+  {id:'schedule',label:'Schedule'},
+  {id:'insights',label:'Insights'},
+  {id:'coach-intel',label:'Intelligence'},
+  {id:'business',label:'Business'}
+];
+
+function buildNav() {
+  const isCoach = userRole === 'coach';
+  const aN = document.getElementById('athlete-nav');
+  const cN = document.getElementById('coach-nav');
+  const modePill = document.getElementById('mode-pill');
+
+  if (isCoach) {
+    modePill.style.display = 'flex';
+    // Coach can also view as athlete (open)
+    const items = athleteNavConfig['open'];
+    aN.innerHTML = items.map(t => `<button class="ntab" onclick="go('${t.id}')">${t.label}</button>`).join('');
+    cN.innerHTML = coachNavConfig.map(t => `<button class="ntab" onclick="go('${t.id}')">${t.label}</button>`).join('');
+  } else {
+    modePill.style.display = 'none';
+    const items = athleteNavConfig[userRole] || athleteNavConfig['open'];
+    aN.innerHTML = items.map(t => `<button class="ntab" onclick="go('${t.id}')">${t.label}</button>`).join('');
+    cN.innerHTML = '';
+  }
+}
+
+/* ════════════════════════════════════
+   MODE SWITCH
+════════════════════════════════════ */
+function setMode(mode) {
+  currentMode = mode;
+  const isCoach = mode === 'coach';
+  document.body.classList.toggle('coach-mode', isCoach);
+  document.getElementById('btn-a').classList.toggle('active', !isCoach);
+  document.getElementById('btn-c').classList.toggle('active', isCoach);
+  document.getElementById('athlete-nav').style.display = isCoach ? 'none' : 'flex';
+  document.getElementById('coach-nav').style.display   = isCoach ? 'flex' : 'none';
+  document.getElementById('race-tag').style.display = isCoach ? 'none' : 'flex';
+  const mb = document.getElementById('mode-badge');
+  mb.className = 'mbadge ' + mode; mb.textContent = isCoach ? 'COACH' : 'ATHLETE';
+  const av = document.getElementById('uavi');
+  av.className = 'uavi ' + (isCoach?'c':'a'); av.textContent = isCoach ? 'JT' : 'MR';
+  const ld = document.querySelector('.logo-dot');
+  if (ld) ld.style.color = isCoach ? 'var(--b)' : 'var(--g)';
+  go(isCoach ? 'roster' : 'today');
+}
+
+/* ════════════════════════════════════
+   NAVIGATION
+════════════════════════════════════ */
+const coachScreenIds = ['roster','programs','schedule','insights','coach-intel','business','invite','coach-profile'];
+
+function go(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById('screen-' + id);
+  if (el) el.classList.add('active');
+
+  const isCoach = coachScreenIds.includes(id);
+  const nav = document.getElementById(isCoach ? 'coach-nav' : 'athlete-nav');
+  nav.querySelectorAll('.ntab').forEach(t => t.classList.remove('active','hi','hic'));
+  nav.querySelectorAll('.ntab').forEach(t => {
+    const onclick = t.getAttribute('onclick') || '';
+    if (onclick.includes(`'${id}'`)) {
+      t.classList.add('active');
+      if (id === 'today') t.classList.add('hi');
+      if (id === 'roster') t.classList.add('hic');
+    }
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ════════════════════════════════════
+   DRILL DOWN
+════════════════════════════════════ */
+function drill(id) {
+  const panel = document.getElementById('drill-' + id);
+  if (!panel) return;
+  const open = panel.classList.contains('open');
+  document.querySelectorAll('.drill-panel').forEach(p => p.classList.remove('open'));
+  document.querySelectorAll('.arow').forEach(r => r.classList.remove('selected'));
+  if (!open) {
+    panel.classList.add('open');
+    panel.previousElementSibling.classList.add('selected');
+    setTimeout(() => panel.scrollIntoView({behavior:'smooth',block:'nearest'}), 50);
+  }
+}
+function closeDrill(id) {
+  document.getElementById('drill-' + id)?.classList.remove('open');
+  document.querySelectorAll('.arow').forEach(r => r.classList.remove('selected'));
+}
+function drillTab(btn, sid) {
+  const p = btn.closest('.drill-panel');
+  p.querySelectorAll('.dtab').forEach(t => t.classList.remove('active'));
+  p.querySelectorAll('.dsec').forEach(s => s.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(sid)?.classList.add('active');
+}
+
+/* ════════════════════════════════════
+   FILTER / SORT
+════════════════════════════════════ */
+document.addEventListener('click', e => {
+  const bar = e.target.closest('.filter-bar');
+  if (bar && e.target.classList.contains('fbtn')) {
+    bar.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
+    e.target.classList.add('active');
+  }
+});
+function spill(btn) {
+  btn.closest('.ledger-tb').querySelectorAll('.spill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+/* ── RELATIONSHIP STATE ── */
+var REL_STATE = 'self'; // 'self' | 'activated' | 'assigned-open' | 'assigned-partial' | 'assigned-full'
+
+function renderStateBanner() {
+  var banner = document.getElementById('state-banner');
+  var rb = document.getElementById('rel-badge');
+  if (!banner) return;
+  var cfg = {
+    'self': {cls:'sb-self', icon:'&#x2699;&#xFE0F;', title:'Self-Coached', sub:"You're running your own program. Add a coach anytime — enter an activation key or browse Discover.", btns:'<button class="btn btn-ghost" style="font-size:12px;padding:6px 13px;flex-shrink:0" onclick="openModal()">Enter Key</button><button class="btn btn-ghost" style="font-size:12px;padding:6px 13px;flex-shrink:0" onclick="go(\'discover\')">Discover</button>', badge:'rel-self', badgeTxt:'SELF-COACHED'},
+    'activated': {cls:'sb-activated', icon:'&#x2705;', title:'Activated &mdash; Jordan Taylor &middot; 20-Week IM 70.3', sub:'Program active &middot; Term expires Apr 9, 2026 &middot; Week 8 of 20 &middot; Auto-reverts to self-coached at term end.', btns:'<button class="btn btn-ghost" style="font-size:12px;padding:6px 13px;flex-shrink:0">View Program</button>', badge:'rel-activated', badgeTxt:'ACTIVATED'},
+    'assigned-partial': {cls:'sb-assigned', icon:'&#x1F3EB;', title:'Team Roster &mdash; Partial Autonomy', sub:"You're following your assigned program. You can also log supplemental workouts and browse Discover.", btns:'<button class="btn btn-ghost" style="font-size:12px;padding:6px 13px;flex-shrink:0" onclick="go(\'discover\')">Discover</button>', badge:'rel-assigned', badgeTxt:'ASSIGNED'},
+    'assigned-full': {cls:'sb-assigned', icon:'&#x1F3EB;', title:'Team Roster &mdash; Full Control', sub:'Your coach assigns and controls your full training plan. Contact your coach to adjust your program.', btns:'', badge:'rel-assigned', badgeTxt:'ASSIGNED'},
+    'assigned-open': {cls:'sb-assigned', icon:'&#x1F3EB;', title:'Team Roster &mdash; Open', sub:'Your coach has visibility into your training. You have full autonomy over your programming.', btns:'<button class="btn btn-ghost" style="font-size:12px;padding:6px 13px;flex-shrink:0" onclick="go(\'discover\')">Discover</button><button class="btn btn-ghost" style="font-size:12px;padding:6px 13px;flex-shrink:0" onclick="openModal()">Enter Key</button>', badge:'rel-assigned', badgeTxt:'ASSIGNED'}
+  };
+  var c = cfg[REL_STATE] || cfg['self'];
+  banner.className = 'state-banner ' + c.cls;
+  banner.innerHTML = '<div class="sb-icon">' + c.icon + '</div><div class="sb-main"><div class="sb-title">' + c.title + '</div><div class="sb-sub">' + c.sub + '</div></div>' + c.btns;
+  if (rb) { rb.className = 'rel-badge ' + c.badge; rb.textContent = c.badgeTxt; }
+}
+
+/* ── KEY MODAL ── */
+function openModal() { document.getElementById('key-modal').classList.add('open'); }
+function closeModal() { document.getElementById('key-modal').classList.remove('open'); }
+function formatKey(el) {
+  var v = el.value.replace(/[^A-Za-z0-9]/g,'').toUpperCase().slice(0,12);
+  var out = '';
+  for (var i=0;i<v.length;i++) { if(i>0&&i%4===0) out+='\u2014'; out+=v[i]; }
+  el.value = out;
+}
+function activateKey() {
+  var val = document.getElementById('key-input').value;
+  if (val.length < 4) return;
+  REL_STATE = 'activated';
+  closeModal();
+  renderStateBanner();
+  // Update nav to show Intelligence and Discover (already visible for self)
+}
+
+/* ── AUTONOMY TOGGLE ── */
+function setAuto(btn, level) {
+  var toggle = btn.closest('.auto-toggle');
+  toggle.querySelectorAll('.at-btn').forEach(function(b) { b.classList.remove('act-f','act-p','act-o'); });
+  if (level === 'f') btn.classList.add('act-f');
+  else if (level === 'p') btn.classList.add('act-p');
+  else btn.classList.add('act-o');
+}
+
+/* ── ONBOARDING ATHLETE TYPE ── */
+var obAthType = null;
+function obSelAthType(type, el) {
+  obAthType = type;
+  document.querySelectorAll('#ob-s2-athlete .ob-opt').forEach(function(o){ o.classList.remove('selected'); });
+  el.classList.add('selected');
+  var tc = document.getElementById('ob-team-code');
+  if (tc) tc.style.display = type === 'team' ? 'block' : 'none';
+  if (type === 'independent') {
+    var btn = document.getElementById('ob-btn-ath');
+    if (btn) { btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer'; }
+  }
+}
+function obCheckTeamCode() {
+  var v = document.getElementById('ob-team-input').value.trim();
+  var btn = document.getElementById('ob-btn-ath');
+  if (btn && v.length >= 4) { btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer'; }
+}
+function obFinishAthlete() {
+  if (obAthType === 'team') { REL_STATE = 'assigned-partial'; }
+  else { REL_STATE = 'self'; }
+  document.getElementById('onboard').style.display = 'none';
+  document.getElementById('topbar').style.display = 'flex';
+  document.getElementById('main-app').style.display = 'block';
+  buildNav();
+  setMode('athlete');
+  renderStateBanner();
+}
+
+// Also update buildNav to check ob step 2 for athletes
+var _origObNext = null;
+
+</script>
+</body>
+</html>
