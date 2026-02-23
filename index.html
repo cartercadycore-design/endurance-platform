@@ -1266,7 +1266,7 @@ function buildNav() {
   if (isCoach) {
     modePill.style.display = 'flex';
     // Coach can also view as athlete (open)
-    const items = athleteNavConfig['open'];
+    const items = athleteNavConfig['self'];
     aN.innerHTML = items.map(t => `<button class="ntab" onclick="go('${t.id}')">${t.label}</button>`).join('');
     cN.innerHTML = coachNavConfig.map(t => `<button class="ntab" onclick="go('${t.id}')">${t.label}</button>`).join('');
   } else {
