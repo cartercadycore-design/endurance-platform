@@ -536,7 +536,7 @@ body.coach-mode .mpb.active.coach { background:var(--b); }
 <div class="onboard-overlay" id="onboard">
   <div class="onboard-box">
     <div class="ob-logo">Coreformance<span>.</span></div>
-    <div class="ob-step" id="ob-step-label">Step 1 of 2</div>
+    <div class="ob-step" id="ob-step-lbl">Step 1 of 2</div>
     <div class="ob-progress" id="ob-progress">
       <div class="ob-prog-dot active"></div>
       <div class="ob-prog-dot"></div>
@@ -1242,10 +1242,11 @@ function launchFromOnboard() {
    NAV BUILDER — renders correct tabs per role
 ════════════════════════════════════ */
 const athleteNavConfig = {
-  open:   [{id:'today',label:'Today'},{id:'training',label:'Training'},{id:'performance',label:'Performance'},{id:'intelligence',label:'Intelligence'},{id:'discover',label:'Discover'}],
-  self:   [{id:'today',label:'Today'},{id:'training',label:'Training'},{id:'performance',label:'Performance'},{id:'intelligence',label:'Intelligence'}],
-  closed: [{id:'today',label:'Today'},{id:'training',label:'Training'},{id:'performance',label:'Performance'}],
-  coach:  [{id:'today',label:'Today'},{id:'training',label:'Training'},{id:'performance',label:'Performance'},{id:'intelligence',label:'Intelligence'},{id:'discover',label:'Discover'}]
+  'self':             [{id:'today',label:'Today'},{id:'training',label:'Training'},{id:'performance',label:'Performance'},{id:'intelligence',label:'Intelligence'},{id:'discover',label:'Discover'}],
+  'activated':        [{id:'today',label:'Today'},{id:'training',label:'Training'},{id:'performance',label:'Performance'},{id:'intelligence',label:'Intelligence'},{id:'discover',label:'Discover'}],
+  'assigned-open':    [{id:'today',label:'Today'},{id:'training',label:'Training'},{id:'performance',label:'Performance'},{id:'intelligence',label:'Intelligence'},{id:'discover',label:'Discover'}],
+  'assigned-partial': [{id:'today',label:'Today'},{id:'training',label:'Training'},{id:'performance',label:'Performance'},{id:'intelligence',label:'Intelligence'},{id:'discover',label:'Discover'}],
+  'assigned-full':    [{id:'today',label:'Today'},{id:'training',label:'Training'},{id:'performance',label:'Performance'}]
 };
 const coachNavConfig = [
   {id:'roster',label:'Roster'},
@@ -1270,7 +1271,7 @@ function buildNav() {
     cN.innerHTML = coachNavConfig.map(t => `<button class="ntab" onclick="go('${t.id}')">${t.label}</button>`).join('');
   } else {
     modePill.style.display = 'none';
-    const items = athleteNavConfig[userRole] || athleteNavConfig['open'];
+    const items = athleteNavConfig[REL_STATE] || athleteNavConfig['self'];
     aN.innerHTML = items.map(t => `<button class="ntab" onclick="go('${t.id}')">${t.label}</button>`).join('');
     cN.innerHTML = '';
   }
@@ -1288,8 +1289,7 @@ function setMode(mode) {
   document.getElementById('athlete-nav').style.display = isCoach ? 'none' : 'flex';
   document.getElementById('coach-nav').style.display   = isCoach ? 'flex' : 'none';
   document.getElementById('race-tag').style.display = isCoach ? 'none' : 'flex';
-  const mb = document.getElementById('mode-badge');
-  mb.className = 'mbadge ' + mode; mb.textContent = isCoach ? 'COACH' : 'ATHLETE';
+// rel-badge is updated by renderStateBanner — no mode-badge element needed
   const av = document.getElementById('uavi');
   av.className = 'uavi ' + (isCoach?'c':'a'); av.textContent = isCoach ? 'JT' : 'MR';
   const ld = document.querySelector('.logo-dot');
