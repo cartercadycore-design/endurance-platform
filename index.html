@@ -58,8 +58,8 @@ body.coach-mode .mpb.active.coach { background:var(--b); }
 .uavi.c { background:var(--b1); color:var(--b); border-color:var(--b2); }
 
 /* ── LAYOUT ── */
-.app { margin-top:var(--topbar); min-height:calc(100vh - var(--topbar)); }
-.screen { display:none; padding:40px 44px; max-width:1120px; }
+.app { margin-top:var(--topbar); margin-left:var(--sidebar); min-height:calc(100vh - var(--topbar)); overflow-x:hidden; }
+.screen { display:none; padding:40px 44px; max-width:1120px; box-sizing:border-box; overflow-x:hidden; }
 .screen.active { display:block; }
 @keyframes fadeUp { from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)} }
 .screen.active>*{animation:fadeUp .26s cubic-bezier(.4,0,.2,1) both}
@@ -364,7 +364,7 @@ body.coach-mode .mpb.active.coach { background:var(--b); }
 .cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:1px; background:var(--bd); border:1px solid var(--bd); border-radius:var(--rad); overflow:hidden; margin-bottom:14px; }
 .cal-day-head { background:var(--sur2); padding:8px; text-align:center; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--t4); }
 .cal-day { background:var(--sur); padding:8px; min-height:72px; cursor:pointer; transition:background .1s; }
-.cal-day:hover{background:var(--sur3)} .cal-day.today{background:var(--g1)}
+.cal-day:hover{background:var(--sur3)} .cal-day.today{background:var(--g1)} .cal-day.cal-selected{background:var(--b1);outline:1px solid var(--b)}
 .cal-day.other-month{background:var(--sur2)} .cal-day.other-month .cdn{color:var(--t4)}
 .cdn { font-size:12px; font-weight:600; color:var(--t1); margin-bottom:4px; }
 .cal-wo { font-size:10px; padding:2px 6px; border-radius:4px; margin-bottom:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
@@ -568,7 +568,7 @@ body.coach-mode .sb-sub-item.active { color:var(--b); }
 .sb-ws-info { background:var(--sur3); border:1px solid var(--bd); border-radius:8px; padding:8px 10px; }
 .sb-ws-title { font-weight:700; font-size:12px; }
 .sb-ws-detail { font-family:'DM Mono',monospace; font-size:10px; color:var(--t4); margin-top:1px; }
-.app { margin-left:var(--sidebar) !important; }
+/* app margin-left consolidated above */
 .screen { padding:32px 36px; max-width:1080px; }
 /* Coach Home */
 .home-grid { display:grid; grid-template-columns:1fr 320px; gap:16px; margin-bottom:16px; }
@@ -615,7 +615,7 @@ body.coach-mode .sb-sub-item.active { color:var(--b); }
 .itab-content { display:none; }
 .itab-content.active { display:block; animation:fadeUp .18s ease both; }
 /* Library / Builder */
-.library-layout { display:flex; height:calc(100vh - var(--topbar)); margin:-32px -36px; overflow:hidden; }
+.library-layout { display:flex; height:calc(100vh - var(--topbar)); margin:0; overflow:hidden; }
 .lib-sidebar { width:288px; flex-shrink:0; background:var(--sur); border-right:1px solid var(--bd); display:flex; flex-direction:column; overflow:hidden; }
 .lib-header { padding:14px 16px 11px; border-bottom:1px solid var(--bd); flex-shrink:0; }
 .lib-title { font-size:13px; font-weight:800; margin-bottom:8px; display:flex; align-items:center; justify-content:space-between; }
@@ -748,7 +748,7 @@ body.coach-mode .sb-sub-item.active { color:var(--b); }
 .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
 
 /* ══ INSIGHTS MODULE ══ */
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@300;400;500&display=swap');
 .ins-wrap { max-width: 900px; margin: 0 auto; }
 /* Rings */
 .rings-row { display: flex; justify-content: center; gap: 40px; margin-bottom: 32px; flex-wrap: wrap; }
@@ -790,8 +790,8 @@ body.coach-mode .sb-sub-item.active { color:var(--b); }
 @keyframes today-ring { 0%,100%{box-shadow:0 0 0 0 rgba(59,130,246,.3)} 50%{box-shadow:0 0 0 6px rgba(59,130,246,.05)} }
 .day-dot.planned { border: 2px dashed #ccc; background: transparent; }
 .day-dot.rest-dot { background: #e5e5e5; }
-.day-sport { font-size: 9px; font-family: 'JetBrains Mono', monospace; color: #aaa; text-align: center; line-height: 1.3; }
-.day-dur { font-size: 10px; font-family: 'JetBrains Mono', monospace; color: #888; }
+.day-sport { font-size: 9px; font-family: 'DM Mono', monospace; color: #aaa; text-align: center; line-height: 1.3; }
+.day-dur { font-size: 10px; font-family: 'DM Mono', monospace; color: #888; }
 /* Workout detail chart */
 .wdc { background: #0f0f0f; border-radius: 20px; padding: 24px; margin-bottom: 24px; }
 .wdc-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
@@ -805,7 +805,7 @@ body.coach-mode .sb-sub-item.active { color:var(--b); }
 .cchip { padding: 4px 10px; border-radius: 6px; font-size: 10px; font-weight: 500; border: 1px solid #2a2a2a; background: transparent; color: #555; cursor: pointer; font-family: 'DM Mono', monospace; transition: all .12s; }
 .cchip:hover { color: #888; }
 .cchip.active { background: #3b82f6; color: #fff; border-color: #3b82f6; }
-.scrub-tooltip { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 8px; padding: 8px 14px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #888; min-height: 32px; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.scrub-tooltip { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 8px; padding: 8px 14px; font-family: 'DM Mono', monospace; font-size: 11px; color: #888; min-height: 32px; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .scrub-time { color: #fff; font-weight: 500; }
 .scrub-val { }
 .wdc-panels { position: relative; }
@@ -814,7 +814,7 @@ body.coach-mode .sb-sub-item.active { color:var(--b); }
 .cp-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
 .cp-metric { font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; font-family: 'DM Sans', sans-serif; display: flex; align-items: center; gap: 5px; }
 .cp-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-.cp-scrub-val { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; }
+.cp-scrub-val { font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 600; }
 .chart-svg { display: block; width: 100%; }
 .lap-marker { font-size: 9px; fill: #333; font-family: 'DM Mono', monospace; }
 /* Insight cards */
@@ -838,7 +838,7 @@ body.coach-mode .sb-sub-item.active { color:var(--b); }
 .ic-section-txt { font-size: 14px; color: #444; line-height: 1.6; margin-bottom: 14px; font-family: 'DM Sans', sans-serif; }
 .ic-mini-chart { background: #111; border-radius: 12px; padding: 16px 18px; margin-top: 4px; }
 .ic-mini-title { font-size: 10px; color: #555; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 10px; font-family: 'DM Sans', sans-serif; }
-.ic-mini-note { font-size: 11px; margin-top: 8px; font-family: 'JetBrains Mono', monospace; }
+.ic-mini-note { font-size: 11px; margin-top: 8px; font-family: 'DM Mono', monospace; }
 /* Coach Roster (Insights coach mode) */
 .roster-radar { background: #fff; border: 1px solid var(--bd); border-radius: var(--rad); overflow: hidden; box-shadow: var(--sh-md); margin-bottom: 16px; }
 .group-event-banner { background: linear-gradient(135deg, var(--b1) 0%, #f0f7ff 100%); border: 1px solid var(--b2); border-radius: var(--rad); padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
@@ -875,7 +875,283 @@ body.coach-mode .sb-sub-item.active { color:var(--b); }
 .ath-stat-row { display: flex; justify-content: space-between; font-size: 11px; padding: 4px 0; border-bottom: 1px solid #222; }
 .ath-stat-row:last-child { border-bottom: none; }
 .ath-stat-lbl { color: #555; font-family: 'DM Mono', monospace; }
-.ath-stat-val { color: #fff; font-family: 'JetBrains Mono', monospace; font-weight: 500; }
+.ath-stat-val { color: #fff; font-family: 'DM Mono', monospace; font-weight: 500; }
+
+/* ══════════════════════════════════════
+   PLAN GENERATOR OVERLAY
+══════════════════════════════════════ */
+.gen-overlay { position:fixed; inset:0; background:rgba(26,24,20,.55); z-index:400; display:none; align-items:flex-start; justify-content:center; overflow-y:auto; padding:60px 16px 40px; }
+.gen-overlay.open { display:flex; }
+.gen-panel { background:var(--sur); border-radius:var(--rad); width:100%; max-width:600px; box-shadow:0 12px 60px rgba(0,0,0,.18); animation:genSlideUp .22s ease both; }
+@keyframes genSlideUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+.gen-header { padding:22px 28px 0; border-bottom:1px solid var(--bd); display:flex; align-items:center; justify-content:space-between; }
+.gen-title { font-family:'DM Serif Display',serif; font-size:22px; color:var(--t1); margin-bottom:16px; }
+.gen-close { width:30px; height:30px; border-radius:50%; border:1px solid var(--bd); background:transparent; color:var(--t3); cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; line-height:1; margin-bottom:16px; }
+.gen-prog { height:3px; background:var(--bd); margin:0 28px; border-radius:2px; }
+.gen-prog-fill { height:100%; background:var(--b); border-radius:2px; transition:width .3s ease; }
+.gen-body { padding:24px 28px; }
+.gen-step { display:none; }
+.gen-step.active { display:block; animation:genSlideUp .18s ease both; }
+
+/* Quick-add */
+.qa-eyebrow { font-size:10px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--b); font-family:'DM Mono',monospace; margin-bottom:8px; }
+.qa-sub { font-size:13px; color:var(--t2); margin-bottom:20px; line-height:1.6; }
+.qa-input-wrap { position:relative; margin-bottom:10px; }
+.qa-textarea { width:100%; background:var(--sur3); border:1.5px solid var(--bd); border-radius:10px; padding:13px 110px 13px 15px; font-family:'Plus Jakarta Sans',sans-serif; font-size:14px; color:var(--t1); outline:none; line-height:1.5; resize:none; transition:border .15s; }
+.qa-textarea:focus { border-color:var(--b); background:var(--sur); }
+.qa-send-btn { position:absolute; right:10px; top:50%; transform:translateY(-50%); background:var(--b); color:#fff; border:none; border-radius:var(--rad-s); padding:8px 14px; font-size:12px; font-weight:700; cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif; white-space:nowrap; }
+.qa-examples-row { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:16px; }
+.qa-eg-chip { padding:5px 12px; border-radius:20px; border:1px solid var(--bd); font-size:11px; color:var(--t2); cursor:pointer; background:var(--sur); transition:all .15s; }
+.qa-eg-chip:hover { background:var(--b1); border-color:var(--b2); color:var(--b); }
+.qa-or-divider { display:flex; align-items:center; gap:10px; margin:14px 0; }
+.qa-or-line { flex:1; height:1px; background:var(--bd); }
+.qa-or-lbl { font-size:10px; color:var(--t4); font-family:'DM Mono',monospace; letter-spacing:.1em; }
+.qa-manual-btn { width:100%; padding:11px; border-radius:var(--rad-s); border:1px dashed var(--bd); background:transparent; font-size:12px; color:var(--t3); cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif; transition:all .15s; }
+.qa-manual-btn:hover { background:var(--sur3); color:var(--t1); }
+
+/* Skeleton panel */
+.qa-skeleton { background:#111; border-radius:12px; padding:18px 20px; margin-top:12px; display:none; }
+.qa-skeleton.show { display:block; animation:genSlideUp .22s ease; }
+.sk-eyebrow { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.14em; color:rgba(255,255,255,.3); font-family:'DM Mono',monospace; display:flex; align-items:center; gap:7px; margin-bottom:10px; }
+.sk-pulse-dot { width:5px; height:5px; border-radius:50%; background:var(--b); animation:skPulse 1.4s ease infinite; }
+@keyframes skPulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+.sk-plan-title { font-family:'DM Serif Display',serif; font-size:18px; color:#fff; margin-bottom:3px; }
+.sk-plan-meta { font-size:10px; color:rgba(255,255,255,.35); font-family:'DM Mono',monospace; margin-bottom:14px; }
+.sk-rows { display:flex; flex-direction:column; gap:3px; }
+.sk-row { display:flex; align-items:center; gap:9px; background:rgba(255,255,255,.04); border-radius:7px; padding:7px 10px; animation:genSlideUp .18s ease both; }
+.sk-row:nth-child(1){animation-delay:.04s}.sk-row:nth-child(2){animation-delay:.08s}.sk-row:nth-child(3){animation-delay:.12s}.sk-row:nth-child(4){animation-delay:.16s}.sk-row:nth-child(5){animation-delay:.2s}
+.sk-d { font-size:9px; font-weight:700; text-transform:uppercase; color:rgba(255,255,255,.25); font-family:'DM Mono',monospace; min-width:22px; }
+.sk-arch { font-size:12px; font-weight:600; color:rgba(255,255,255,.8); flex:1; }
+.sk-dur-lbl { font-size:9px; color:rgba(255,255,255,.25); font-family:'DM Mono',monospace; }
+.sk-z2 { font-size:8px; font-weight:700; padding:2px 5px; border-radius:3px; background:rgba(34,197,94,.15); color:#4ade80; font-family:'DM Mono',monospace; }
+.sk-z4 { font-size:8px; font-weight:700; padding:2px 5px; border-radius:3px; background:rgba(245,158,11,.15); color:#fbbf24; font-family:'DM Mono',monospace; }
+.sk-actions { display:flex; gap:7px; margin-top:12px; padding-top:10px; border-top:1px solid rgba(255,255,255,.06); }
+.sk-btn { flex:1; padding:9px; border-radius:var(--rad-s); font-size:11px; font-weight:700; cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif; border:none; transition:all .15s; }
+.sk-confirm { background:var(--g); color:#fff; }
+.sk-adjust { background:rgba(255,255,255,.07); color:rgba(255,255,255,.6); }
+
+/* Confidence check */
+.cc-inferred-box { background:var(--g1); border:1px solid var(--g2); border-radius:10px; padding:11px 14px; font-size:13px; color:var(--t2); line-height:1.6; margin-bottom:20px; }
+.cc-q-group { display:flex; flex-direction:column; gap:18px; margin-bottom:22px; }
+.cc-q-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--t3); font-family:'DM Mono',monospace; margin-bottom:7px; }
+.cc-opts { display:flex; gap:5px; flex-wrap:wrap; }
+.cc-opt { padding:6px 13px; border-radius:20px; border:1.5px solid var(--bd); font-size:12px; font-weight:600; cursor:pointer; background:var(--sur); color:var(--t2); transition:all .15s; font-family:'Plus Jakarta Sans',sans-serif; }
+.cc-opt:hover { border-color:var(--b2); background:var(--b1); }
+.cc-opt.sel { border-color:var(--b); background:var(--b1); color:var(--b); }
+.inj-chips { display:flex; gap:5px; flex-wrap:wrap; }
+.inj-chip { padding:4px 11px; border-radius:20px; border:1px solid var(--bd); font-size:11px; color:var(--t2); cursor:pointer; transition:all .15s; }
+.inj-chip.flagged { background:var(--r1); border-color:var(--r2); color:var(--r); }
+
+/* Plan preview */
+.prev-hero { background:var(--t1); border-radius:12px; padding:18px 20px; margin-bottom:18px; }
+.prev-hero-top { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:12px; }
+.prev-eyebrow { font-size:9px; color:rgba(255,255,255,.35); font-family:'DM Mono',monospace; text-transform:uppercase; letter-spacing:.12em; margin-bottom:3px; }
+.prev-title { font-family:'DM Serif Display',serif; font-size:20px; color:#fff; }
+.prev-conf { text-align:right; }
+.prev-conf-bar { height:4px; width:80px; background:rgba(255,255,255,.1); border-radius:2px; overflow:hidden; margin-bottom:4px; }
+.prev-conf-fill { height:100%; background:var(--g); border-radius:2px; transition:width 1s ease; }
+.prev-conf-pct { font-size:10px; color:rgba(255,255,255,.4); font-family:'DM Mono',monospace; }
+.prev-stats { display:flex; gap:14px; flex-wrap:wrap; }
+.prev-stat { }
+.prev-stat-v { font-family:'DM Serif Display',serif; font-size:18px; color:#fff; }
+.prev-stat-l { font-size:9px; color:rgba(255,255,255,.3); font-family:'DM Mono',monospace; text-transform:uppercase; letter-spacing:.1em; }
+.prev-stat-div { width:1px; background:rgba(255,255,255,.1); align-self:stretch; }
+
+.phase-bar-row { display:flex; gap:2px; margin-bottom:4px; }
+.phase-seg { height:5px; border-radius:3px; }
+.phase-labels { display:flex; justify-content:space-between; font-size:9px; font-family:'DM Mono',monospace; color:var(--t4); letter-spacing:.08em; margin-bottom:18px; }
+
+.prev-sessions { display:flex; flex-direction:column; gap:5px; margin-bottom:14px; }
+.prev-row { display:flex; align-items:center; gap:9px; background:var(--sur); border:1px solid var(--bd); border-radius:9px; padding:9px 13px; }
+.prev-row.key-l { border-left:3px solid var(--a2); }
+.pr-day { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--t4); font-family:'DM Mono',monospace; min-width:24px; }
+.pr-arch { font-size:13px; font-weight:700; color:var(--t1); flex:1; }
+.pr-dur { font-size:10px; color:var(--t3); font-family:'DM Mono',monospace; }
+
+.conf-note-box { font-size:12px; color:var(--t2); line-height:1.6; padding:10px 13px; background:var(--g1); border:1px solid var(--g2); border-radius:9px; margin-bottom:18px; }
+
+/* Step nav */
+.gen-step-nav { display:flex; align-items:center; justify-content:space-between; padding-top:18px; border-top:1px solid var(--bd); }
+.btn-gen-back { padding:9px 18px; border-radius:var(--rad-s); border:1px solid var(--bd); background:transparent; font-size:12px; font-weight:600; color:var(--t3); cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif; transition:all .15s; }
+.btn-gen-back:hover { background:var(--sur3); color:var(--t1); }
+.btn-gen-next { padding:9px 20px; border-radius:var(--rad-s); border:none; font-size:12px; font-weight:700; cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif; transition:all .15s; display:inline-flex; align-items:center; gap:5px; }
+.btn-gen-b { background:var(--b); color:#fff; }
+.btn-gen-g { background:var(--g); color:#fff; }
+
+/* ══════════════════════════════════════
+   PLANNER (inside Training screen)
+══════════════════════════════════════ */
+.planner-wrap { display:none; }
+.planner-wrap.active { display:block; }
+
+/* Rolling week signal */
+.rolling-signal { background:#111; border-radius:var(--rad); padding:12px 16px; margin-bottom:10px; display:flex; align-items:flex-start; gap:11px; }
+.rs-icon { font-size:16px; flex-shrink:0; margin-top:1px; }
+.rs-text { flex:1; }
+.rs-headline { font-size:12px; font-weight:700; color:#fff; margin-bottom:2px; }
+.rs-detail { font-size:10px; color:rgba(255,255,255,.38); line-height:1.5; font-family:'DM Mono',monospace; }
+.rs-cta { font-size:11px; color:var(--b2); font-weight:600; cursor:pointer; margin-top:4px; display:inline-block; }
+.rs-cta:hover { text-decoration:underline; }
+
+/* Week bar */
+.week-bar { background:var(--sur); border:1px solid var(--bd); border-radius:var(--rad); padding:12px 16px; margin-bottom:10px; display:flex; align-items:center; gap:12px; box-shadow:var(--sh); flex-wrap:wrap; }
+.wb-info { flex:1; min-width:0; }
+.wb-title { font-family:'DM Serif Display',serif; font-size:17px; color:var(--t1); }
+.wb-sub { font-size:10px; color:var(--t3); font-family:'DM Mono',monospace; margin-top:1px; }
+.wb-stats { display:flex; gap:12px; align-items:center; }
+.wbs { text-align:center; }
+.wbs-v { font-family:'DM Mono',monospace; font-size:14px; font-weight:700; }
+.wbs-l { font-size:8px; text-transform:uppercase; letter-spacing:.1em; color:var(--t4); font-family:'DM Mono',monospace; }
+.wb-div { width:1px; height:26px; background:var(--bd); }
+.wb-btns { display:flex; gap:5px; }
+
+/* Session cards */
+.plan-sessions { display:flex; flex-direction:column; gap:6px; margin-bottom:20px; }
+.psc { background:var(--sur); border:1.5px solid var(--bd); border-radius:var(--rad); box-shadow:var(--sh); overflow:hidden; transition:box-shadow .15s, transform .15s; }
+.psc:hover { box-shadow:var(--sh-md); transform:translateY(-1px); }
+.psc.key-l { border-left:4px solid var(--a); }
+.psc.open { box-shadow:var(--sh-lg); transform:translateY(-1px); }
+.psc-top { display:flex; align-items:center; gap:10px; padding:12px 14px; cursor:pointer; }
+.psc-day { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--t4); font-family:'DM Mono',monospace; min-width:24px; }
+.psc-dot { width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
+.dot-s { background:var(--b1); }
+.dot-r { background:var(--r1); }
+.dot-b { background:#f5f3ff; }
+.dot-rest { background:var(--sur3); }
+.psc-body { flex:1; }
+.psc-arch { font-size:13px; font-weight:700; color:var(--t1); margin-bottom:2px; }
+.psc-meta { display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+.psc-dur { font-size:10px; color:var(--t3); font-family:'DM Mono',monospace; }
+.psc-chev { color:var(--t4); font-size:10px; transition:transform .2s; flex-shrink:0; }
+.psc.open .psc-chev { transform:rotate(180deg); }
+
+/* Session detail */
+.psc-detail { display:none; border-top:1px solid var(--bd); background:var(--sur2); }
+.psc.open .psc-detail { display:block; animation:genSlideUp .16s ease both; }
+.psc-detail-inner { padding:14px 16px; }
+.intent-summary { display:flex; align-items:center; gap:10px; margin-bottom:12px; padding:9px 13px; background:var(--sur); border:1px solid var(--bd); border-radius:9px; }
+.is-label { font-size:12px; font-weight:700; color:var(--t1); flex:1; }
+.is-sub { font-size:10px; color:var(--t3); }
+.struct-toggle { font-size:10px; color:var(--b); cursor:pointer; font-weight:700; padding:3px 9px; border-radius:20px; border:1px solid var(--b2); background:var(--b1); transition:all .15s; white-space:nowrap; }
+.struct-toggle.hide { background:var(--t1); color:#fff; border-color:var(--t1); }
+
+/* Guided blocks */
+.g-block { border-radius:9px; padding:10px 12px; margin-bottom:6px; }
+.g-wu { background:var(--g1); border:1px solid var(--g2); }
+.g-main { background:var(--b1); border:1px solid var(--b2); }
+.g-cd { background:var(--sur3); border:1px solid var(--bd); }
+.gb-lbl { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:var(--t4); font-family:'DM Mono',monospace; margin-bottom:3px; }
+.gb-text { font-size:12px; color:var(--t1); line-height:1.6; }
+.gb-dur { font-family:'DM Mono',monospace; font-size:10px; color:var(--t3); margin-top:2px; }
+
+/* Structured view */
+.struct-view { display:none; margin-bottom:10px; animation:genSlideUp .16s ease; }
+.struct-view.show { display:block; }
+.struct-canvas { background:#111; border-radius:9px; padding:10px 12px; margin-bottom:7px; }
+.struct-bars { display:flex; gap:2px; align-items:flex-end; height:48px; }
+.struct-blk { border-radius:2px 2px 0 0; display:flex; align-items:center; justify-content:center; font-size:7px; font-family:'DM Mono',monospace; color:rgba(255,255,255,.65); font-weight:600; cursor:pointer; }
+.sb-wu { background:#22c55e; }
+.sb-z2 { background:#60a5fa; }
+.sb-z4 { background:#f87171; }
+.sb-z5 { background:#ef4444; }
+.sb-rest { background:#374151; }
+.sb-cd { background:#6b7280; }
+.struct-targets { display:flex; flex-direction:column; gap:4px; }
+.st-row { display:flex; align-items:center; gap:7px; font-size:11px; color:var(--t2); }
+.st-swatch { width:7px; height:7px; border-radius:2px; flex-shrink:0; }
+.st-val { font-family:'DM Mono',monospace; font-size:10px; color:var(--t1); font-weight:700; margin-left:auto; }
+.struct-adj { display:flex; gap:5px; flex-wrap:wrap; margin-top:7px; }
+.struct-adj-btn { padding:4px 9px; border-radius:5px; border:1px solid var(--bd); font-size:9px; font-family:'DM Mono',monospace; color:var(--t2); background:var(--sur); cursor:pointer; transition:all .15s; }
+.struct-adj-btn:hover { background:var(--t1); color:#fff; border-color:var(--t1); }
+
+/* Session footer */
+.psc-footer { display:flex; gap:7px; padding:0 16px 12px; flex-wrap:wrap; align-items:center; }
+.btn-done { background:var(--g); color:#fff; border:none; border-radius:var(--rad-s); padding:7px 14px; font-size:11px; font-weight:700; cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif; }
+.btn-skip-sess { background:transparent; color:var(--t3); border:1px solid var(--bd); border-radius:var(--rad-s); padding:7px 12px; font-size:11px; font-weight:600; cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif; transition:all .15s; }
+.btn-skip-sess:hover { background:var(--sur3); color:var(--t1); }
+.btn-save-pattern { background:transparent; color:var(--b); border:none; padding:7px 5px; font-size:11px; font-weight:600; cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif; text-decoration:underline; text-underline-offset:3px; margin-left:auto; }
+
+/* Rest card */
+.rest-day-card { background:var(--sur2); border:1px dashed var(--bd); border-radius:var(--rad); padding:11px 14px; display:flex; align-items:center; gap:10px; opacity:.55; }
+.rdc-day { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--t4); font-family:'DM Mono',monospace; min-width:24px; }
+.rdc-dot { width:34px; height:34px; border-radius:50%; background:var(--sur); display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
+.rdc-lbl { font-size:12px; font-weight:600; color:var(--t3); }
+.rdc-sub { font-size:10px; color:var(--t4); font-family:'DM Mono',monospace; margin-top:1px; }
+
+/* ══════════════════════════════════════
+   WEEK REVIEW MODAL
+══════════════════════════════════════ */
+.week-review-modal { position:fixed; inset:0; background:rgba(26,24,20,.5); z-index:500; display:none; align-items:center; justify-content:center; padding:20px; }
+.week-review-modal.open { display:flex; animation:fadeInBg .2s ease; }
+@keyframes fadeInBg { from{opacity:0} to{opacity:1} }
+.wr-box { background:var(--sur); border-radius:var(--rad); padding:28px 32px; max-width:480px; width:100%; box-shadow:0 12px 60px rgba(0,0,0,.18); animation:genSlideUp .2s ease; }
+.wr-eyebrow { font-size:10px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--b); font-family:'DM Mono',monospace; margin-bottom:7px; }
+.wr-title { font-family:'DM Serif Display',serif; font-size:20px; margin-bottom:5px; }
+.wr-sub { font-size:12px; color:var(--t3); margin-bottom:16px; line-height:1.6; }
+.wr-rows { display:flex; flex-direction:column; gap:4px; margin-bottom:16px; }
+.wr-row { display:flex; align-items:center; gap:9px; padding:7px 11px; border-radius:8px; background:var(--sur2); }
+.wr-row.key-l { border-left:3px solid var(--a2); }
+.wr-day { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--t4); font-family:'DM Mono',monospace; min-width:24px; }
+.wr-arch { font-size:12px; font-weight:600; color:var(--t1); flex:1; }
+.wr-dur { font-size:9px; color:var(--t4); font-family:'DM Mono',monospace; }
+.wr-load-note { font-size:11px; color:var(--t2); padding:8px 12px; background:var(--sur2); border-radius:8px; margin-bottom:14px; }
+.wr-actions { display:flex; gap:7px; flex-wrap:wrap; }
+.wr-dismiss { font-size:11px; color:var(--t4); cursor:pointer; text-align:center; margin-top:8px; }
+.wr-dismiss:hover { color:var(--t2); }
+
+/* ══════════════════════════════════════
+   DIVERGENCE MODAL
+══════════════════════════════════════ */
+.divergence-modal { position:fixed; inset:0; background:rgba(26,24,20,.5); z-index:500; display:none; align-items:center; justify-content:center; padding:20px; }
+.divergence-modal.open { display:flex; animation:fadeInBg .2s ease; }
+.div-box { background:var(--sur); border-radius:var(--rad); padding:28px 32px; max-width:480px; width:100%; box-shadow:0 12px 60px rgba(0,0,0,.18); animation:genSlideUp .2s ease; }
+.div-types { display:flex; flex-direction:column; gap:7px; margin-bottom:18px; }
+.div-type { border:1.5px solid var(--bd); border-radius:10px; padding:11px 13px; cursor:pointer; transition:all .15s; }
+.div-type:hover { border-color:var(--b2); background:var(--b1); }
+.div-type.selected { border-color:var(--b); background:var(--b1); }
+.dt-top { display:flex; align-items:center; gap:9px; margin-bottom:3px; }
+.dt-icon { font-size:16px; }
+.dt-label { font-size:13px; font-weight:700; color:var(--t1); }
+.dt-sub { font-size:11px; color:var(--t3); line-height:1.5; }
+.div-adapt-box { background:var(--b1); border:1px solid var(--b2); border-radius:9px; padding:10px 13px; margin-bottom:14px; font-size:12px; color:var(--t2); line-height:1.6; display:none; }
+.div-adapt-box.show { display:block; animation:genSlideUp .16s ease; }
+
+/* ══════════════════════════════════════
+   COACH: SCHEDULE GENERATE + PATTERN LIBRARY
+══════════════════════════════════════ */
+.coach-gen-signal { background:#111; border-radius:var(--rad); padding:10px 16px; margin-bottom:12px; display:flex; align-items:center; gap:10px; }
+.cgs-text { flex:1; font-size:12px; color:rgba(255,255,255,.45); line-height:1.5; }
+.cgs-text strong { color:#fff; display:block; margin-bottom:2px; }
+.cgs-cta { background:var(--b); color:#fff; border:none; border-radius:var(--rad-s); padding:7px 13px; font-size:11px; font-weight:700; cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif; white-space:nowrap; }
+.coach-ath-filter-row { display:flex; gap:5px; flex-wrap:wrap; margin-bottom:12px; }
+.caf-pill { display:flex; align-items:center; gap:5px; padding:4px 11px; border-radius:20px; border:1.5px solid var(--bd); background:var(--sur); cursor:pointer; font-size:11px; font-weight:600; color:var(--t2); transition:all .15s; }
+.caf-pill:hover { border-color:var(--b2); color:var(--b); background:var(--b1); }
+.caf-pill.active { border-color:var(--b); color:var(--b); background:var(--b1); }
+.caf-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+
+/* Pattern library card */
+.pattern-lib-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:9px; margin-bottom:18px; }
+.pat-card { background:var(--sur); border:1px solid var(--bd); border-radius:var(--rad); padding:14px 16px; box-shadow:var(--sh); transition:all .15s; cursor:pointer; }
+.pat-card:hover { border-color:var(--b2); box-shadow:var(--sh-md); }
+.pat-card.master { border-left:4px solid var(--b); }
+.pat-type-row { display:flex; align-items:center; gap:7px; margin-bottom:8px; }
+.pat-icon { font-size:18px; }
+.pat-type-lbl { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; font-family:'DM Mono',monospace; color:var(--t4); }
+.pat-name { font-size:14px; font-weight:700; color:var(--t1); margin-bottom:3px; }
+.pat-meta { font-size:10px; color:var(--t3); font-family:'DM Mono',monospace; margin-bottom:9px; }
+.pat-ath-tags { display:flex; gap:5px; flex-wrap:wrap; margin-bottom:9px; }
+.pat-ath-tag { font-size:9px; padding:2px 7px; border-radius:9px; background:var(--b1); color:var(--b); font-weight:700; font-family:'DM Mono',monospace; }
+.pat-actions { display:flex; gap:5px; }
+.btn-pat { padding:4px 9px; border-radius:var(--rad-s); border:1px solid var(--bd); background:transparent; font-size:10px; font-weight:600; color:var(--t2); cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif; transition:all .15s; }
+.btn-pat:hover { background:var(--t1); color:#fff; border-color:var(--t1); }
+.btn-pat.primary { background:var(--b); color:#fff; border-color:var(--b); }
+.pattern-model-callout { background:#111; border-radius:var(--rad); padding:16px 20px; margin-bottom:18px; display:flex; gap:14px; }
+.pmc-icon { font-size:22px; flex-shrink:0; }
+.pmc-title { font-size:13px; font-weight:700; color:#fff; margin-bottom:6px; }
+.pmc-points { display:flex; flex-direction:column; gap:5px; }
+.pmc-point { display:flex; gap:7px; font-size:11px; color:rgba(255,255,255,.45); line-height:1.5; }
+.pmc-point strong { color:rgba(255,255,255,.8); }
+.pmc-dot-b { width:4px; height:4px; border-radius:50%; background:var(--b); flex-shrink:0; margin-top:4px; }
 </style>
 </head>
 <body>
@@ -1100,33 +1376,267 @@ body.coach-mode .sb-sub-item.active { color:var(--b); }
 
 <!-- ══ ATHLETE: TRAINING ══ -->
 <div class="screen" id="screen-training">
-  <div class="ph"><div class="ph-row"><div><div class="ph-t">Training</div><div class="ph-s">Your assigned plan and session history.</div></div><div style="display:flex;gap:8px"><button class="btn btn-ghost" style="font-size:12px">Week View</button><button class="btn btn-ghost" style="font-size:12px">Month View</button></div></div></div>
-  <!-- Self-coached plan builder (shown conditionally) -->
-  <div class="plan-builder" id="self-plan-builder" style="display:none">
-    <div class="pb-header"><div class="pb-title">Week Builder — Feb 17–23</div><button class="btn btn-b" style="font-size:12px">+ Add Workout</button></div>
-    <div class="week-grid">
-      <div class="wday has-workout"><div class="wd-day">Mon</div><div class="wd-icon">🚴</div><div class="wd-type">Tempo Bike</div></div>
-      <div class="wday has-workout"><div class="wd-day">Tue</div><div class="wd-icon">🏃</div><div class="wd-type">Z2 Run</div></div>
-      <div class="wday rest"><div class="wd-day">Wed</div><div class="wd-icon">—</div><div class="wd-type">Rest</div></div>
-      <div class="wday has-workout"><div class="wd-day">Thu</div><div class="wd-icon">🏊</div><div class="wd-type">Swim</div></div>
-      <div class="wday has-workout"><div class="wd-day">Fri</div><div class="wd-icon">🚴</div><div class="wd-type">Intervals</div></div>
-      <div class="wday has-workout"><div class="wd-day">Sat</div><div class="wd-icon">🏃</div><div class="wd-type">Long Run</div></div>
-      <div class="wday rest"><div class="wd-day">Sun</div><div class="wd-icon">—</div><div class="wd-type">Rest</div></div>
+  <div class="ph"><div class="ph-row"><div><div class="ph-t">Training</div><div class="ph-s">Your week, built around your goals and readiness.</div></div><div style="display:flex;gap:6px"><button class="btn btn-ghost" style="font-size:12px" onclick="openPlanGenerator()">✦ Generate Plan</button><button class="btn btn-b" style="font-size:12px" onclick="openWeekReview()">Week Review</button></div></div></div>
+
+  <!-- ══ WEEKLY PLANNER ══ -->
+  <div class="planner-wrap active" id="planner-wrap">
+
+    <!-- Rolling signal -->
+    <div class="rolling-signal">
+      <div class="rs-icon">⟳</div>
+      <div class="rs-text">
+        <div class="rs-headline">Week 9 of 20 · IM 70.3 Build</div>
+        <div class="rs-detail">Next week auto-built Sunday · 9.8h total · +8% load step · 2 key sessions</div>
+        <span class="rs-cta" onclick="openWeekReview()">Review next week →</span>
+      </div>
     </div>
-  </div>
-  <div class="filter-bar">
-    <button class="fbtn active">All</button><button class="fbtn">🏃 Run</button><button class="fbtn">🚴 Bike</button><button class="fbtn">🏊 Swim</button><button class="fbtn">Last 7 days</button><button class="fbtn">Last 30 days</button>
-  </div>
-  <div class="hist-grp"><div class="hg-lbl">This Week</div>
-    <div class="hrow"><div class="htype run">🏃</div><div class="hmain"><div class="hname">Zone 2 Run</div><div class="hmeta">SAT FEB 21 · 45 MIN · 6.2 MI · HR AVG 138</div></div><div class="hright"><div class="hload up">62</div><div class="chip cg">Positive</div></div></div>
-    <div class="hrow"><div class="htype bike">🚴</div><div class="hmain"><div class="hname">Tempo Intervals</div><div class="hmeta">FRI FEB 20 · 60 MIN · 3×12MIN · 245W AVG</div></div><div class="hright"><div class="hload warn">88</div><div class="chip ca">High Load</div></div></div>
-    <div class="hrow"><div class="htype swim">🏊</div><div class="hmain"><div class="hname">Easy Aerobic Swim</div><div class="hmeta">THU FEB 19 · 35 MIN · 2,400M</div></div><div class="hright"><div class="hload up">41</div><div class="chip cg">Positive</div></div></div>
-    <div class="hrow"><div class="htype run">🏃</div><div class="hmain"><div class="hname">Recovery Run</div><div class="hmeta">WED FEB 18 · 30 MIN · HR AVG 122</div></div><div class="hright"><div class="hload muted">28</div><div class="chip cn">Recovery</div></div></div>
-  </div>
-  <div class="hist-grp"><div class="hg-lbl">Last Week</div>
-    <div class="hrow"><div class="htype bike">🚴</div><div class="hmain"><div class="hname">Long Ride</div><div class="hmeta">SAT FEB 14 · 3H 20MIN · 240W NP</div></div><div class="hright"><div class="hload warn">112</div><div class="chip ca">High Load</div></div></div>
-    <div class="hrow"><div class="htype run">🏃</div><div class="hmain"><div class="hname">Brick Run</div><div class="hmeta">SAT FEB 14 · 20 MIN · Post-bike</div></div><div class="hright"><div class="hload up">31</div><div class="chip cg">Productive</div></div></div>
-  </div>
+
+    <!-- Week bar -->
+    <div class="week-bar">
+      <div class="wb-info">
+        <div class="wb-title">Feb 23 – Mar 1</div>
+        <div class="wb-sub">Week 8 of 20 · Base → Build transition</div>
+      </div>
+      <div class="wb-stats">
+        <div class="wbs"><div class="wbs-v">3/5</div><div class="wbs-l">Done</div></div>
+        <div class="wb-div"></div>
+        <div class="wbs"><div class="wbs-v" style="color:var(--a)">2</div><div class="wbs-l">Key</div></div>
+        <div class="wb-div"></div>
+        <div class="wbs"><div class="wbs-v">64%</div><div class="wbs-l">Load cap</div></div>
+      </div>
+    </div>
+
+    <!-- Session cards -->
+    <div class="plan-sessions" id="plan-sessions">
+
+      <!-- MON — done -->
+      <div class="psc" id="psc-mon" onclick="togglePsc('mon')">
+        <div class="psc-top">
+          <div class="psc-day">Mon</div>
+          <div class="psc-dot dot-s">🏊</div>
+          <div class="psc-body">
+            <div class="psc-arch">Easy Swim</div>
+            <div class="psc-meta">
+              <span class="psc-dur">45 min · 2,400m</span>
+              <span class="chip cn" style="font-size:9px">Easy / Recover</span>
+              <span class="chip cg" style="font-size:9px">✓ Done</span>
+            </div>
+          </div>
+          <div class="psc-chev">▾</div>
+        </div>
+        <div class="psc-detail">
+          <div class="psc-detail-inner">
+            <div class="intent-summary">
+              <div><div class="is-label">Easy / Recover</div><div class="is-sub">Zone 2 aerobic · Flush fatigue from Tuesday</div></div>
+              <button class="struct-toggle" onclick="toggleStruct(event,'mon')">Show structure</button>
+            </div>
+            <div class="g-block g-wu"><div class="gb-lbl">Warmup</div><div class="gb-text">400m easy, mixing strokes to warm up</div><div class="gb-dur">8 min</div></div>
+            <div class="g-block g-main"><div class="gb-lbl">Main</div><div class="gb-text">1,600m aerobic at comfortable pace. Focus on long, smooth strokes — no huffing.</div><div class="gb-dur">29 min</div></div>
+            <div class="g-block g-cd"><div class="gb-lbl">Cooldown</div><div class="gb-text">400m easy backstroke or pull</div><div class="gb-dur">8 min</div></div>
+            <div class="struct-view" id="struct-mon">
+              <div class="struct-canvas">
+                <div class="struct-bars">
+                  <div class="struct-blk sb-wu" style="width:38px;height:55%">WU</div>
+                  <div class="struct-blk sb-z2" style="width:110px;height:70%">Z2</div>
+                  <div class="struct-blk sb-z2" style="width:110px;height:65%">Z2</div>
+                  <div class="struct-blk sb-cd" style="width:38px;height:38%">CD</div>
+                </div>
+              </div>
+              <div class="struct-targets">
+                <div class="st-row"><div class="st-swatch" style="background:#60a5fa"></div><span>Zone 2 pace</span><span class="st-val">1:55–2:05/100m</span></div>
+                <div class="st-row"><div class="st-swatch" style="background:#f87171"></div><span>HR target</span><span class="st-val">130–142 bpm</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="psc-footer">
+            <button class="btn-done">✓ Mark Done</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TUE — KEY, done -->
+      <div class="psc key-l" id="psc-tue" onclick="togglePsc('tue')">
+        <div class="psc-top">
+          <div class="psc-day">Tue</div>
+          <div class="psc-dot dot-r">🏃</div>
+          <div class="psc-body">
+            <div class="psc-arch">Threshold Run — 3×15min</div>
+            <div class="psc-meta">
+              <span class="psc-dur">65 min</span>
+              <span class="chip ca" style="font-size:9px">⚡ KEY</span>
+              <span class="chip cg" style="font-size:9px">✓ Done</span>
+            </div>
+          </div>
+          <div class="psc-chev">▾</div>
+        </div>
+        <div class="psc-detail">
+          <div class="psc-detail-inner">
+            <div class="intent-summary">
+              <div><div class="is-label">Build Threshold</div><div class="is-sub">3 × 15 min at lactate threshold · Critical quality session</div></div>
+              <button class="struct-toggle hide" id="stbtn-tue" onclick="toggleStruct(event,'tue')">Hide structure</button>
+            </div>
+            <div class="struct-view show" id="struct-tue">
+              <div class="struct-canvas">
+                <div class="struct-bars">
+                  <div class="struct-blk sb-wu" style="width:28px;height:48%">WU</div>
+                  <div class="struct-blk sb-z4" style="width:44px;height:90%">Z4</div>
+                  <div class="struct-blk sb-rest" style="width:14px;height:32%">R</div>
+                  <div class="struct-blk sb-z4" style="width:44px;height:90%">Z4</div>
+                  <div class="struct-blk sb-rest" style="width:14px;height:32%">R</div>
+                  <div class="struct-blk sb-z4" style="width:44px;height:90%">Z4</div>
+                  <div class="struct-blk sb-cd" style="width:22px;height:38%">CD</div>
+                </div>
+              </div>
+              <div class="struct-targets">
+                <div class="st-row"><div class="st-swatch" style="background:#f87171"></div><span>Zone 4 pace</span><span class="st-val">6:38–6:48/mi</span></div>
+                <div class="st-row"><div class="st-swatch" style="background:#60a5fa"></div><span>HR target</span><span class="st-val">162–170 bpm</span></div>
+                <div class="st-row"><div class="st-swatch" style="background:#374151"></div><span>Recovery jog</span><span class="st-val">3 min between</span></div>
+              </div>
+              <div class="struct-adj">
+                <button class="struct-adj-btn" onclick="showDivergence(event)">Couldn't complete →</button>
+                <button class="struct-adj-btn">Extend by 5min</button>
+                <button class="struct-adj-btn">Reduce intensity</button>
+              </div>
+            </div>
+          </div>
+          <div class="psc-footer">
+            <button class="btn-done">✓ Mark Done</button>
+            <button class="btn-skip-sess" onclick="showDivergence(event)">Skip / Modified</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- WED — rest -->
+      <div class="rest-day-card">
+        <div class="rdc-day">Wed</div>
+        <div class="rdc-dot">—</div>
+        <div><div class="rdc-lbl">Rest</div><div class="rdc-sub">Scheduled recovery</div></div>
+      </div>
+
+      <!-- THU — today -->
+      <div class="psc key-l open" id="psc-thu" onclick="togglePsc('thu')">
+        <div class="psc-top">
+          <div class="psc-day">Thu</div>
+          <div class="psc-dot dot-b">🚴</div>
+          <div class="psc-body">
+            <div class="psc-arch">Tempo Intervals — 4×8min</div>
+            <div class="psc-meta">
+              <span class="psc-dur">70 min · 95% FTP</span>
+              <span class="chip ca" style="font-size:9px">⚡ KEY</span>
+              <span class="chip cb" style="font-size:9px">Today</span>
+            </div>
+          </div>
+          <div class="psc-chev">▾</div>
+        </div>
+        <div class="psc-detail">
+          <div class="psc-detail-inner">
+            <div class="intent-summary">
+              <div><div class="is-label">Build Threshold</div><div class="is-sub">Sweet Spot · 4 × 8 min at 90–95% FTP</div></div>
+              <button class="struct-toggle hide" id="stbtn-thu" onclick="toggleStruct(event,'thu')">Hide structure</button>
+            </div>
+            <div class="struct-view show" id="struct-thu">
+              <div class="struct-canvas">
+                <div class="struct-bars">
+                  <div class="struct-blk sb-wu" style="width:26px;height:48%">WU</div>
+                  <div class="struct-blk sb-z4" style="width:38px;height:88%">Z4</div>
+                  <div class="struct-blk sb-rest" style="width:12px;height:34%">R</div>
+                  <div class="struct-blk sb-z4" style="width:38px;height:88%">Z4</div>
+                  <div class="struct-blk sb-rest" style="width:12px;height:34%">R</div>
+                  <div class="struct-blk sb-z4" style="width:38px;height:88%">Z4</div>
+                  <div class="struct-blk sb-rest" style="width:12px;height:34%">R</div>
+                  <div class="struct-blk sb-z4" style="width:38px;height:88%">Z4</div>
+                  <div class="struct-blk sb-cd" style="width:20px;height:36%">CD</div>
+                </div>
+              </div>
+              <div class="struct-targets">
+                <div class="st-row"><div class="st-swatch" style="background:#a78bfa"></div><span>Sweet Spot power</span><span class="st-val">245–258W (90–95% FTP)</span></div>
+                <div class="st-row"><div class="st-swatch" style="background:#f87171"></div><span>HR target</span><span class="st-val">158–168 bpm</span></div>
+                <div class="st-row"><div class="st-swatch" style="background:#374151"></div><span>Recovery</span><span class="st-val">4 min between reps</span></div>
+              </div>
+              <div class="struct-adj">
+                <button class="struct-adj-btn" onclick="showDivergence(event)">Can't do this today →</button>
+                <button class="struct-adj-btn">Drop to 3 reps</button>
+                <button class="struct-adj-btn">Reduce to 88% FTP</button>
+              </div>
+            </div>
+          </div>
+          <div class="psc-footer">
+            <button class="btn-done">✓ Mark Done</button>
+            <button class="btn-skip-sess" onclick="showDivergence(event)">Skip / Modified</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- FRI — upcoming -->
+      <div class="psc" id="psc-fri" onclick="togglePsc('fri')">
+        <div class="psc-top">
+          <div class="psc-day">Fri</div>
+          <div class="psc-dot dot-r">🏃</div>
+          <div class="psc-body">
+            <div class="psc-arch">Easy Recovery Run</div>
+            <div class="psc-meta">
+              <span class="psc-dur">35 min</span>
+              <span class="chip cn" style="font-size:9px">Easy / Recover</span>
+            </div>
+          </div>
+          <div class="psc-chev">▾</div>
+        </div>
+        <div class="psc-detail">
+          <div class="psc-detail-inner">
+            <div class="intent-summary">
+              <div><div class="is-label">Easy / Recover</div><div class="is-sub">Flush legs after Thursday's key session</div></div>
+              <button class="struct-toggle" id="stbtn-fri" onclick="toggleStruct(event,'fri')">Show structure</button>
+            </div>
+            <div class="g-block g-main"><div class="gb-lbl">Main</div><div class="gb-text">35 min easy Zone 1–2. HR cap 135. No splits, no effort. This run is doing real work — stay easy.</div><div class="gb-dur">35 min</div></div>
+            <div class="struct-view" id="struct-fri"></div>
+          </div>
+          <div class="psc-footer">
+            <button class="btn-done">✓ Mark Done</button>
+            <button class="btn-skip-sess" onclick="showDivergence(event)">Skip / Modified</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SAT — KEY -->
+      <div class="psc key-l" id="psc-sat" onclick="togglePsc('sat')">
+        <div class="psc-top">
+          <div class="psc-day">Sat</div>
+          <div class="psc-dot dot-r">🏃</div>
+          <div class="psc-body">
+            <div class="psc-arch">Long Run — 1h 45m</div>
+            <div class="psc-meta">
+              <span class="psc-dur">1h 45m · Zone 2</span>
+              <span class="chip ca" style="font-size:9px">⚡ KEY</span>
+            </div>
+          </div>
+          <div class="psc-chev">▾</div>
+        </div>
+        <div class="psc-detail">
+          <div class="psc-detail-inner">
+            <div class="intent-summary">
+              <div><div class="is-label">Long / Durable</div><div class="is-sub">Aerobic base building · Protect Saturday streak</div></div>
+              <button class="struct-toggle" id="stbtn-sat" onclick="toggleStruct(event,'sat')">Show structure</button>
+            </div>
+            <div class="g-block g-wu"><div class="gb-lbl">Warmup</div><div class="gb-text">15 min easy, building to conversational pace</div><div class="gb-dur">15 min</div></div>
+            <div class="g-block g-main"><div class="gb-lbl">Main</div><div class="gb-text">90 min at comfortable Zone 2 — you should be able to hold a conversation. HR cap 148. If you're above 148 at any point, walk until it drops.</div><div class="gb-dur">1h 30m</div></div>
+            <div class="struct-view" id="struct-sat"></div>
+          </div>
+          <div class="psc-footer">
+            <button class="btn-done">✓ Mark Done</button>
+            <button class="btn-skip-sess" onclick="showDivergence(event)">Skip / Modified</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUN — rest -->
+      <div class="rest-day-card">
+        <div class="rdc-day">Sun</div>
+        <div class="rdc-dot">—</div>
+        <div><div class="rdc-lbl">Rest</div><div class="rdc-sub">Recovery + next week auto-builds tonight</div></div>
+      </div>
+
+    </div><!-- /plan-sessions -->
+  </div><!-- /planner-wrap -->
 </div>
 
 <!-- ══ ATHLETE: PERFORMANCE ══ -->
@@ -1496,8 +2006,8 @@ body.coach-mode .sb-sub-item.active { color:var(--b); }
         <div class="qa-title">Quick Actions</div>
         <button class="qa-btn" onclick="go('library');setTimeout(openBuilder,200)"><span>➕</span>New Workout</button>
         <button class="qa-btn" onclick="go('invite')"><span>👤</span>Invite Athlete</button>
-        <button class="qa-btn" onclick="go('schedule')"><span>📅</span>Assign Workout</button>
-        <button class="qa-btn" onclick="go('library')"><span>📚</span>Open Plan Library</button>
+        <button class="qa-btn" onclick="go('schedule')"><span>📅</span>Schedule Workout</button>
+        <button class="qa-btn" onclick="go('library')"><span>📚</span>Open Program Builder</button>
       </div>
       <div class="roster-snapshot">
         <div class="qa-title">Roster Snapshot</div>
@@ -1518,6 +2028,7 @@ body.coach-mode .sb-sub-item.active { color:var(--b); }
       <div class="lib-header">
         <div class="lib-title"><span>Workout Library</span><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--t4);font-weight:400">24 workouts</span></div>
         <input class="lib-search" placeholder="🔍  Search workouts…">
+        <div style="padding:2px 0 4px;text-align:right"><span style="font-size:10px;color:var(--b);cursor:pointer;font-weight:600" onclick="go('patterns')">Manage Library &rarr;</span></div>
         <div class="lib-filters">
           <button class="lib-filter active" onclick="filterLib(this,'all')">All</button>
           <button class="lib-filter" onclick="filterLib(this,'run')">🏃 Run</button>
@@ -1580,7 +2091,7 @@ body.coach-mode .sb-sub-item.active { color:var(--b); }
         </div>
         <div style="display:flex;gap:6px">
           <button class="btn btn-ghost" style="font-size:12px;padding:6px 13px">Preview</button>
-          <button class="btn btn-b" style="font-size:12px;padding:6px 13px">Assign to Athlete</button>
+          <button class="btn btn-b" style="font-size:12px;padding:6px 13px">Assign Program</button>
         </div>
       </div>
       <div class="canvas-toolbar">
@@ -1695,11 +2206,71 @@ body.coach-mode .sb-sub-item.active { color:var(--b); }
   </div>
 </div>
 
+<!-- ══ COACH: PATTERN LIBRARY ══ -->
+<div class="screen" id="screen-patterns">
+    <div class="ph"><div class="ph-row"><div><div class="ph-t">Workout Library</div><div class="ph-s">Your workout building blocks. Schedule to athletes, or drag into Program Builder.</div></div><div style="display:flex;gap:8px"><button class="btn btn-ghost" style="font-size:12px" onclick="go('programs')">Build Program &rarr;</button><button class="btn btn-b" style="font-size:12px" onclick="openBuilder()">+ New Workout</button></div></div></div>
+
+  <div style="margin-bottom:14px">
+    <button onclick="var nx=this.nextElementSibling;nx.style.display=nx.style.display==='block'?'none':'block';this.querySelector('.wl-chev').textContent=nx.style.display==='block'?'&#9652;':'&#9662;'" style="display:flex;align-items:center;gap:7px;background:transparent;border:1px solid var(--bd);border-radius:var(--rad-s);padding:6px 14px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:600;color:var(--t3)">
+      <span>How workouts &amp; schedules work</span><span class="wl-chev">&#9662;</span>
+    </button>
+    <div style="display:none;margin-top:8px;background:#111;border-radius:var(--rad);padding:14px 18px">
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;gap:9px;font-size:12px;color:rgba(255,255,255,.45);line-height:1.5"><div style="width:5px;height:5px;border-radius:50%;background:var(--b);flex-shrink:0;margin-top:4px"></div><span><strong style="color:rgba(255,255,255,.8)">Workout (master):</strong> edit once, updates cascade to all future scheduled sessions automatically</span></div>
+        <div style="display:flex;gap:9px;font-size:12px;color:rgba(255,255,255,.45);line-height:1.5"><div style="width:5px;height:5px;border-radius:50%;background:var(--b);flex-shrink:0;margin-top:4px"></div><span><strong style="color:rgba(255,255,255,.8)">Scheduled (instance):</strong> placed on an athlete calendar &middot; can be overridden without breaking the master</span></div>
+        <div style="display:flex;gap:9px;font-size:12px;color:rgba(255,255,255,.45);line-height:1.5"><div style="width:5px;height:5px;border-radius:50%;background:var(--b);flex-shrink:0;margin-top:4px"></div><span><strong style="color:rgba(255,255,255,.8)">Completed history locked:</strong> past sessions never change &mdash; athlete records stay clean</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pattern-lib-grid">
+    <div class="pat-card master">
+      <div class="pat-type-row"><div class="pat-icon">🚴</div><div class="pat-type-lbl">Bike · Sweet Spot</div></div>
+      <div class="pat-name">4×8 @ 95% FTP</div>
+      <div class="pat-meta">70 MIN · THRESHOLD · 4 REPS</div>
+      <div class="pat-ath-tags"><div class="pat-ath-tag">Marcus Reid</div><div class="pat-ath-tag">Derek Osei</div><div class="pat-ath-tag">+2</div></div>
+      <div class="pat-actions"><button class="btn-pat primary">Schedule</button><button class="btn-pat">Edit</button><button class="btn-pat">4 Scheduled</button></div>
+    </div>
+    <div class="pat-card master">
+      <div class="pat-type-row"><div class="pat-icon">🏃</div><div class="pat-type-lbl">Run · Threshold</div></div>
+      <div class="pat-name">Tempo 3×15min</div>
+      <div class="pat-meta">65 MIN · ZONE 4 · 3 REPS</div>
+      <div class="pat-ath-tags"><div class="pat-ath-tag">Marcus Reid</div><div class="pat-ath-tag">Aisha Lawson</div></div>
+      <div class="pat-actions"><button class="btn-pat primary">Schedule</button><button class="btn-pat">Edit</button><button class="btn-pat">6 Scheduled</button></div>
+    </div>
+    <div class="pat-card master">
+      <div class="pat-type-row"><div class="pat-icon">🏊</div><div class="pat-type-lbl">Swim · CSS</div></div>
+      <div class="pat-name">CSS Intervals 10×100m</div>
+      <div class="pat-meta">55 MIN · THRESHOLD · 10 REPS</div>
+      <div class="pat-ath-tags"><div class="pat-ath-tag">Marcus Reid</div></div>
+      <div class="pat-actions"><button class="btn-pat primary">Schedule</button><button class="btn-pat">Edit</button><button class="btn-pat">2 Scheduled</button></div>
+    </div>
+    <div class="pat-card master">
+      <div class="pat-type-row"><div class="pat-icon">🚴</div><div class="pat-type-lbl">Bike · Endurance</div></div>
+      <div class="pat-name">3×20 Sweet Spot</div>
+      <div class="pat-meta">90 MIN · ZONE 3–4 · 3 REPS</div>
+      <div class="pat-ath-tags"><div class="pat-ath-tag">Sarah Chen</div><div class="pat-ath-tag">Aisha Lawson</div></div>
+      <div class="pat-actions"><button class="btn-pat primary">Schedule</button><button class="btn-pat">Edit</button><button class="btn-pat">5 Scheduled</button></div>
+    </div>
+    <div class="pat-card master">
+      <div class="pat-type-row"><div class="pat-icon">🏃</div><div class="pat-type-lbl">Run · VO2</div></div>
+      <div class="pat-name">VO2 1000m Repeats</div>
+      <div class="pat-meta">55 MIN · ZONE 5 · 5–6 REPS</div>
+      <div class="pat-ath-tags"><div class="pat-ath-tag">Marcus Reid</div><div class="pat-ath-tag">Derek Osei</div></div>
+      <div class="pat-actions"><button class="btn-pat primary">Schedule</button><button class="btn-pat">Edit</button><button class="btn-pat">3 Scheduled</button></div>
+    </div>
+    <div class="pat-card" style="border:1.5px dashed var(--bd);display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:120px;cursor:pointer;opacity:.6" onclick="openPlanGenerator()">
+      <div style="font-size:22px;margin-bottom:4px">+</div>
+      <div style="font-size:12px;color:var(--t3);font-weight:600">New Workout</div>
+    </div>
+  </div>
+</div>
+
 <!-- ══ COACH: SCHEDULE ══ -->
 
 <!-- ══ COACH: PLAN ASSIGNMENT ══ -->
 <div class="screen" id="screen-plan-assign">
-  <div class="ph"><div class="ph-row"><div><div class="ph-t">Plan Assignment</div><div class="ph-s">Assign training programs to individual athletes or groups.</div></div><div style="display:flex;gap:8px"><button class="btn btn-b" style="font-size:12px" onclick="go('library')">Open Builder →</button></div></div></div>
+  <div class="ph"><div class="ph-row"><div><div class="ph-t">Plan Assignment</div><div class="ph-s">Assign programs to individual athletes or groups.</div></div><div style="display:flex;gap:8px"><button class="btn btn-b" style="font-size:12px" onclick="go('library')">Open Builder →</button></div></div></div>
   <div class="g2" style="margin-bottom:14px">
     <div class="card card-p">
       <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t4);margin-bottom:10px">Assign Program to Athlete</div>
@@ -1743,11 +2314,27 @@ body.coach-mode .sb-sub-item.active { color:var(--b); }
 </div>
 
 <div class="screen" id="screen-schedule">
-  <div class="ph"><div class="ph-row"><div><div class="ph-t">Schedule</div><div class="ph-s">Assign workouts across your roster. Click any day to edit.</div></div><div style="display:flex;gap:8px;align-items:center"><button class="btn btn-ghost" style="font-size:12px">← Jan</button><div style="font-size:15px;font-weight:700;padding:0 8px">February 2026</div><button class="btn btn-ghost" style="font-size:12px">Mar →</button></div></div></div>
+  <div class="ph"><div class="ph-row"><div><div class="ph-t">Schedule</div><div class="ph-s">Assign workouts across your roster. Click any day to edit.</div></div><div style="display:flex;gap:8px;align-items:center"><button class="btn btn-ghost" style="font-size:12px" onclick="schedChangeMonth(-1)">← Jan</button><div id="sched-month-lbl" style="font-size:15px;font-weight:700;padding:0 8px">February 2026</div><button class="btn btn-ghost" style="font-size:12px" onclick="schedChangeMonth(1)">Mar →</button><button class="btn btn-b" style="font-size:12px;margin-left:8px" onclick="openPlanGenerator()">✦ Generate Plan</button></div></div></div>
+
+  <!-- Generate signal -->
+  <div class="coach-gen-signal">
+    <div class="rs-icon">⟳</div>
+    <div class="cgs-text"><strong>4 athletes · Next week auto-builds Sunday night</strong>Weekly review ready: +8% load step · 2 compliance flags · Approve or adjust in 30 seconds</div>
+    <button class="cgs-cta" onclick="openWeekReview()">Review Now →</button>
+  </div>
+
+  <!-- Athlete filter -->
+  <div class="coach-ath-filter-row">
+    <div class="caf-pill active" onclick="schedFilterAth(this,'Marcus Reid')"><div class="caf-dot" style="background:var(--g)"></div>Marcus Reid</div>
+    <div class="caf-pill" onclick="schedFilterAth(this,'Sarah Chen')"><div class="caf-dot" style="background:var(--r)"></div>Sarah Chen <span class="chip cr" style="font-size:8px;margin-left:4px">⚠</span></div>
+    <div class="caf-pill" onclick="schedFilterAth(this,'Derek Osei')"><div class="caf-dot" style="background:var(--a)"></div>Derek Osei</div>
+    <div class="caf-pill" onclick="schedFilterAth(this,'Aisha Lawson')"><div class="caf-dot" style="background:var(--b)"></div>Aisha Lawson</div>
+    <div class="caf-pill" style="margin-left:auto;color:var(--t4);border-style:dashed" onclick="schedFilterAth(this,'all')">All Athletes</div>
+  </div>
   <div class="cal-grid">
     <div class="cal-day-head">Sun</div><div class="cal-day-head">Mon</div><div class="cal-day-head">Tue</div><div class="cal-day-head">Wed</div><div class="cal-day-head">Thu</div><div class="cal-day-head">Fri</div><div class="cal-day-head">Sat</div>
     <div class="cal-day other-month"><div class="cdn">26</div></div><div class="cal-day other-month"><div class="cdn">27</div></div><div class="cal-day other-month"><div class="cdn">28</div></div><div class="cal-day other-month"><div class="cdn">29</div></div><div class="cal-day other-month"><div class="cdn">30</div></div><div class="cal-day other-month"><div class="cdn">31</div></div>
-    <div class="cal-day"><div class="cdn">1</div></div>
+    <div class="cal-day" onclick="schedCalDayClick(this,'Feb 1')"><div class="cdn">1</div><div class="cal-ev run">🏃 Z2 Run</div></div>
     <div class="cal-day"><div class="cdn">2</div><div class="cal-wo run">MR · Z2 Run</div><div class="cal-wo bike">AL · Bike</div></div>
     <div class="cal-day"><div class="cdn">3</div><div class="cal-wo bike">MR · Tempo</div></div>
     <div class="cal-day"><div class="cdn">4</div><div class="cal-wo swim">SC · Swim</div></div>
@@ -1761,10 +2348,10 @@ body.coach-mode .sb-sub-item.active { color:var(--b); }
     <div class="cal-day"><div class="cdn">13</div><div class="cal-wo swim">MR · Open Water</div></div>
     <div class="cal-day"><div class="cdn">14</div><div class="cal-wo bike">MR · Long Ride</div><div class="cal-wo run">SC · LR</div></div>
     <div class="cal-day"><div class="cdn">15</div></div><div class="cal-day"><div class="cdn">16</div></div>
-    <div class="cal-day"><div class="cdn">17</div></div><div class="cal-day"><div class="cdn">18</div><div class="cal-wo bike">DO · Threshold</div></div>
+    <div class="cal-day" onclick="schedCalDayClick(this,'Feb 17')"><div class="cdn">17</div><div class="cal-ev run">🏃 Threshold</div></div><div class="cal-day"><div class="cdn">18</div><div class="cal-wo bike">DO · Threshold</div></div>
     <div class="cal-day"><div class="cdn">19</div><div class="cal-wo run">SC · Tempo</div></div>
     <div class="cal-day today"><div class="cdn" style="color:var(--g);font-weight:800">21</div><div class="cal-wo run">MR · Z2 Run</div></div>
-    <div class="cal-day"><div class="cdn">22</div></div>
+    <div class="cal-day" onclick="schedCalDayClick(this,'Feb 22')"><div class="cdn">22</div><div class="cal-ev run">🏃 Long Run</div></div>
     <div class="cal-day"><div class="cdn">23</div></div>
   </div>
   <div class="plan-shell">
@@ -1962,7 +2549,7 @@ body.coach-mode .sb-sub-item.active { color:var(--b); }
 </div>
 
 <div class="screen" id="screen-business">
-  <div class="ph"><div class="ph-t">Business</div><div class="ph-s">Subscriptions, billing, and your coach profile.</div></div>
+  <div class="ph"><div class="ph-row"><div><div class="ph-t">Business</div><div class="ph-s">Subscriptions, billing, and your coach profile.</div></div></div></div>
 
   <div class="biz-hero">
     <div>
@@ -2009,7 +2596,334 @@ body.coach-mode .sb-sub-item.active { color:var(--b); }
   </div>
 </div>
 
-</div><!-- /app -->
+
+
+<div class="screen" id="screen-my-profile">
+  <div class="ph"><div class="ph-row"><div><div class="ph-t">Coach Profile</div><div class="ph-s">Your Cady Core profile — visible to athletes in Discover.</div></div><div style="display:flex;gap:8px"><div class="cady-badge"><span class="cady-badge-icon">✦</span> Cady Core</div><button class="btn btn-gold" style="font-size:12px">Save Changes</button></div></div></div>
+
+  <div style="background:var(--gold1);border:1px solid var(--gold2);border-radius:var(--rad);padding:14px 18px;margin-bottom:18px;display:flex;align-items:center;gap:14px">
+    <div style="font-size:20px">✦</div>
+    <div style="flex:1"><div style="font-weight:700;color:var(--gold);font-size:13px;margin-bottom:2px">Profile is Live</div><div style="font-size:12px;color:var(--t2)">Athletes can discover and enroll in your programs through the Discover tab. Last updated Feb 18.</div></div>
+    <button class="btn btn-ghost" style="font-size:12px;flex-shrink:0" onclick="go('discover')">Preview as athlete →</button>
+  </div>
+
+  <div class="g2" style="margin-bottom:18px">
+    <div class="card card-p">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t4);margin-bottom:12px">Identity</div>
+      <div class="profile-form">
+        <div class="pf-field"><div class="pf-label">Full Name</div><input class="pf-input" value="Jordan Taylor"></div>
+        <div class="pf-field"><div class="pf-label">Specialty</div><input class="pf-input" value="Triathlon · Ironman Specialist"></div>
+        <div class="pf-field"><div class="pf-label">Years Coaching</div><input class="pf-input" value="12"></div>
+        <div class="pf-field"><div class="pf-label">Certifications</div><input class="pf-input" value="USAT Level 2, USAC, TrainingPeaks Certified"></div>
+        <div class="pf-field full"><div class="pf-label">Bio</div><textarea class="pf-ta" rows="4">I coach working professionals who want to compete seriously without burning out. My methodology is rooted in aerobic base development, progressive overload, and intelligent recovery.</textarea></div>
+      </div>
+    </div>
+    <div class="card card-p">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t4);margin-bottom:12px">Programs Available</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px">
+        <div style="background:var(--sur3);border:1px solid var(--bd);border-radius:var(--rad-s);padding:9px 12px;display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:12px;font-weight:700">20-Wk Ironman 70.3</div><div style="font-size:11px;color:var(--t4);font-family:'DM Mono',monospace">47 enrolled · $149/mo</div></div><button class="btn btn-ghost" style="font-size:11px;padding:4px 10px">Edit</button></div>
+        <div style="background:var(--sur3);border:1px solid var(--bd);border-radius:var(--rad-s);padding:9px 12px;display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:12px;font-weight:700">12-Wk Olympic Tri</div><div style="font-size:11px;color:var(--t4);font-family:'DM Mono',monospace">23 enrolled · $99/mo</div></div><button class="btn btn-ghost" style="font-size:11px;padding:4px 10px">Edit</button></div>
+      </div>
+      <button class="btn btn-ghost" style="font-size:12px;width:100%;justify-content:center" onclick="go('library')">+ Add Program from Library</button>
+
+      <div style="margin-top:18px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t4);margin-bottom:10px">Profile Stats</div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--t2)">Profile views (30d)</span><span class="mono" style="font-weight:600">847</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--t2)">Enrollment rate</span><span class="mono up" style="font-weight:600">12%</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--t2)">Athlete completion rate</span><span class="mono up" style="font-weight:600">91%</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--t2)">Cady Core rank</span><span class="mono" style="font-weight:600">#3 Triathlon</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BUILDER OVERLAY -->
+<div class="builder-overlay" id="builder-overlay">
+  <div class="builder-panel">
+    <div class="bp-header">
+      <div class="bp-title">New Workout</div>
+      <button class="bp-close" onclick="closeBuilder()">✕</button>
+    </div>
+    <div class="bp-body">
+      <div class="bp-section">
+        <div class="bp-label">Workout Name</div>
+        <input class="bp-input" id="bp-name" placeholder="e.g. 3×12 Threshold Bike" style="font-weight:700;font-size:14px">
+      </div>
+      <div class="bp-section">
+        <div class="bp-label">Sport</div>
+        <div class="sport-select" id="sport-select">
+          <div class="sport-opt selected" onclick="selectSportOpt(this)"><div class="sport-opt-icon">🏃</div><div class="sport-opt-lbl">Run</div></div>
+          <div class="sport-opt" onclick="selectSportOpt(this)"><div class="sport-opt-icon">🚴</div><div class="sport-opt-lbl">Bike</div></div>
+          <div class="sport-opt" onclick="selectSportOpt(this)"><div class="sport-opt-icon">🏊</div><div class="sport-opt-lbl">Swim</div></div>
+          <div class="sport-opt" onclick="selectSportOpt(this)"><div class="sport-opt-icon">💪</div><div class="sport-opt-lbl">Strength</div></div>
+        </div>
+      </div>
+      <div class="bp-section">
+        <div class="bp-row">
+          <div><div class="bp-label">Total Duration</div><input class="bp-input" placeholder="60 min" value="60"></div>
+          <div><div class="bp-label">Primary Zone</div>
+            <select class="bp-input"><option>Zone 1 — Recovery</option><option>Zone 2 — Aerobic</option><option selected>Zone 3 — Tempo</option><option>Zone 4 — Threshold</option><option>Zone 5 — VO2</option></select>
+          </div>
+        </div>
+      </div>
+      <div class="bp-section">
+        <div class="bp-label" style="display:flex;justify-content:space-between"><span>Interval Structure</span><span style="font-size:9px;color:var(--t4);font-weight:400;text-transform:none;letter-spacing:0">Click block to edit</span></div>
+        <div class="interval-canvas">
+          <div class="interval-track" id="int-track"></div>
+          <div class="int-add-bar">
+            <button class="int-add-btn" onclick="addBlock('warmup')">+ Warmup</button>
+            <button class="int-add-btn" onclick="addBlock('work')">+ Work</button>
+            <button class="int-add-btn" onclick="addBlock('rest')">+ Rest</button>
+            <button class="int-add-btn" onclick="addBlock('hard')">+ Hard</button>
+            <button class="int-add-btn" onclick="addBlock('cool')">+ Cooldown</button>
+          </div>
+          <div class="int-detail" id="int-detail">
+            <div class="bp-label" id="int-det-lbl">Warmup</div>
+            <div class="target-grid">
+              <div class="target-box"><div class="tgt-lbl">Power</div><input class="tgt-input" id="tgt-power" placeholder="—" value="55-75%"></div>
+              <div class="target-box"><div class="tgt-lbl">HR Zone</div><input class="tgt-input" id="tgt-hr" placeholder="—" value="Z1-Z2"></div>
+              <div class="target-box"><div class="tgt-lbl">Pace</div><input class="tgt-input" id="tgt-pace" placeholder="—" value="Easy"></div>
+            </div>
+            <div style="margin-top:7px;display:flex;align-items:center;gap:8px">
+              <div><div class="bp-label" style="margin-bottom:4px">Duration (min)</div><input class="bp-input" id="tgt-dur" value="10" style="width:68px"></div>
+              <button class="int-add-btn" style="color:var(--r);border-color:var(--r2);margin-top:18px" onclick="removeSelectedBlock()">Remove</button>
+            </div>
+          </div>
+          <div class="int-summary" id="int-summary"></div>
+        </div>
+      </div>
+      <div class="bp-section">
+        <div class="bp-label">Coach Notes</div>
+        <textarea class="bp-input" rows="2" placeholder="Key instructions or context for this workout…" style="resize:none;line-height:1.6"></textarea>
+      </div>
+      <div class="bp-section">
+        <div class="bp-label">Tags</div>
+        <div style="display:flex;gap:4px;flex-wrap:wrap">
+          <span class="wo-tag tag-threshold" style="padding:3px 9px;cursor:pointer;border-radius:20px;font-size:10px" onclick="toggleTag(this)">threshold ✓</span>
+          <span class="wo-tag tag-z2" style="padding:3px 9px;cursor:pointer;border-radius:20px;font-size:10px;opacity:.4" onclick="toggleTag(this)">z2</span>
+          <span class="wo-tag tag-vo2" style="padding:3px 9px;cursor:pointer;border-radius:20px;font-size:10px;opacity:.4" onclick="toggleTag(this)">vo2</span>
+          <span class="wo-tag tag-long" style="padding:3px 9px;cursor:pointer;border-radius:20px;font-size:10px;opacity:.4" onclick="toggleTag(this)">long</span>
+          <span class="wo-tag tag-race" style="padding:3px 9px;cursor:pointer;border-radius:20px;font-size:10px;opacity:.4" onclick="toggleTag(this)">race-pace</span>
+        </div>
+      </div>
+    </div>
+    <div class="bp-footer">
+      <button class="btn btn-ghost" style="font-size:12px" onclick="closeBuilder()">Cancel</button>
+      <button class="btn btn-b" style="font-size:12px" onclick="saveWorkout()">Save to Library →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PLAN GENERATOR OVERLAY
+══════════════════════════════════════ -->
+<div class="gen-overlay" id="gen-overlay" onclick="if(event.target===this)closePlanGenerator()">
+<div class="gen-panel">
+  <div class="gen-header">
+    <div class="gen-title" id="gen-title">Generate Plan</div>
+    <button class="gen-close" onclick="closePlanGenerator()">✕</button>
+  </div>
+  <div class="gen-prog"><div class="gen-prog-fill" id="gen-prog-fill" style="width:25%"></div></div>
+  <div class="gen-body">
+
+    <!-- Step 1: Quick Add -->
+    <div class="gen-step active" id="gen-s1">
+      <div class="qa-eyebrow">Step 1 of 4 · Intent</div>
+      <div class="qa-sub">Describe what you want to train for. One sentence is enough — the system infers the rest.</div>
+      <div class="qa-input-wrap">
+        <textarea class="qa-textarea" id="qa-input" rows="2" placeholder="e.g. I want to do Ironman 70.3 in April, 6 days a week, long ride Saturdays" oninput="qaHandleInput(this)"></textarea>
+        <button class="qa-send-btn" onclick="qaGenerate()">Generate →</button>
+      </div>
+      <div class="qa-examples-row">
+        <div class="qa-eg-chip" onclick="qaFill(this)">🏊 IM 70.3 in April, 6d/wk</div>
+        <div class="qa-eg-chip" onclick="qaFill(this)">🏃 BQ attempt, 5d/wk, Sunday long</div>
+        <div class="qa-eg-chip" onclick="qaFill(this)">🚴 FTP build, 4d/wk</div>
+        <div class="qa-eg-chip" onclick="qaFill(this)">🏊 Olympic tri, beginner</div>
+      </div>
+      <div id="qa-skeleton" class="qa-skeleton">
+        <div class="sk-eyebrow"><div class="sk-pulse-dot"></div>Building your plan…</div>
+        <div class="sk-plan-title" id="sk-title">20-Week IM 70.3 — Full Build</div>
+        <div class="sk-plan-meta">FEB 25 → JUL 8 · 6 SESSIONS/WK · INTERMEDIATE</div>
+        <div class="sk-rows">
+          <div class="sk-row"><div class="sk-d">Mon</div><div class="sk-arch">Easy Swim</div><div class="sk-dur-lbl">45 min</div><div class="sk-z2">Z2</div></div>
+          <div class="sk-row"><div class="sk-d">Tue</div><div class="sk-arch">Threshold Run</div><div class="sk-dur-lbl">65 min</div><div class="sk-z4">KEY</div></div>
+          <div class="sk-row"><div class="sk-d">Thu</div><div class="sk-arch">Tempo Bike</div><div class="sk-dur-lbl">70 min</div><div class="sk-z4">KEY</div></div>
+          <div class="sk-row"><div class="sk-d">Fri</div><div class="sk-arch">Recovery Run</div><div class="sk-dur-lbl">35 min</div><div class="sk-z2">Z2</div></div>
+          <div class="sk-row"><div class="sk-d">Sat</div><div class="sk-arch">Long Ride</div><div class="sk-dur-lbl">2h 30m</div><div class="sk-z2">Z2</div></div>
+        </div>
+        <div class="sk-actions">
+          <button class="sk-btn sk-confirm" onclick="genGoStep(2)">Looks right — continue →</button>
+          <button class="sk-btn sk-adjust" onclick="genGoStep(2)">Quick adjust</button>
+        </div>
+      </div>
+      <div class="qa-or-divider"><div class="qa-or-line"></div><div class="qa-or-lbl">or</div><div class="qa-or-line"></div></div>
+      <button class="qa-manual-btn" onclick="genGoStep(2)">Set up manually instead →</button>
+    </div>
+
+    <!-- Step 2: Confidence Check -->
+    <div class="gen-step" id="gen-s2">
+      <div class="qa-eyebrow">Step 2 of 4 · Confirm a few things</div>
+      <div class="cc-inferred-box">
+        ✓ Already inferred from your input: <strong>Ironman 70.3 · April 9 · Intermediate · ~9h/week</strong>. Just confirm what the system can't safely assume.
+      </div>
+      <div class="cc-q-group">
+        <div>
+          <div class="cc-q-label">Training days per week</div>
+          <div class="cc-opts">
+            <div class="cc-opt" onclick="ccSel(this)">4 days</div>
+            <div class="cc-opt" onclick="ccSel(this)">5 days</div>
+            <div class="cc-opt sel" onclick="ccSel(this)">6 days</div>
+            <div class="cc-opt" onclick="ccSel(this)">7 days</div>
+          </div>
+        </div>
+        <div>
+          <div class="cc-q-label">Preferred long session day</div>
+          <div class="cc-opts">
+            <div class="cc-opt" onclick="ccSel(this)">Friday</div>
+            <div class="cc-opt sel" onclick="ccSel(this)">Saturday</div>
+            <div class="cc-opt" onclick="ccSel(this)">Sunday</div>
+          </div>
+        </div>
+        <div>
+          <div class="cc-q-label">Sleep quality lately</div>
+          <div class="cc-opts">
+            <div class="cc-opt" onclick="ccSel(this)">Poor</div>
+            <div class="cc-opt sel" onclick="ccSel(this)">Okay</div>
+            <div class="cc-opt" onclick="ccSel(this)">Good</div>
+            <div class="cc-opt" onclick="ccSel(this)">Great</div>
+          </div>
+        </div>
+        <div>
+          <div class="cc-q-label">Any injuries or constraints?</div>
+          <div class="inj-chips" id="inj-chips">
+            <div class="inj-chip" onclick="this.classList.toggle('flagged')">Left knee</div>
+            <div class="inj-chip" onclick="this.classList.toggle('flagged')">Achilles</div>
+            <div class="inj-chip" onclick="this.classList.toggle('flagged')">Shoulder</div>
+            <div class="inj-chip" onclick="this.classList.toggle('flagged')">Lower back</div>
+            <div class="inj-chip" onclick="this.classList.toggle('flagged')">None</div>
+          </div>
+        </div>
+      </div>
+      <div class="gen-step-nav">
+        <button class="btn-gen-back" onclick="genGoStep(1)">← Back</button>
+        <button class="btn-gen-next btn-gen-b" onclick="genGoStep(3)">Build Plan →</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Plan Preview -->
+    <div class="gen-step" id="gen-s3">
+      <div class="qa-eyebrow">Step 3 of 4 · Plan Preview</div>
+      <div class="prev-hero">
+        <div class="prev-hero-top">
+          <div>
+            <div class="prev-eyebrow">20 Weeks · Triathlon</div>
+            <div class="prev-title">IM 70.3 Full Build</div>
+          </div>
+          <div class="prev-conf">
+            <div class="prev-conf-bar"><div class="prev-conf-fill" id="prev-conf-fill" style="width:0"></div></div>
+            <div class="prev-conf-pct">87% confidence</div>
+          </div>
+        </div>
+        <div class="prev-stats">
+          <div class="prev-stat"><div class="prev-stat-v">20</div><div class="prev-stat-l">Weeks</div></div>
+          <div class="prev-stat-div"></div>
+          <div class="prev-stat"><div class="prev-stat-v">6</div><div class="prev-stat-l">Sessions/wk</div></div>
+          <div class="prev-stat-div"></div>
+          <div class="prev-stat"><div class="prev-stat-v">9.2h</div><div class="prev-stat-l">Peak week</div></div>
+          <div class="prev-stat-div"></div>
+          <div class="prev-stat"><div class="prev-stat-v">Apr 9</div><div class="prev-stat-l">Race day</div></div>
+        </div>
+      </div>
+      <div class="phase-bar-row">
+        <div class="phase-seg" style="width:35%;background:var(--g);opacity:.7"></div>
+        <div class="phase-seg" style="width:30%;background:var(--b);opacity:.7"></div>
+        <div class="phase-seg" style="width:20%;background:var(--a);opacity:.7"></div>
+        <div class="phase-seg" style="width:15%;background:#7c3aed;opacity:.7"></div>
+      </div>
+      <div class="phase-labels"><span>Base (wk 1–7)</span><span>Build (wk 8–13)</span><span>Peak (wk 14–17)</span><span>Taper</span></div>
+      <div class="prev-sessions">
+        <div class="prev-row"><div class="pr-day">Mon</div><div class="pr-arch">Easy Swim</div><div class="pr-dur">45 min</div></div>
+        <div class="prev-row key-l"><div class="pr-day">Tue</div><div class="pr-arch">Threshold Run</div><div class="pr-dur">65 min · KEY</div></div>
+        <div class="prev-row"><div class="pr-day">Thu</div><div class="pr-arch">Sweet Spot Bike</div><div class="pr-dur">70 min · KEY</div></div>
+        <div class="prev-row"><div class="pr-day">Fri</div><div class="pr-arch">Recovery Run</div><div class="pr-dur">35 min</div></div>
+        <div class="prev-row"><div class="pr-day">Sat</div><div class="pr-arch">Long Ride</div><div class="pr-dur">2h 30m</div></div>
+      </div>
+      <div class="conf-note-box">✓ Saturday long ride confirmed. Sleep quality applied as conservative load cap. No injuries flagged — full program available.</div>
+      <div class="gen-step-nav">
+        <button class="btn-gen-back" onclick="genGoStep(2)">← Adjust</button>
+        <button class="btn-gen-next btn-gen-g" onclick="genActivate()">Activate Plan →</button>
+      </div>
+    </div>
+
+    <!-- Step 4: Activated -->
+    <div class="gen-step" id="gen-s4">
+      <div style="text-align:center;padding:24px 0 8px">
+        <div style="font-size:40px;margin-bottom:12px">✓</div>
+        <div style="font-family:'DM Serif Display',serif;font-size:22px;margin-bottom:6px">Plan activated.</div>
+        <div style="font-size:13px;color:var(--t2);line-height:1.7;margin-bottom:22px">Week 1 starts Monday. Next week auto-builds every Sunday night.<br>You'll get a 30-second review before each new week goes live.</div>
+        <button class="btn-gen-next btn-gen-g" style="margin:0 auto" onclick="closePlanGenerator()">Go to Training →</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     WEEK REVIEW MODAL
+══════════════════════════════════════ -->
+<div class="week-review-modal" id="week-review-modal" onclick="if(event.target===this)closeWeekReview()">
+  <div class="wr-box">
+    <div class="wr-eyebrow">⟳ Week Preview · Auto-built Sunday</div>
+    <div class="wr-title">Week 9 — Feb 25 → Mar 1</div>
+    <div class="wr-sub">9.8h total · +8% load step · 2 key sessions · All within safe zone</div>
+    <div class="wr-rows">
+      <div class="wr-row"><div class="wr-day">Mon</div><div class="wr-arch">Easy Swim · 45min</div><div class="wr-dur">Z2</div></div>
+      <div class="wr-row key-l"><div class="wr-day">Tue</div><div class="wr-arch">Threshold Run · 65min</div><div class="wr-dur">KEY</div></div>
+      <div class="wr-row"><div class="wr-day">Wed</div><div class="wr-arch">Rest</div><div class="wr-dur">—</div></div>
+      <div class="wr-row key-l"><div class="wr-day">Thu</div><div class="wr-arch">Tempo Bike 4×8 · 70min</div><div class="wr-dur">KEY</div></div>
+      <div class="wr-row"><div class="wr-day">Fri</div><div class="wr-arch">Recovery Run · 35min</div><div class="wr-dur">Z1</div></div>
+      <div class="wr-row"><div class="wr-day">Sat</div><div class="wr-arch">Long Ride · 2h 30m</div><div class="wr-dur">Z2</div></div>
+    </div>
+    <div class="wr-load-note">📈 +8% from last week · Well within 10% safe-step limit</div>
+    <div class="wr-actions">
+      <button class="btn-gen-next btn-gen-g" style="flex:1" onclick="closeWeekReview();showToast('Week 9 approved — starts Monday')">Approve</button>
+      <button class="btn-gen-back" onclick="showToast('Load lightened by 10%');closeWeekReview()">Lighten</button>
+      <button class="btn-gen-back" onclick="showToast('Sessions shifted — check Training');closeWeekReview()">Shift days</button>
+    </div>
+    <div class="wr-dismiss" onclick="closeWeekReview()">Dismiss</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     DIVERGENCE MODAL
+══════════════════════════════════════ -->
+<div class="divergence-modal" id="divergence-modal" onclick="if(event.target===this)closeDivergence()">
+  <div class="div-box">
+    <div style="font-family:'DM Serif Display',serif;font-size:20px;margin-bottom:5px">What happened?</div>
+    <div style="font-size:12px;color:var(--t3);margin-bottom:16px;line-height:1.6">This helps the system learn your patterns — not judge you.</div>
+    <div class="div-types">
+      <div class="div-type" id="dt-capacity" onclick="divSelect('capacity')">
+        <div class="dt-top"><div class="dt-icon">🔋</div><div class="dt-label">Capacity — too hard / too tired</div></div>
+        <div class="dt-sub">Body wasn't ready. Session was genuinely too much today.</div>
+      </div>
+      <div class="div-type" id="dt-preference" onclick="divSelect('preference')">
+        <div class="dt-top"><div class="dt-icon">📅</div><div class="dt-label">Preference — doesn't fit my week</div></div>
+        <div class="dt-sub">Session is fine, just wrong day or format for how my life is structured.</div>
+      </div>
+      <div class="div-type" id="dt-context" onclick="divSelect('context')">
+        <div class="dt-top"><div class="dt-icon">🌍</div><div class="dt-label">Context — life / travel / weather</div></div>
+        <div class="dt-sub">External reason. Plan is still right, this was a one-off.</div>
+      </div>
+    </div>
+    <div class="div-adapt-box" id="div-adapt-box"></div>
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <button class="btn-gen-back" onclick="closeDivergence()">Cancel</button>
+      <button class="btn-gen-next btn-gen-b" style="flex:1" onclick="applyDivergence()">Apply Adaptation →</button>
+    </div>
+  </div>
+</div>
+
 
 </div><!-- /app -->
 
@@ -2155,8 +3069,9 @@ var coachNavGroups = [
       {id:'plan-assign',label:'Plan Assignment'},
     ]},
     {id:'library',icon:'📚',label:'Programs',noNav:true, subs:[
-      {id:'library',label:'Plan Library'},
-      {id:'programs',label:'Templates'},
+      {id:'patterns',label:'Workout Library'},
+      {id:'programs',label:'Programs'},
+      {id:'library',label:'Program Builder'},
     ]},
   ]},
   {label:'Analytics', items:[
@@ -2274,7 +3189,7 @@ function setMode(mode) {
 /* ════════════════════════════════════
    NAVIGATION
 ════════════════════════════════════ */
-var coachScreenIds = ['home','roster','programs','schedule','plan-assign','insights','insights-charts','business','invite','coach-profile','library','my-profile'];
+var coachScreenIds = ['home','roster','programs','schedule','plan-assign','insights','insights-charts','business','invite','coach-profile','library','my-profile','patterns'];
 
 function go(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -3670,125 +4585,168 @@ document.getElementById('key-modal').addEventListener('click', function(e) {
 document.getElementById('builder-overlay').addEventListener('click', function(e) {
   if (e.target === this) closeBuilder();
 });
+
+/* ════════════════════════════════════
+   PLAN GENERATOR
+════════════════════════════════════ */
+var genCurrentStep = 1;
+var qaTimer = null;
+
+function openPlanGenerator() {
+  genGoStep(1);
+  document.getElementById('gen-overlay').classList.add('open');
+  document.getElementById('qa-skeleton').classList.remove('show');
+  document.getElementById('qa-input').value = '';
+}
+function closePlanGenerator() {
+  document.getElementById('gen-overlay').classList.remove('open');
+}
+function genGoStep(n) {
+  genCurrentStep = n;
+  document.querySelectorAll('.gen-step').forEach(function(s){ s.classList.remove('active'); });
+  var el = document.getElementById('gen-s'+n);
+  if (el) el.classList.add('active');
+  var pct = [25,50,80,100][n-1] || 25;
+  var fill = document.getElementById('gen-prog-fill');
+  if (fill) fill.style.width = pct + '%';
+  var titles = ['Generate Plan','Confirm Details','Plan Preview','Done'];
+  var titleEl = document.getElementById('gen-title');
+  if (titleEl) titleEl.textContent = titles[n-1] || 'Generate Plan';
+}
+function qaHandleInput(el) {
+  clearTimeout(qaTimer);
+  if (el.value.trim().length > 10) {
+    qaTimer = setTimeout(function() {
+      var sk = document.getElementById('qa-skeleton');
+      if (sk) sk.classList.add('show');
+    }, 800);
+  }
+}
+function qaFill(chip) {
+  var input = document.getElementById('qa-input');
+  if (input) {
+    input.value = chip.textContent.replace(/^[^ ]+ /,'');
+    setTimeout(function(){
+      document.getElementById('qa-skeleton').classList.add('show');
+    }, 600);
+  }
+}
+function qaGenerate() {
+  var sk = document.getElementById('qa-skeleton');
+  if (sk) sk.classList.add('show');
+}
+function genActivate() {
+  genGoStep(4);
+  showToast('Plan activated — starts Monday');
+}
+function ccSel(el) {
+  var group = el.closest('.cc-opts');
+  group.querySelectorAll('.cc-opt').forEach(function(o){ o.classList.remove('sel'); });
+  el.classList.add('sel');
+}
+
+/* ════════════════════════════════════
+   TRAINING SCREEN — SESSION CARDS
+════════════════════════════════════ */
+function togglePsc(id) {
+  var el = document.getElementById('psc-' + id);
+  if (!el) return;
+  var wasOpen = el.classList.contains('open');
+  // Close all
+  document.querySelectorAll('.psc').forEach(function(p){ p.classList.remove('open'); });
+  if (!wasOpen) el.classList.add('open');
+}
+function toggleStruct(e, id) {
+  e.stopPropagation();
+  var sv = document.getElementById('struct-' + id);
+  var btn = document.getElementById('stbtn-' + id);
+  if (!sv) return;
+  var isShow = sv.classList.contains('show');
+  sv.classList.toggle('show');
+  if (btn) {
+    btn.textContent = isShow ? 'Show structure' : 'Hide structure';
+    btn.classList.toggle('hide', !isShow);
+  }
+}
+
+/* ══════════════════════════════════════════
+   SCHEDULE INTERACTIONS
+══════════════════════════════════════════ */
+function schedChangeMonth(dir) {
+  var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var lbl = document.getElementById('sched-month-lbl');
+  if (!lbl) return;
+  var txt = lbl.textContent.trim();
+  var parts = txt.split(' ');
+  var curMonthIdx = months.indexOf(parts[0]);
+  var curYear = parseInt(parts[1]) || 2026;
+  var newMonthIdx = curMonthIdx + dir;
+  if (newMonthIdx < 0) { newMonthIdx = 11; curYear--; }
+  if (newMonthIdx > 11) { newMonthIdx = 0; curYear++; }
+  lbl.textContent = months[newMonthIdx] + ' ' + curYear;
+  // Update prev/next button labels
+  var prevM = months[(newMonthIdx - 1 + 12) % 12];
+  var nextM = months[(newMonthIdx + 1) % 12];
+  var btns = lbl.parentElement.querySelectorAll('.btn-ghost');
+  if (btns[0]) btns[0].textContent = '← ' + prevM.slice(0,3);
+  if (btns[1]) btns[1].textContent = nextM.slice(0,3) + ' →';
+  showToast(months[newMonthIdx] + ' ' + curYear);
+}
+
+function schedFilterAth(pill, name) {
+  document.querySelectorAll('.caf-pill').forEach(function(p){ p.classList.remove('active'); });
+  pill.classList.add('active');
+  showToast(name === 'all' ? 'Showing all athletes' : 'Viewing ' + name + '\u2019s schedule');
+}
+function schedCalDayClick(cell, label) {
+  document.querySelectorAll('.cal-day').forEach(function(c){ c.classList.remove('cal-selected'); });
+  cell.classList.add('cal-selected');
+  showToast('Click to assign workout on ' + label + ' — drag from Workout Library');
+}
+
+/* ══════════════════════════════════════════
+   WEEK REVIEW MODAL
+════════════════════════════════════ */
+function openWeekReview() {
+  document.getElementById('week-review-modal').classList.add('open');
+}
+function closeWeekReview() {
+  document.getElementById('week-review-modal').classList.remove('open');
+}
+
+/* ════════════════════════════════════
+   DIVERGENCE MODAL
+════════════════════════════════════ */
+var selectedDivType = null;
+var divAdaptMessages = {
+  capacity: 'System will reduce next week\'s load by 5%, and step down Thursday\'s intensity to 88% FTP. If this happens again next week, the Base phase will extend by one week.',
+  preference: 'System will move Saturday\'s long ride to Sunday and reduce Friday\'s run duration by 10 min. Your week structure will update going forward.',
+  context: 'Plan stays unchanged. An alternate shorter session is offered for today if you want to do something. Context events don\'t affect the long-term arc.'
+};
+
+function showDivergence(e) {
+  e.stopPropagation();
+  selectedDivType = null;
+  document.querySelectorAll('.div-type').forEach(function(d){ d.classList.remove('selected'); });
+  document.getElementById('div-adapt-box').classList.remove('show');
+  document.getElementById('divergence-modal').classList.add('open');
+}
+function closeDivergence() {
+  document.getElementById('divergence-modal').classList.remove('open');
+}
+function divSelect(type) {
+  selectedDivType = type;
+  document.querySelectorAll('.div-type').forEach(function(d){ d.classList.remove('selected'); });
+  document.getElementById('dt-' + type).classList.add('selected');
+  var box = document.getElementById('div-adapt-box');
+  box.innerHTML = '<strong>What the system will do:</strong> ' + divAdaptMessages[type];
+  box.classList.add('show');
+}
+function applyDivergence() {
+  if (!selectedDivType) { showToast('Please select a reason first'); return; }
+  closeDivergence();
+  showToast('Got it — plan adapting to ' + selectedDivType + ' signal');
+}
 </script>
-
-
-
-<!-- ══ COACH: MY PROFILE ══ -->
-<div class="screen" id="screen-my-profile">
-  <div class="ph"><div class="ph-row"><div><div class="ph-t">Coach Profile</div><div class="ph-s">Your Cady Core profile — visible to athletes in Discover.</div></div><div style="display:flex;gap:8px"><div class="cady-badge"><span class="cady-badge-icon">✦</span> Cady Core</div><button class="btn btn-gold" style="font-size:12px">Save Changes</button></div></div></div>
-
-  <div style="background:var(--gold1);border:1px solid var(--gold2);border-radius:var(--rad);padding:14px 18px;margin-bottom:18px;display:flex;align-items:center;gap:14px">
-    <div style="font-size:20px">✦</div>
-    <div style="flex:1"><div style="font-weight:700;color:var(--gold);font-size:13px;margin-bottom:2px">Profile is Live</div><div style="font-size:12px;color:var(--t2)">Athletes can discover and enroll in your programs through the Discover tab. Last updated Feb 18.</div></div>
-    <button class="btn btn-ghost" style="font-size:12px;flex-shrink:0" onclick="go('discover')">Preview as athlete →</button>
-  </div>
-
-  <div class="g2" style="margin-bottom:18px">
-    <div class="card card-p">
-      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t4);margin-bottom:12px">Identity</div>
-      <div class="profile-form">
-        <div class="pf-field"><div class="pf-label">Full Name</div><input class="pf-input" value="Jordan Taylor"></div>
-        <div class="pf-field"><div class="pf-label">Specialty</div><input class="pf-input" value="Triathlon · Ironman Specialist"></div>
-        <div class="pf-field"><div class="pf-label">Years Coaching</div><input class="pf-input" value="12"></div>
-        <div class="pf-field"><div class="pf-label">Certifications</div><input class="pf-input" value="USAT Level 2, USAC, TrainingPeaks Certified"></div>
-        <div class="pf-field full"><div class="pf-label">Bio</div><textarea class="pf-ta" rows="4">I coach working professionals who want to compete seriously without burning out. My methodology is rooted in aerobic base development, progressive overload, and intelligent recovery.</textarea></div>
-      </div>
-    </div>
-    <div class="card card-p">
-      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t4);margin-bottom:12px">Programs Available</div>
-      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px">
-        <div style="background:var(--sur3);border:1px solid var(--bd);border-radius:var(--rad-s);padding:9px 12px;display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:12px;font-weight:700">20-Wk Ironman 70.3</div><div style="font-size:11px;color:var(--t4);font-family:'DM Mono',monospace">47 enrolled · $149/mo</div></div><button class="btn btn-ghost" style="font-size:11px;padding:4px 10px">Edit</button></div>
-        <div style="background:var(--sur3);border:1px solid var(--bd);border-radius:var(--rad-s);padding:9px 12px;display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:12px;font-weight:700">12-Wk Olympic Tri</div><div style="font-size:11px;color:var(--t4);font-family:'DM Mono',monospace">23 enrolled · $99/mo</div></div><button class="btn btn-ghost" style="font-size:11px;padding:4px 10px">Edit</button></div>
-      </div>
-      <button class="btn btn-ghost" style="font-size:12px;width:100%;justify-content:center" onclick="go('library')">+ Add Program from Library</button>
-
-      <div style="margin-top:18px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t4);margin-bottom:10px">Profile Stats</div>
-      <div style="display:flex;flex-direction:column;gap:6px">
-        <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--t2)">Profile views (30d)</span><span class="mono" style="font-weight:600">847</span></div>
-        <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--t2)">Enrollment rate</span><span class="mono up" style="font-weight:600">12%</span></div>
-        <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--t2)">Athlete completion rate</span><span class="mono up" style="font-weight:600">91%</span></div>
-        <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--t2)">Cady Core rank</span><span class="mono" style="font-weight:600">#3 Triathlon</span></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- BUILDER OVERLAY -->
-<div class="builder-overlay" id="builder-overlay">
-  <div class="builder-panel">
-    <div class="bp-header">
-      <div class="bp-title">New Workout</div>
-      <button class="bp-close" onclick="closeBuilder()">✕</button>
-    </div>
-    <div class="bp-body">
-      <div class="bp-section">
-        <div class="bp-label">Workout Name</div>
-        <input class="bp-input" id="bp-name" placeholder="e.g. 3×12 Threshold Bike" style="font-weight:700;font-size:14px">
-      </div>
-      <div class="bp-section">
-        <div class="bp-label">Sport</div>
-        <div class="sport-select" id="sport-select">
-          <div class="sport-opt selected" onclick="selectSportOpt(this)"><div class="sport-opt-icon">🏃</div><div class="sport-opt-lbl">Run</div></div>
-          <div class="sport-opt" onclick="selectSportOpt(this)"><div class="sport-opt-icon">🚴</div><div class="sport-opt-lbl">Bike</div></div>
-          <div class="sport-opt" onclick="selectSportOpt(this)"><div class="sport-opt-icon">🏊</div><div class="sport-opt-lbl">Swim</div></div>
-          <div class="sport-opt" onclick="selectSportOpt(this)"><div class="sport-opt-icon">💪</div><div class="sport-opt-lbl">Strength</div></div>
-        </div>
-      </div>
-      <div class="bp-section">
-        <div class="bp-row">
-          <div><div class="bp-label">Total Duration</div><input class="bp-input" placeholder="60 min" value="60"></div>
-          <div><div class="bp-label">Primary Zone</div>
-            <select class="bp-input"><option>Zone 1 — Recovery</option><option>Zone 2 — Aerobic</option><option selected>Zone 3 — Tempo</option><option>Zone 4 — Threshold</option><option>Zone 5 — VO2</option></select>
-          </div>
-        </div>
-      </div>
-      <div class="bp-section">
-        <div class="bp-label" style="display:flex;justify-content:space-between"><span>Interval Structure</span><span style="font-size:9px;color:var(--t4);font-weight:400;text-transform:none;letter-spacing:0">Click block to edit</span></div>
-        <div class="interval-canvas">
-          <div class="interval-track" id="int-track"></div>
-          <div class="int-add-bar">
-            <button class="int-add-btn" onclick="addBlock('warmup')">+ Warmup</button>
-            <button class="int-add-btn" onclick="addBlock('work')">+ Work</button>
-            <button class="int-add-btn" onclick="addBlock('rest')">+ Rest</button>
-            <button class="int-add-btn" onclick="addBlock('hard')">+ Hard</button>
-            <button class="int-add-btn" onclick="addBlock('cool')">+ Cooldown</button>
-          </div>
-          <div class="int-detail" id="int-detail">
-            <div class="bp-label" id="int-det-lbl">Warmup</div>
-            <div class="target-grid">
-              <div class="target-box"><div class="tgt-lbl">Power</div><input class="tgt-input" id="tgt-power" placeholder="—" value="55-75%"></div>
-              <div class="target-box"><div class="tgt-lbl">HR Zone</div><input class="tgt-input" id="tgt-hr" placeholder="—" value="Z1-Z2"></div>
-              <div class="target-box"><div class="tgt-lbl">Pace</div><input class="tgt-input" id="tgt-pace" placeholder="—" value="Easy"></div>
-            </div>
-            <div style="margin-top:7px;display:flex;align-items:center;gap:8px">
-              <div><div class="bp-label" style="margin-bottom:4px">Duration (min)</div><input class="bp-input" id="tgt-dur" value="10" style="width:68px"></div>
-              <button class="int-add-btn" style="color:var(--r);border-color:var(--r2);margin-top:18px" onclick="removeSelectedBlock()">Remove</button>
-            </div>
-          </div>
-          <div class="int-summary" id="int-summary"></div>
-        </div>
-      </div>
-      <div class="bp-section">
-        <div class="bp-label">Coach Notes</div>
-        <textarea class="bp-input" rows="2" placeholder="Key instructions or context for this workout…" style="resize:none;line-height:1.6"></textarea>
-      </div>
-      <div class="bp-section">
-        <div class="bp-label">Tags</div>
-        <div style="display:flex;gap:4px;flex-wrap:wrap">
-          <span class="wo-tag tag-threshold" style="padding:3px 9px;cursor:pointer;border-radius:20px;font-size:10px" onclick="toggleTag(this)">threshold ✓</span>
-          <span class="wo-tag tag-z2" style="padding:3px 9px;cursor:pointer;border-radius:20px;font-size:10px;opacity:.4" onclick="toggleTag(this)">z2</span>
-          <span class="wo-tag tag-vo2" style="padding:3px 9px;cursor:pointer;border-radius:20px;font-size:10px;opacity:.4" onclick="toggleTag(this)">vo2</span>
-          <span class="wo-tag tag-long" style="padding:3px 9px;cursor:pointer;border-radius:20px;font-size:10px;opacity:.4" onclick="toggleTag(this)">long</span>
-          <span class="wo-tag tag-race" style="padding:3px 9px;cursor:pointer;border-radius:20px;font-size:10px;opacity:.4" onclick="toggleTag(this)">race-pace</span>
-        </div>
-      </div>
-    </div>
-    <div class="bp-footer">
-      <button class="btn btn-ghost" style="font-size:12px" onclick="closeBuilder()">Cancel</button>
-      <button class="btn btn-b" style="font-size:12px" onclick="saveWorkout()">Save to Library →</button>
-    </div>
-  </div>
-</div>
 </body>
 </html>
